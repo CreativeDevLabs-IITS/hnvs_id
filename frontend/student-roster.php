@@ -11,13 +11,24 @@
             <div class="py-3 pe-3 ps-5">
                 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="mt-3 breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item" style="font-size: 14px;">Students</li>
-                        <li class="breadcrumb-item" style="font-size: 14px;"><a href="teachers.php" class="text-decoration-none text-dark">List</a></li>
+                        <li class="breadcrumb-item" style="font-size: 14px;">Subject Roster</li>
+                        <li class="breadcrumb-item" style="font-size: 14px;"><a href="teachers.php" class="text-decoration-none text-dark">Student List</a></li>
                     </ol>
                 </nav>
                 <div class="d-flex justify-content-between align-items-center">
-                    <div class="fs-4 mt-2">Students</div>
-                    <a href="add_student.php" id="add_student" class="btn btn-primaryfw-semibold text-white" style="background-color: #3498db; border: none">Add Student</a>
+                    <div class="fs-4 mt-2">Subject Roster</div>
+                    <div class="d-flex gap-4">
+                        <div class="mt-2 text-secondary fs-6">Total Students: <span class="text-primary fs-5 fw-bold" id="total_student"></span></div>
+                        <form class="generate_search shadow">
+                            <button>
+                                <div class="loader" style="display: none;" id="searchLoader"></div>
+                                <svg id="searchIcon" width="17" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="search">
+                                    <path d="M7.667 12.667A5.333 5.333 0 107.667 2a5.333 5.333 0 000 10.667zM14.334 14l-2.9-2.9" stroke="currentColor" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </button>
+                            <input class="input" placeholder="Search" required="" type="text" id="search_student">
+                        </form>
+                    </div>
                 </div>
 
                 <div id="screenLoaderCon" style="height: 80%; display: flex" class="flex-column gap-1 justify-content-center align-items-center">
@@ -28,59 +39,62 @@
                 </div>
 
                 <div id="content" class="bg-white p-4 shadow rounded-4 mt-4" style="display: none;">
-                    <div class="d-flex justify-content-between mb-3 mt-3 gap-4 align-items-center">
-                        <div class="input-group d-flex flex-column align-items-baseline" style="width: 100%">
-                            <label for="sem" style="font-size: 13px;" class="text-secondary">Stand</label>
-                            <select class="" id="strandFilter" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
-                                <option value="" class="text-secondary" id="clearStrand" selected>All</option>
-                                <!-- strand -->
-                            </select>                                
+                    <div class="d-flex justify-content-between align-items-end">
+                        <div class="d-flex flex-column">
+                            <div class="text-secondary" style="font-size: 13px;">Section:</div>
+                            <div class="fs-5 fw-semibold" style="margin-top: -5px; max-width: 280px;" id="subject_name"></div>
                         </div>
+                        <div class="d-flex gap-4 align-items-end">
+                            <div class="fw-semibold" id="AllBtn" style="padding: 2px 8px; color: #fff; border-radius: 5px; border: none; cursor: pointer">
+                                All
+                                <svg xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-caret-down"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 9c.852 0 1.297 .986 .783 1.623l-.076 .084l-6 6a1 1 0 0 1 -1.32 .083l-.094 -.083l-6 -6l-.083 -.094l-.054 -.077l-.054 -.096l-.017 -.036l-.027 -.067l-.032 -.108l-.01 -.053l-.01 -.06l-.004 -.057v-.118l.005 -.058l.009 -.06l.01 -.052l.032 -.108l.027 -.067l.07 -.132l.065 -.09l.073 -.081l.094 -.083l.077 -.054l.096 -.054l.036 -.017l.067 -.027l.108 -.032l.053 -.01l.06 -.01l.057 -.004l12.059 -.002z" /></svg>
+                            </div>
+                            <div class="input-group d-flex flex-column align-items-baseline" style="width: 270px">
+                                <label for="sem" style="font-size: 13px;" class="text-secondary">Stand</label>
+                                <select class="" id="strandOpt" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
+                                    <option value="" class="text-secondary" selected disabled>Select strand</option>
+                                    <!-- strand -->
+                                </select>                                
+                            </div>
 
-                        <div class="input-group d-flex flex-column align-items-baseline" style="width: 100%;">
-                            <label for="sem" style="font-size: 13px;" class="text-secondary">Section</label>
-                            <select class="" id="sectionFilter" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
-                                <option value="" class="text-secondary" id="clearSection" selected>All</option>
-                                <!-- section -->
-                            </select>                                
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <form class="form">
-                                <button>
-                                    <div class="loader" style="display: none;" id="searchLoader"></div>
-                                    <svg id="searchIcon" width="17" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="search">
-                                        <path d="M7.667 12.667A5.333 5.333 0 107.667 2a5.333 5.333 0 000 10.667zM14.334 14l-2.9-2.9" stroke="currentColor" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </button>
-                                <input class="input" placeholder="Search" required="" type="text" id="search_student">
-                            </form>
-                            <div class="dropdown d-flex flex-row-reverse no_print" id="noPrint">
+                            <div class="input-group d-flex flex-column align-items-baseline" style="width: 270px;">
+                                <label for="sem" style="font-size: 13px;" class="text-secondary">Section</label>
+                                <select class="" id="section" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
+                                    <option value="" class="text-secondary" selected disabled>Select section</option>
+                                    <!-- section -->
+                                </select>                                
+                            </div>
+
+                            <div class="dropdown d-flex flex-row-reverse" id="noPrint" style="cursor: pointer;">
                                 <div class="" data-bs-toggle="dropdown" aria-expanded="false" >
                                     <svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#002"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
                                 </div>
     
-                                <ul class="dropdown-menu">
-                                    <li>
+                                <ul class="dropdown-menu shadow">
+                                    <li class="py-1">
                                         <a data-bs-toggle="modal" data-bs-target="#importModal" class="dropdown-item text-dark d-flex gap-2 align-items-center" id="print" style="font-size: 13px" id="printTable" href="#">
-                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-import"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 13v-8a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-5.5m-9.5 -2h7m-3 -3l3 3l-3 3" /></svg>                                        
-                                            Import Students
+                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-import"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 13v-8a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-5.5m-9.5 -2h7m-3 -3l3 3l-3 3" /></svg>                                        
+                                            Import Students Roster
+                                        </a>
+                                    </li>
+                                    <li class="py-1">
+                                        <a data-bs-toggle="offcanvas" data-bs-target="#student-roster" aria-controls="offcanvasRight" class="dropdown-item text-dark d-flex gap-2 align-items-center" id="rosrterOffcanvas" style="font-size: 13px" id="" href="#">
+                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user-cog"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h2.5" /><path d="M19.001 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M19.001 15.5v1.5" /><path d="M19.001 21v1.5" /><path d="M22.032 17.25l-1.299 .75" /><path d="M17.27 20l-1.3 .75" /><path d="M15.97 17.25l1.3 .75" /><path d="M20.733 20l1.3 .75" /></svg>
+                                            Manage Student Roster
                                         </a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-                    <div class="table-responsive mt-4">
-                        <table class="table table-hover align-middle rounded overflow-hidden" style="font-size: 13px; overflow: visible !important">
+                    <div class="table-responsive mt-5">
+                        <table class="table table-hover align-middle rounded overflow-hidden" style="font-size: 13px;">
                             <thead class="table-secondary border">
                                 <tr>
-                                    <th scope="">#</th>
                                     <th scope="col">Image</th>
                                     <th scope="col">Fullname</th>
                                     <th scope="col">Section</th>
                                     <th scope="col">Strand</th>
-                                    <th scope="col">LRN</th>
-                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="student_table_body">
@@ -146,7 +160,7 @@
                     <input type="file" class="dropify"  data-height="100" name="picture" id="importFile"/>
                 </div>
                 <div class="d-flex flex-row-reverse p-3 gap-3">
-                    <button class="btn btn-primary d-flex align-items-center gap-2" id="import">
+                    <button class="btn btn-primary d-flex align-items-center gap-2" id="importRoster">
                         <div class="spinner-border spinner-border-sm" id="importSpinner" style="display: none" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
@@ -158,7 +172,7 @@
         </div>
     </div>
 
-    <?php include 'partials/view-info.php' ?>
+    <?php include 'partials/add-roster.php' ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     <script src="http://hnvs_backend.test/dist/js/dropify.min.js"></script>
@@ -194,6 +208,19 @@
             }, 800)
         })
 
+
+        $(document).ready(function() {
+            $('.dropify').dropify({
+                messages: {
+                    'default': 'Drag and drop a file here or click',
+                    'replace': 'Drag and drop or click to replace',
+                    'remove':  'Remove',
+                    'error':   'Ooops, something wrong happended.'
+                }
+            });
+        });
+
+
         // populate strand dropdown
         $(document).ready(function() {
             fetch('http://hnvs_backend.test/api/list/strands', {
@@ -205,7 +232,7 @@
             })
             .then(res => res.json())
             .then(data => {
-                let strandSelect = document.getElementById('strandFilter');
+                let strandSelect = document.getElementById('strandOpt');
                 let strands = data.strands;
                 
                 strands.forEach(strand => {
@@ -236,7 +263,7 @@
             })
             .then(res => res.json())
             .then(data => {
-                let sectionSelect = document.getElementById('sectionFilter');
+                let sectionSelect = document.getElementById('section');
                 let sections = data.sections;
                 
                 sections.forEach(section => {
@@ -250,33 +277,55 @@
         })
 
 
+        // load subject name
         $(document).ready(function() {
-            $('.dropify').dropify({
-                messages: {
-                    'default': 'Drag and drop a file here or click',
-                    'replace': 'Drag and drop or click to replace',
-                    'remove':  'Remove',
-                    'error':   'Ooops, something wrong happended.'
-                }
-            });
-        });
+            const urlParam = new URLSearchParams(window.location.search);
+            const id = urlParam.get('id');
+            
+            fetch('http://hnvs_backend.test/api/find/subject', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'Application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    'Content-Type': 'Application/json'
+                },
+                body: JSON.stringify({
+                    id: id
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                document.getElementById('subject_name').textContent = data.subject.name + ' ' + '(' + data.subject.section + ')';
+                document.getElementById('subject_name_offCanvas').textContent = data.subject.name;
+            })
+        })
+
 
         // pupulate table and search
         let currentPage = 1;
         let currentSearch = '';
 
         document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('AllBtn').style.backgroundColor = '#3498db';
+            fetchStudents();
             fetchStudents();
         });
 
         function fetchStudents(page = 1) {
-            currentSearch = ''; // clear search if it's a normal fetch
-            fetch(`http://hnvs_backend.test/api/student/list?page=${page}`, {
-                method: 'GET',
+            const url_param = new URLSearchParams(window.location.search);
+            const subject_id = url_param.get('id');
+            currentSearch = '';
+            fetch(`http://hnvs_backend.test/api/student/roster?page=${page}`, {
+                method: 'POST',
                 headers: {
                     'Accept': 'Application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
-                }
+                    'Content-Type': 'Application/json'
+                },
+                body: JSON.stringify({
+                    id: subject_id
+                })
             })
             .then(response => response.json())
             .then(data => {
@@ -284,12 +333,13 @@
                 const meta = data.students;
                 renderTable(students, meta);
                 renderPagination(meta, false);
+                document.getElementById('total_student').textContent = students.length;
             });
         }
 
         function fetchSearchResults(search, page = 1) {
-            const section = document.getElementById('sectionFilter').value;
-            const strand = document.getElementById('strandFilter').value;
+            const section = document.getElementById('section').value;
+            const strand = document.getElementById('strandOpt').value;
 
             const search_params = new URLSearchParams({
                 search: search,
@@ -297,6 +347,7 @@
                 section: section,
                 page: page
             });
+
 
             fetch(`http://hnvs_backend.test/api/search/student?${search_params.toString()}`, {
                 method: 'GET',
@@ -314,11 +365,24 @@
             })
         }
 
+
+        let student_countInfo = 0;
+        let totalFetchCount = '';
+
         function renderTable(students, meta) {
+            const urlParam = new URLSearchParams(window.location.search);
+            const id = urlParam.get('id');
+
             const tableBody = document.getElementById('student_table_body');
             tableBody.innerHTML = '';
 
-            if(students.length  < 1) {
+            const filteredStudents = students.filter(student => {
+                return student.subjects.some(subject => subject.id == id);
+            });
+
+            totalFetchCount = filteredStudents.length;
+
+            if(filteredStudents.length  < 1) {
                 const emptyRow = document.createElement('tr');
                 const emptyCell = document.createElement('td');
                 emptyCell.colSpan = 9;
@@ -331,61 +395,14 @@
                 return;
             }
 
-            students.forEach((student, index) => {
+            filteredStudents.forEach(student => {
+                student_countInfo += 1;
                 let row = document.createElement('tr');
                 row.innerHTML = `
-                <td>${(meta.current_page - 1) * meta.per_page + index + 1}</td>
                 <td>${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="http://hnvs_backend.test/storage/${student.image}" />` : 'No Image'}</td>
                 <td>${student.lastname + ', ' + student.firstname + ' ' + (student.suffix != null ? student.suffix : '') + ' ' + (student.middlename != null ? student.middlename.charAt(0) : '') + '.'}</td>
                 <td>${student.section.name}</td>
                 <td>${student.strand.cluster == 'Industrial Arts (IA)' ? `(IA) ${student.strand.specialization}` : student.strand.cluster == 'Family and Consumer Science (FCS)' ? `(FCS) ${student.strand.specialization}` : student.strand.cluster }</td>
-                <td>${student.lrn}</td>
-                <td>
-                    <div class="dropdown d-flex flex-row-reverse no_print">
-                        <div class="" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
-                            <svg xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="#002"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
-                        </div>
-
-                        <ul class="dropdown-menu">
-                            <li class="p-1">
-                                <div class="" id="view_student" style="color: gray; cursor: pointer; font-size: 14px" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"
-                                data-id="${student.id}"
-                                data-firstname="${student.firstname}"
-                                data-middlename="${student.middlename}"
-                                data-lastname="${student.lastname}"
-                                data-suffix="${student.suffix}"
-                                data-birth="${student.birthdate}"
-                                data-age="${student.age}"
-                                data-level="${student.year_level}"
-                                data-section="${student.section.name}"
-                                data-strand="${student.strand.cluster}"
-                                data-lrn="${student.lrn}"
-                                data-specialization="${student.strand.specialization}"
-                                data-image="${student.image}"
-                                data-brgy="${student.barangay}"
-                                data-municipal="${student.municipality}"
-                                data-contact="${student.contact}"
-                                data-emergency="${student.emergency_contact}"
-                                data-qr="${student.qr_code}">
-                                    <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-eye"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
-                                    View
-                                </div>
-                            </li>
-                            <li class="p-1">
-                                <a href="edit-student.php?id=${student.id}" style="text-decoration: none; font-size: 14px">
-                                    <svg class="me-2" class="text-primary" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
-                                    Edit
-                                </a>
-                            </li>
-                            <li class="p-1">
-                                <div id="deleteBtn" class="text-danger" style="cursor: pointer; font-size: 14px" data-id="${student.id}" data-name="${student.firstname}" data-lname="${student.lastname}" data-bs-toggle="modal" data-bs-target="#deleteStudent">
-                                    <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
-                                    Delete
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </td>
                 `;
 
                 tableBody.appendChild(row);
@@ -394,7 +411,10 @@
 
         function renderPagination(meta, isSearch = false) {
             const paginationInfo = document.getElementById('paginationInfo');
-            paginationInfo.textContent = `Showing ${(meta.current_page - 1) * meta.per_page + 1} to ${Math.min(meta.current_page * meta.per_page, meta.total)} of ${meta.total} students`;
+            const infoStart = (meta.current_page - 1) * meta.per_page + 1;
+            const infoEnd = infoStart + totalFetchCount - 1;
+            paginationInfo.textContent = `Showing ${infoStart} to ${infoEnd} of ${meta.total} students`;
+
 
             const container = document.getElementById('pagination');
             container.innerHTML = '';
@@ -476,27 +496,29 @@
         })
 
         // filter by strand and section
-        document.getElementById('strandFilter').addEventListener('change', () => {
+        document.getElementById('strandOpt').addEventListener('change', () => {
+            document.getElementById('AllBtn').style.backgroundColor = 'transparent';
+            document.getElementById('AllBtn').style.color = '#000';
             currentSearch = search.value.trim();
             fetchSearchResults(currentSearch, 1);
         });
 
-        document.getElementById('sectionFilter').addEventListener('change', () => {
+        document.getElementById('section').addEventListener('change', () => {
+            document.getElementById('AllBtn').style.backgroundColor = 'transparent';
+            document.getElementById('AllBtn').style.color = '#000';
             currentSearch = search.value.trim();
             fetchSearchResults(currentSearch, 1);
         });
 
-        document.getElementById('clearStrand').addEventListener('click', () => {
+        document.getElementById('AllBtn').addEventListener('click', () => {
             fetchStudents();
-            document.getElementById('strandFilter').value = '';
+            document.getElementById('strandOpt').value = '';
+            document.getElementById('section').value = '';
             currentSearch.value = '';
-        });
+            document.getElementById('AllBtn').style.backgroundColor = '#3498db';
+            document.getElementById('AllBtn').style.color = '#fff';
+        })
 
-        document.getElementById('clearSection').addEventListener('click', () => {
-            fetchStudents();
-            document.getElementById('sectionFilter').value = '';
-            currentSearch.value = '';
-        });
 
         // populate delete modal
         $(document).on('click', '#deleteBtn', function(e) {
@@ -555,14 +577,14 @@
         })
 
 
-        // import student
-        $(document).on('click', '#import', function() {
+        // import roster
+        $(document).on('click', '#importRoster', function() {
             document.getElementById('importSpinner').style.display = 'block';
             let file = document.getElementById('importFile').files[0];
             let formData = new FormData();
             formData.append('file', file);
 
-            fetch('http://hnvs_backend.test/api/student/import', {
+            fetch('http://hnvs_backend.test/api/subject/roster/import', {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',
@@ -585,6 +607,9 @@
                         title: response.skipped,
                         timer: 9000,
                         timerProgressBar: true,
+                    })
+                    .then(() => {
+                        location.reload();
                     })
                 }else if(response.message) {
                     Swal.fire({

@@ -27,9 +27,18 @@
                 </div>
 
                 <div id="content" style="display: none;">
-                    <div class=" d-flex flex-column gap-4 bg-white p-4 shadow rounded-4 mt-4">
+                    <div class=" d-flex flex-column position-relative gap-4 bg-white p-4 shadow rounded-4 mt-4">
+                        <!-- <div class="lineLoader position-absolute" id="lineLoader" style="top: 0; left: 0; width: 100%; display: none"></div> -->
                         <div class=" text-secondary">Basic Info</div>
                         <form action="" class="d-flex flex-column gap-4">
+                            <div class="d-flex align-items gap-5 mb-3">
+                                <div class="input-group">
+                                    <label for="lrn" class="text-dark">Student Learner Number <span class="text-secondary">(LRN)</span></label>
+                                    <input type="text" id="lrn" style="width: 100%;" placeholder="">
+                                </div>
+                                <div style="width: 100%;"></div>
+                                <div style="width: 100%;"></div>
+                            </div>
                             <div class="d-flex align-items gap-5">
                                 <div class="input-group">
                                     <label for="fName" class="text-dark">Firstname</label>
@@ -62,14 +71,34 @@
 
                             <div class="d-flex align-items gap-5">
                                 <div class="input-group">
-                                    <label for="studentID" class="text-dark">Student ID</label>
-                                    <input type="text" id="studentID" style="width: 100%;" placeholder="">
+                                    <label for="level" class="text-dark">Year Level</label>
+                                    <select class="" name="level" id="level" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
+                                        <option value="" class="text-secondary" selected disabled>Select level</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                    </select>
                                 </div>
                                 <div class="input-group">
-                                    <label for="lrn" class="text-dark">Student Learner Number <span class="text-secondary">(LRN)</span></label>
-                                    <input type="text" id="lrn" style="width: 100%;" placeholder="">
+                                    <label for="section" class="text-dark">Section</label>
+                                    <select class="" name="section" id="section" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
+                                        <!-- section -->
+                                    </select>
                                 </div>
-                                <div style="width: 100%;"></div>
+                            </div>
+
+                            <div class="d-flex flex-column align-items gap-5 my-3">
+                                <div class="input-group">
+                                    <label for="strand" class="text-dark">Strand</label>
+                                    <select class="" name="strand" id="strand" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
+                                        <!-- strand -->
+                                    </select>
+                                </div>
+                                <div class="input-group" id="specializationCon" style="display: none;">
+                                    <label for="specialization" class="text-dark">Specialization</label>
+                                    <select class="" name="specialization" id="specialization" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
+                                        <!-- strand -->
+                                    </select>
+                                </div>
                             </div>
 
                         </form>
@@ -141,23 +170,153 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     <script src="http://hnvs_backend.test/dist/js/dropify.min.js"></script>
+
+    <?php include 'partials/_logout.php' ?>
     
 
     <script>
+        // prevent backing
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if(!token) {
+                location.replace('http://hnvs.system.test/');
+            }else {
+                if (window.history && window.history.pushState) {
+                    window.history.pushState(null, null, location.href);
+                    window.onpopstate = function () {
+                        window.history.pushState(null, null, location.href); // Prevent back
+                    };
+                }
+            }
+        });
+
+
         window.addEventListener("load", function () {
             setTimeout(() => {
-                if(navigator.onLine) {
+                if(!navigator.onLine) {
                     document.getElementById('screenLoaderCon').style.display = 'none';
-                    document.getElementById('content').style.display = 'block';
-                }else {
-                    document.getElementById('screenLoaderCon').style.display = 'none';
-                    document.getElementById('no-internet').style.display = 'flex'; 
+                    document.getElementById('no-internet').style.display = 'flex';
                 }
             }, 800)
         });
 
+        // populate dropdown
+        $(document).ready(function() {
+            fetch('http://hnvs_backend.test/api/section/strand/list', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'Application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const sectionSelect = document.getElementById('section');
+                const strandSelect = document.getElementById('strand');
+                sectionSelect.innerHTML = '';
+                strandSelect.innerHTML = '';
+                let sections = data.sections;
+                let strands = data.strands;
+
+                let defaultSectionOption = document.createElement('option');
+                defaultSectionOption.value = '';
+                defaultSectionOption.textContent = 'Select section';
+                defaultSectionOption.selected = true;
+                defaultSectionOption.disabled = true;
+                sectionSelect.appendChild(defaultSectionOption);
+                
+                sections.forEach(section => {
+                    let sectionOption = document.createElement('option');
+                    sectionOption.value = section.id;
+                    sectionOption.textContent = section.name;
+
+                    sectionSelect.appendChild(sectionOption);
+                });
+
+                let defaultStrandOPtion = document.createElement('option');
+                defaultStrandOPtion.value = '';
+                defaultStrandOPtion.textContent = 'Select Strand';
+                defaultStrandOPtion.selected = true;
+                defaultStrandOPtion.disabled = true;
+                strandSelect.appendChild(defaultStrandOPtion);
+
+                
+                strands.forEach(strand => {
+                    let exists = Array.from(strandSelect.options).some(
+                        option => option.textContent === strand.cluster
+                    );
+                    
+                    if(!exists) {
+                        let strandOption = document.createElement('option');
+                        strandOption.value = strand.id;
+                        strandOption.textContent = strand.cluster;
+                        
+                        strandSelect.appendChild(strandOption);
+                    }
+                })
+
+            })
+        })
+
+
+        // populate specialization
+        function populateSpecialization() {
+            return new Promise((resolve, reject) => {
+                const selectedOption = this.options[this.selectedIndex];
+                const selected = selectedOption ? selectedOption.textContent : '';
+    
+                
+                if(selected == 'Industrial Arts (IA)' || selected == 'Family and Consumer Science (FCS)') {
+                    $('#specializationCon').slideDown(200).css('display', 'block');
+        
+                    fetch('http://hnvs_backend.test/api/section/strand/list', {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'Application/json',
+                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        const specializationSelect = document.getElementById('specialization');
+                        specializationSelect.innerHTML = '';
+        
+                        let defaultSpecializationOption = document.createElement('option');
+                        defaultSpecializationOption.value = '';
+                        defaultSpecializationOption.textContent = 'Select specialization';
+                        defaultSpecializationOption.selected = true;
+                        defaultSpecializationOption.disabled = true;
+                        specializationSelect.appendChild(defaultSpecializationOption);
+        
+                        let specializations = data.strands;
+                        specializations.forEach(specialization => {
+                            if(specialization.specialization == null) {
+                                return;
+                            }
+                            if(specialization.cluster != selected) {
+                                return;
+                            }
+                            let specializationOption = document.createElement('option');
+                            specializationOption.value = specialization.id;
+                            specializationOption.textContent = specialization.specialization;
+                            specializationSelect.appendChild(specializationOption);
+                        });
+
+                        resolve();
+                    })
+                    .catch(reject);
+        
+                }else {
+                    $('#specializationCon').val('');
+                    $('#specializationCon').slideUp(200).css('display', 'none');
+                    resolve();
+                }
+            })
+        }        
+
         // populate form
         $(document).ready(function() {
+            // document.getElementById('lineLoader').style.display = 'block';
             const url = new URLSearchParams(window.location.search);
             const id = url.get('id');
             const dropifyInput = $('#studentImg');
@@ -177,69 +336,111 @@
             })
             .then(res => res.json())
             .then(data => {
-                const student = data.student;
-                console.log(student);
-                
-                document.getElementById('fName').value = student.firstname;
-                document.getElementById('mName').value = student.middlename;
-                document.getElementById('lName').value = student.lastname;
-                document.getElementById('contact').value = student.contact;
-                document.getElementById('emergency').value = student.emergency_contact;
-                document.getElementById('birth').value = student.birthdate;
-                document.getElementById('age').value = student.age;
-                document.getElementById('studentID').value = student.student_id;
-                document.getElementById('lrn').value = student.lrn;
-                document.getElementById('brgy').value = student.barangay;
-                document.getElementById('municipal').value = student.municipality;
-
-                if(student.suffix != null) {
-                    document.getElementById('suffix').value = student.suffix;
-                }
-                let image = '';
-                let signature = '';
-
-                if(student.image != null) {
-                    image = 'http://hnvs_backend.test/storage/' + student.image;
-                }else {
-                    image = 'http://hnvs_backend.test/images/default.jpg';
-                }
-                
-                if(student.signature != null) {
-                    signature = 'http://hnvs_backend.test/storage/' + student.signature;
-                }else {
-                    signature = 'http://hnvs_backend.test/images/default-signature.png';
+                function delay(ms) {
+                    return new Promise(resolve => setTimeout(resolve, ms));
                 }
 
-                dropifyInput.attr('data-default-file', image);
-                dropifySign.attr('data-default-file', signature);
+                async function loadSpecialization() {
+                    try {
+                        await delay(1000)
 
-                const drEvent = dropifyInput.data('dropify');
-                if (drEvent) drEvent.destroy();
+                        const student = data.student;
+                        const strandSelect = document.getElementById('strand');
+                        document.getElementById('fName').value = student.firstname;
+                        document.getElementById('mName').value = student.middlename;
+                        document.getElementById('lName').value = student.lastname;
+                        document.getElementById('contact').value = student.contact;
+                        document.getElementById('emergency').value = student.emergency_contact;
+                        document.getElementById('birth').value = student.birthdate;
+                        document.getElementById('age').value = student.age;
+                        document.getElementById('level').value = student.year_level;
+                        document.getElementById('section').value = student.section.id;
+                        document.getElementById('lrn').value = student.lrn;
+                        document.getElementById('brgy').value = student.barangay;
+                        document.getElementById('municipal').value = student.municipality;
+                        
+                        if(student.suffix != null) {
+                            document.getElementById('suffix').value = student.suffix;
+                        }
                 
-                const drSignature = dropifySign.data('dropify');
-                if (drSignature) drSignature.destroy();
+                        strandSelect.value = student.strand.id;
+                        if(student.strand.specialization != null) {
+                            await populateSpecialization.call(strandSelect);
+        
+                            let specializationSelect = document.getElementById('specializationCon');
+                            specializationSelect.style.display = 'block';
+                            document.getElementById('specialization').value = student.strand.id;
+                        }
+                        document.getElementById('screenLoaderCon').style.display = 'none';
+                        document.getElementById('content').style.display = 'block';
+                              
 
-                dropifyInput.dropify({
-                    messages: {
-                        'default': 'Drag and drop a file here or click',
-                        'replace': 'Drag and drop or click to replace',
-                        'remove':  'Remove',
-                        'error':   'Ooops, something wrong happened.'
-                    }
-                });
+                        let image = '';
+                        let signature = '';
 
-                dropifySign.dropify({
-                    messages: {
-                        'default': 'Drag and drop a file here or click',
-                        'replace': 'Drag and drop or click to replace',
-                        'remove':  'Remove',
-                        'error':   'Ooops, something wrong happened.'
-                    }
-                });
+                        if(student.image != null) {
+                            image = 'http://hnvs_backend.test/storage/' + student.image;
+                        }else {
+                            image = 'http://hnvs_backend.test/images/default.jpg';
+                        }
+                        
+                        if(student.signature != null) {
+                            signature = 'http://hnvs_backend.test/storage/' + student.signature;
+                        }else {
+                            signature = 'http://hnvs_backend.test/images/default-signature.png';
+                        }
+
+                        dropifyInput.attr('data-default-file', image);
+                        dropifySign.attr('data-default-file', signature);
+
+                        const drEvent = dropifyInput.data('dropify');
+                        if (drEvent) drEvent.destroy();
+                        
+                        const drSignature = dropifySign.data('dropify');
+                        if (drSignature) drSignature.destroy();
+
+                        dropifyInput.dropify({
+                            messages: {
+                                'default': 'Drag and drop a file here or click',
+                                'replace': 'Drag and drop or click to replace',
+                                'remove':  'Remove',
+                                'error':   'Ooops, something wrong happened.'
+                            }
+                        });
+
+                        dropifySign.dropify({
+                            messages: {
+                                'default': 'Drag and drop a file here or click',
+                                'replace': 'Drag and drop or click to replace',
+                                'remove':  'Remove',
+                                'error':   'Ooops, something wrong happened.'
+                            }
+                        });
+                    }catch (error) {
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "error",
+                            color: "#fff",
+                            width: 350,
+                            background:  "#cc0202",
+                            toast: true,
+                            title: 'Something went wrong while loading data. Please try again later.',
+                            showConfirmButton: false,
+                            timer: 5000,
+                        })
+                    } 
+                }
                 
-
+                loadSpecialization(); 
             })
         })
+
+
+        // on change strand
+        $(document).on('change', '#strand', function() {
+            populateSpecialization.call(this);
+        })
+
 
         // edit student
         $(document).on('click', '#editStudent', function(e) {
@@ -261,10 +462,16 @@
             formData.append('emergency_contact', document.getElementById('emergency').value);
             formData.append('birthdate', document.getElementById('birth').value);
             formData.append('age', document.getElementById('age').value);
-            formData.append('student_id', document.getElementById('studentID').value);
+            formData.append('year_level', document.getElementById('level').value);
+            formData.append('section_id', document.getElementById('section').value);
+            formData.append('strand', document.getElementById('strand').value);
             formData.append('lrn', document.getElementById('lrn').value);
             formData.append('barangay', document.getElementById('brgy').value);
             formData.append('municipality', document.getElementById('municipal').value);
+
+            if(specialization.value != null ) {
+                formData.append('specialization', specialization.value);
+            }
 
             if(image) {
                 formData.append('image', image);

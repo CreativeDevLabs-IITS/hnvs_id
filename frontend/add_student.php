@@ -30,6 +30,14 @@
                     <div class=" d-flex flex-column gap-4 bg-white p-4 shadow rounded-4 mt-4">
                         <div class=" text-secondary">Basic Info</div>
                         <form action="" class="d-flex flex-column gap-4">
+                            <div class="d-flex align-items gap-5 mb-3">
+                                <div class="input-group">
+                                    <label for="lrn" class="text-dark">Student Learner Number <span class="text-secondary">(LRN)</span></label>
+                                    <input type="text" id="lrn" style="width: 100%;" placeholder="">
+                                </div>
+                                <div style="width: 100%;"></div>
+                                <div style="width: 100%;"></div>
+                            </div>
                             <div class="d-flex align-items gap-5">
                                 <div class="input-group">
                                     <label for="fName" class="text-dark">Firstname</label>
@@ -62,14 +70,34 @@
 
                             <div class="d-flex align-items gap-5">
                                 <div class="input-group">
-                                    <label for="studentID" class="text-dark">Student ID</label>
-                                    <input type="text" id="studentID" style="width: 100%;" placeholder="">
+                                    <label for="level" class="text-dark">Year Level</label>
+                                    <select class="" name="level" id="level" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
+                                        <option value="" class="text-secondary" selected disabled>Select level</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                    </select>
                                 </div>
                                 <div class="input-group">
-                                    <label for="lrn" class="text-dark">Student Learner Number <span class="text-secondary">(LRN)</span></label>
-                                    <input type="text" id="lrn" style="width: 100%;" placeholder="">
+                                    <label for="section" class="text-dark">Section</label>
+                                    <select class="" name="section" id="section" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
+                                        <!-- section -->
+                                    </select>
                                 </div>
-                                <div style="width: 100%;"></div>
+                            </div>
+
+                            <div class="d-flex flex-column align-items gap-5 my-3">
+                                <div class="input-group">
+                                    <label for="strand" class="text-dark">Strand</label>
+                                    <select class="" name="strand" id="strand" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
+                                        <!-- strand -->
+                                    </select>
+                                </div>
+                                <div class="input-group" id="specializationCon" style="display: none;">
+                                    <label for="specialization" class="text-dark">Specialization</label>
+                                    <select class="" name="specialization" id="specialization" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
+                                        <!-- strand -->
+                                    </select>
+                                </div>
                             </div>
 
                         </form>
@@ -118,7 +146,7 @@
                         </div>
                     </div>
                     
-                    <div class="d-flex gap-3 align-items-center mt-4">
+                    <div class="d-flex gap-3 align-items-center mt-4 mb-3">
                         <button class="btn btn-primary fw-semibold d-flex align-items-center" id="addStudentBtn" style="background-color: #3498db !important; border: none">
                             <div class="loader2 me-2" style="display: none;" id="createStudentLoader"></div>
                             Create
@@ -145,9 +173,27 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     <script src="http://hnvs_backend.test/dist/js/dropify.min.js"></script>
+
+    <?php include 'partials/_logout.php' ?>
     
 
     <script>
+        // prevent backing
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if(!token) {
+                location.replace('http://hnvs.system.test/');
+            }else {
+                if (window.history && window.history.pushState) {
+                    window.history.pushState(null, null, location.href);
+                    window.onpopstate = function () {
+                        window.history.pushState(null, null, location.href); // Prevent back
+                    };
+                }
+            }
+        });
+
+
         window.addEventListener("load", function () {
             setTimeout(() => {
                 if(navigator.onLine) {
@@ -159,6 +205,112 @@
                 }
             }, 800)
         });
+
+        // populate dropdown
+        $(document).ready(function() {
+            fetch('http://hnvs_backend.test/api/section/strand/list', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'Application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const sectionSelect = document.getElementById('section');
+                const strandSelect = document.getElementById('strand');
+                sectionSelect.innerHTML = '';
+                strandSelect.innerHTML = '';
+                let sections = data.sections;
+                let strands = data.strands;
+
+                let defaultSectionOption = document.createElement('option');
+                defaultSectionOption.value = '';
+                defaultSectionOption.textContent = 'Select section';
+                defaultSectionOption.selected = true;
+                defaultSectionOption.disabled = true;
+                sectionSelect.appendChild(defaultSectionOption);
+                
+                sections.forEach(section => {
+                    let sectionOption = document.createElement('option');
+                    sectionOption.value = section.id;
+                    sectionOption.textContent = section.name;
+
+                    sectionSelect.appendChild(sectionOption);
+                });
+
+                let defaultStrandOPtion = document.createElement('option');
+                defaultStrandOPtion.value = '';
+                defaultStrandOPtion.textContent = 'Select Strand';
+                defaultStrandOPtion.selected = true;
+                defaultStrandOPtion.disabled = true;
+                strandSelect.appendChild(defaultStrandOPtion);
+
+                
+                strands.forEach(strand => {
+                    let exists = Array.from(strandSelect.options).some(
+                        option => option.textContent === strand.cluster
+                    );
+                    
+                    if(!exists) {
+                        let strandOption = document.createElement('option');
+                        strandOption.value = strand.id;
+                        strandOption.textContent = strand.cluster;
+                        
+                        strandSelect.appendChild(strandOption);
+                    }
+                })
+
+            })
+        })
+
+        // show specialization
+        $(document).on('change', '#strand', function() {
+            const selected = this.options[this.selectedIndex].textContent;
+
+            if(selected == 'Industrial Arts (IA)' || selected == 'Family and Consumer Science (FCS)') {
+                $('#specializationCon').slideDown(200).css('display', 'block');
+
+                fetch('http://hnvs_backend.test/api/section/strand/list', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'Application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    const specializationSelect = document.getElementById('specialization');
+                    specializationSelect.innerHTML = '';
+
+                    let defaultSpecializationOption = document.createElement('option');
+                    defaultSpecializationOption.value = '';
+                    defaultSpecializationOption.textContent = 'Select specialization';
+                    defaultSpecializationOption.selected = true;
+                    defaultSpecializationOption.disabled = true;
+                    specializationSelect.appendChild(defaultSpecializationOption);
+
+                    let specializations = data.strands;
+                    specializations.forEach(specialization => {
+                        if(specialization.specialization == null) {
+                            return;
+                        }
+                        if(specialization.cluster != selected) {
+                            return;
+                        }
+                        let specializationOption = document.createElement('option');
+                        specializationOption.value = specialization.id;
+                        specializationOption.textContent = specialization.specialization;
+                        specializationSelect.appendChild(specializationOption);
+                    })
+                })
+
+
+            }else {
+                $('#specializationCon').val('');
+                $('#specializationCon').slideUp(200).css('display', 'none');
+            }
+        })
 
         // dropify
         $(document).ready(function() {
@@ -179,6 +331,7 @@
 
             document.getElementById('createStudentLoader').style.display = 'block';
             const suffix = document.getElementById('suffix');
+            const specialization = document.getElementById('specialization');
 
             let formData = new FormData();
             formData.append('firstname', document.getElementById('fName').value);
@@ -188,7 +341,9 @@
             formData.append('emergency_contact', document.getElementById('emergency').value);
             formData.append('birthdate', document.getElementById('birth').value);
             formData.append('age', document.getElementById('age').value);
-            formData.append('student_id', document.getElementById('studentID').value);
+            formData.append('year_level', document.getElementById('level').value);
+            formData.append('section_id', document.getElementById('section').value);
+            formData.append('strand', document.getElementById('strand').value);
             formData.append('lrn', document.getElementById('lrn').value);
             formData.append('barangay', document.getElementById('brgy').value);
             formData.append('municipality', document.getElementById('municipal').value);
@@ -198,6 +353,10 @@
             
             if(suffix.value != null) {
                 formData.append('suffix', suffix.value);
+            }
+
+            if(specialization.value != null ) {
+                formData.append('specialization', specialization.value);
             }
             
 

@@ -13,6 +13,10 @@
     transform: none !important;
 }
 
+#academicTrack, #techTrack {
+  display: none;
+}
+
 .active {
     background-color: #3498db;
     color: #fff;
@@ -30,6 +34,109 @@
     position: sticky;
     height: 95vh;
     top: 15px;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 1px solid #0071e2;
+  border-radius: 4px;
+  position: relative;
+}
+
+.nav-tabs {
+  border: none;
+  border-radius: 0;
+}
+
+.nav-tabs .nav-link {
+  color: #838383;
+  border: none !important;
+  padding-bottom: 15px;
+}
+
+.nav-tabs .nav-link:hover {
+  border-color: transparent !important;
+}
+
+.nav-tabs .nav-link.active {
+  color: #0071e2;
+  border: none;
+  border-radius: 5px 5px 0 0;
+}
+
+.tab-content, .tab-pane {
+  background-color: #fff; /* Light gray, you can change this */
+  border: none !important;
+  padding: 20px;
+  margin-top: -10px;
+  border-radius: 10px 10px 10px 10px;
+}
+
+
+
+
+/* From Uiverse.io by satyamchaudharydev */ 
+.lineLoader {
+  display: block;
+  --height-of-loader: 4px;
+  --loader-color: #0071e2;
+  width: 130px;
+  height: var(--height-of-loader);
+  border-radius: 30px;
+  background-color: rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.lineLoader::before {
+  content: "";
+  position: absolute;
+  background: var(--loader-color);
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  border-radius: 30px;
+  animation: moving 1s ease-in-out infinite;
+  ;
+}
+
+@keyframes moving {
+  50% {
+    width: 100%;
+  }
+
+  100% {
+    width: 0;
+    right: 0;
+    left: unset;
+  }
+}
+
+.choices__inner {
+  border: none !important;
+  border-bottom: 1px solid #8b8ba7 !important; /* Optional bottom line */
+  background-color: transparent !important;
+  box-shadow: none !important;
+  padding-left: 0.5rem;
+}
+
+/* Style the search input inside the dropdown */
+.choices__input {
+  border: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+.choices__list--multiple .choices__item--selectable {
+  background-color: #3498db !important;
+  color: #fff !important;
+  border: none;
+  border-radius: 20px;
+  padding: 4px 8px;
+  margin: 3px 4px;
+  font-size: 13px;
 }
 
 .generate_search button {
@@ -85,6 +192,7 @@
 .generate_search:focus-within {
   border-radius: var(--after-border-radius);
 }
+
 
 input:focus {
   outline: none;
