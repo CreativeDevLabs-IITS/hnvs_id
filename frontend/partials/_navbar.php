@@ -17,10 +17,10 @@
                         </div>
                         <div class="">
                             <ul class="user-drop dropdown-menu dropdown-menu-lg-end p-0" style="border: 1px solid #e0e0e0; width:200px">
-                                <a href="" id="profileBtn" class="list-group-item  p-2">
+                                <div id="profileBtn" class="list-group-item  p-2" style="cursor: default;">
                                     <div style="font-size: 14px;" id="user_name"></div>
-                                    <small class="text-secondary" style="font-size: 12px">Profile</small>
-                                </a>
+                                    <small class="text-secondary" style="font-size: 12px" id="user_role"></small>
+                                </div>
                                 <li><hr class="dropdown-divider m-0"></li>
                                 <a style="font-size: 13px;" class="list-group-item text-danger shadow dropdown-item admin-na py-2" href="" data-bs-toggle="modal" data-bs-target="#logoutModal">
                                     <svg class="ms-3" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-logout"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M9 12h12l-3 -3" /><path d="M18 15l3 -3" /></svg>
@@ -36,6 +36,8 @@
 </div>
 
 
+
+
 <script>
     $(document).ready(function() {
         fetch(`http://hnvs_backend.test/api/current/user`, {
@@ -49,6 +51,7 @@
         .then(data => {
             let profileImg = document.getElementById('profileImage');
             let role = document.getElementById('role');
+            let userRole = document.getElementById('user_role');
             document.getElementById('user_name').textContent = data.firstname + ' ' + data.lastname;
             
             if(data.image == null) {
@@ -58,11 +61,13 @@
             }
 
             if(data.role == 0) {
-                role.textContent = 'Admin'
+                role.textContent = 'Root Admin'
+                userRole.textContent = 'Root Admin'
             }
 
             if(data.role == 1) {
-                role.textContent = 'Teacher'
+                role.textContent = 'Admin'
+                userRole.textContent = 'Admin'
             }
         })
     })

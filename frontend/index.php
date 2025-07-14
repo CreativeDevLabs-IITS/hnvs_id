@@ -7,7 +7,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="css/Login.css">
+    <link rel="stylesheet" href="css/log-in.css">
 </head>
 <body>
     
@@ -28,7 +28,10 @@
                 <input class="input" type="password" placeholder="" required="" id="password">
                 <span>Password</span>
             </label>
-            <button class="btn btn-primary fw-semibold" style="font-size: 12px; padding: 12px 0" id="login">Submit</button>
+            <button class="btn btn-primary fw-semibold d-flex justify-content-center" style="font-size: 12px; padding: 12px 0" id="login">
+                <div id="submitText">Submit</div>
+                <div class="loader2 me-2" style="display: none" id="loginLoader"></div>
+            </button>
         </form>
     </div>
 
@@ -38,7 +41,24 @@
 
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if(token) {
+                location.replace('http://hnvs.system.test/dashboard.php');
+            }else {
+                if (window.history && window.history.pushState) {
+                    window.history.pushState(null, null, location.href);
+                    window.onpopstate = function () {
+                        window.history.pushState(null, null, location.href); // Prevent back
+                    };
+                }
+            }
+        });
+
+
         $(document).on('click', '#login', function(e) {
+            document.getElementById('submitText').style.display = 'none';
+            document.getElementById('loginLoader').style.display = 'block'
             e.preventDefault();
 
             const email = document.getElementById('email').value;
@@ -56,7 +76,7 @@
             .then(res => {
                 if (res.token) {
                     localStorage.setItem('token', res.token);
-                    location.href = 'dashboard.php';
+                    location.replace('http://hnvs.system.test/dashboard');
                 }else {
                     Swal.fire({
                         position: "top-end",
@@ -70,6 +90,10 @@
                         timer: 5000
                     })
                 }
+            })
+            .finally(() => {
+                document.getElementById('loginLoader').style.display = 'none'
+                document.getElementById('submitText').style.display = 'block';
             })
         })
 

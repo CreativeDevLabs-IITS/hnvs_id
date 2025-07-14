@@ -50,7 +50,14 @@
                                     <label for="suffix" class="text-dark">Suffix</label>
                                     <input type="text" id="suffix" style="width: 100%;" placeholder="">
                                 </div>
-                                <div style="width: 100%;"></div>
+                                <div class="input-group">
+                                    <label for="teacher_role" class="text-dark">Role</label>
+                                    <select class="" name="teacher_role" id="teacher_role" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
+                                        <option value="" class="text-secondary" selected disabled>Select role</option>
+                                        <option value="1">Admin</option>
+                                        <option value="2">Regular Teacher</option>
+                                    </select>
+                                </div>
                                 <div style="width: 100%;"></div>
                             </div>
                         </form>
@@ -100,8 +107,24 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     <script src="http://hnvs_backend.test/dist/js/dropify.min.js"></script>
+    <?php include 'partials/_logout.php' ?>
 
     <script>
+        // prevent backing
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if(!token) {
+                location.replace('http://hnvs.system.test/');
+            }else {
+                if (window.history && window.history.pushState) {
+                    window.history.pushState(null, null, location.href);
+                    window.onpopstate = function () {
+                        window.history.pushState(null, null, location.href); // Prevent back
+                    };
+                }
+            }
+        });
+
 
         window.addEventListener("load", function () {
             setTimeout(() => {
@@ -142,6 +165,7 @@
                 document.getElementById('lName').value = teacher.lastname;
                 document.getElementById('contact').value = teacher.contact;
                 document.getElementById('email').value = teacher.email;
+                document.getElementById('teacher_role').value = teacher.role;
 
                 if(teacher.suffix != null) {
                     document.getElementById('suffix').value = teacher.suffix;
@@ -188,6 +212,7 @@
             formData.append('lastname', document.getElementById('lName').value);
             formData.append('contact', document.getElementById('contact').value);
             formData.append('email', document.getElementById('email').value);
+            formData.append('role', document.getElementById('teacher_role').value);
             
             if(suffix.value != null) {
                 formData.append('suffix', suffix.value);
@@ -219,7 +244,7 @@
                         toast: true,
                         title: response.message,
                         showConfirmButton: false,
-                        timer: 3000,
+                        timer: 1000,
                     }).then (() => {
                         location.href = 'teachers.php';
                     });

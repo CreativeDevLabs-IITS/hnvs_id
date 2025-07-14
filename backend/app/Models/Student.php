@@ -22,6 +22,20 @@ class Student extends Model
         'image',
         'qr_code',
         'year_level',
-        'student_id'
+        'section_id',
+        'strand_id',
     ];
+
+    public function section() {
+        return $this->belongsTo(Section::class);
+    }
+
+    public function strand() {
+        return $this->belongsTo(Strand::class);
+    }
+
+    public function subjects() {
+        return $this->belongsToMany(Subject::class, 'subject_students');
+    }
+
 }

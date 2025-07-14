@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
@@ -13,10 +12,11 @@ use App\Mail\TeacherCredential;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Exception;
-use App\Models\User;
+use Illuminate\Http\Request;
+use App\Models\Teacher;
 use Maatwebsite\Excel\Facades\Excel;
 
-class UserController extends Controller
+class TeacherController extends Controller
 {
     public function getUser() {
         return response()->json(Auth::user());
@@ -24,13 +24,13 @@ class UserController extends Controller
 
     public function list() {
         return response()->json([
-            'teachers' => User::where('role', '!=', '0')->get()
+            'teachers' => Teacher::all()
         ]);
     }
 
     public function search(Request $request) {
         try {
-            $teacher = User::query();
+            $teacher = Teacher::query();
 
             if($request->has('search')) {
                 $search = $request->input('search');
@@ -56,10 +56,12 @@ class UserController extends Controller
                 'lastname' => ['required', 'string', 'regex:/^[A-Za-z\s]+$/'],
                 'suffix' => 'nullable',
                 'contact' => 'required',
-                'email' => 'required|email|unique:users',
+                'email' => 'required|email|unique:users|unique:teachers',
+                'picture' => 'nullable|mimes:png,jpg,jpeg|max:5400',
                 'password' => 'required',
-                'role' => 'required'
             ]);
+
+            $validate['role'] = 2;
 
             if($request->hasFile('image')) {
                 $file = $request->file('image');
@@ -67,7 +69,7 @@ class UserController extends Controller
                 $validate['image'] = $path;
             }
 
-            $teacher = User::create($validate);
+            $teacher = Teacher::create($validate);
 
             $teacher->email_token = Str::random(60);
             $teacher->email_token_expires_at = now()->addHours(48);
@@ -97,13 +99,13 @@ class UserController extends Controller
 
     public function find(Request $request) {
         return response()->json([
-            'teacher' => User::find($request->id)
+            'teacher' => Teacher::find($request->id)
         ]);
     }
 
     public function edit(Request $request) {
         try {
-            $teacher = User::find($request->id);
+            $teacher = Teacher::find($request->id);
 
             $validate = $request->validate([
                 'firstname' => ['nullable', 'string', 'regex:/^[A-Za-z\s]+$/'],
@@ -142,7 +144,7 @@ class UserController extends Controller
 
     public function delete(Request $request) {
         try {
-            $teacher = User::find($request->id);
+            $teacher = Teacher::find($request->id);
             if($teacher->image && Storage::disk('public')->exists($teacher->image)) {
                 Storage::disk('public')->delete($teacher->image);
             }
@@ -161,7 +163,7 @@ class UserController extends Controller
 
     public function count() {
         return response()->json([
-            'teachers' => User::count(),
+            'teachers' => Teacher::count(),
             'user' => Auth::user()->role
         ]);
     }
@@ -177,7 +179,7 @@ class UserController extends Controller
     public function setup(Request $request) {
         try {
             $token = $request->token;
-            $teacher = User::where('email_token', $token)->first();
+            $teacher = Teacher::where('email_token', $token)->first();
 
             if(!$teacher) {
                 return response()->json([
@@ -204,7 +206,7 @@ class UserController extends Controller
 
     public function saveSetup(Request $request) {
         try {
-            $teacher = User::find($request->id);
+            $teacher = Teacher::find($request->id);
             $validate = $request->validate([
                 'password' => 'required'
             ]);
