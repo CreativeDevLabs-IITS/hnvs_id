@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('school_year');
             $table->string('description')->nullable();
             $table->integer('year_level');
-            $table->string('section');
             $table->string('semester');
             $table->integer('is_specialized')->nullable();
             $table->string('section');
