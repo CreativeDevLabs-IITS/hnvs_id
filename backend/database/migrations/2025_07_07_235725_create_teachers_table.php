@@ -23,6 +23,8 @@ return new class extends Migration
             $table->integer('role');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('email_token')->nullable()->unique();
+            $table->timestamp('email_token_expires_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

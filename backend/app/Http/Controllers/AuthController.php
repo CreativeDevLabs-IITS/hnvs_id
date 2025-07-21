@@ -8,6 +8,7 @@ use Illuminate\Validation\ValidationException;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Teacher;
 
 class AuthController extends Controller
 {
@@ -16,26 +17,29 @@ class AuthController extends Controller
             if(is_null($request->email) || is_null($request->password)) {
                 return response()->json([
                     'error' => 'Email and password are required.'
-                ]);
+                ], 422);
             }
 
-            $credentials = User::where('email', $request->email)->first();
+            $credentials = User::where('email', $request->email)->first() ??
+                    Teacher::where('email', $request->email)->first();
+
             if($credentials && Hash::check($request->password, $credentials->password)) {
                 $token = $credentials->createToken('personal-token')->plainTextToken;
 
                 return response()->json([
                     'token' => $token,
+                    'id' => $credentials->id
                 ], 200);
             }else {
                 return response()->json([
                     'error' => 'Invalid credentials'
-                ]);
+                ], 401);
             }
 
         }catch(ValidationException $e) {
             return response()->json([
                 'error' => $e->getMessage()
-            ]);
+            ], 422);
         }
     }
 }

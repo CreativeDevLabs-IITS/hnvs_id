@@ -106,7 +106,7 @@ class StudentController extends Controller
             $result = $writer->write($qrcode);
             $fileName = 'qr_code/' . uniqid() . '.png';
             Storage::disk('public')->put($fileName, $result->getString());
-            $qr_path = 'http://hnvs_backend.test' . $fileName;
+            $qr_path = 'http://hnvs_backend.test/' . $fileName;
             $student->qr_code = $qr_path;
 
             $student->save();

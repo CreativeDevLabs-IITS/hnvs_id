@@ -72,6 +72,26 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="d-flex gap-5">
+                                <div class="d-flex flex-column input-group">
+                                    <label for="daysSelect" class="text-dark">Schedule Day/s</label>
+                                    <select id="daysSelect" class="form-select" style="border: none;" multiple>
+                                        <option value="MON">Monday</option>
+                                        <option value="TUE">Tuesday</option>
+                                        <option value="WED">Wednesday</option>
+                                        <option value="THU">Thursday</option>
+                                        <option value="FRI">Friday</option>
+                                    </select>
+                                </div>
+                                <div class="input-group d-flex flex-column align-items-baseline justify-content-between" style=" width: 100%">
+                                    <label for="time_start" class="text-dark">Time In</label>
+                                    <input type="time" name="time_start" id="time_start" style="width: 100%;" placeholder="">
+                                </div>
+                                <div class="input-group d-flex flex-column align-items-baseline justify-content-between" style=" width: 100%">
+                                    <label for="time_end" class="text-dark">Time Out</label>
+                                    <input type="time" name="time_end" id="time_end" style="width: 100%;" placeholder="">                              
+                                </div>
+                            </div>
                         </form>
                     </div>
 
@@ -95,7 +115,7 @@
                             <div class="loader2 me-2" style="display: none;" id="createSubjectAginLoader"></div>
                             Create & create another
                         </button>
-                        <a href="strands.php" class="btn btn-secondary fw-semibold text-white">Cancel</a>
+                        <a href="subjects.php" class="btn btn-secondary fw-semibold text-white">Cancel</a>
                     </div>
                 </div>
 
@@ -131,6 +151,14 @@
                     };
                 }
             }
+
+            const daysSelect = document.getElementById('daysSelect');
+            const choices = new Choices(daysSelect, {
+                removeItemButton: true,
+                placeholderValue: 'Select day/s',
+                searchEnabled: false,
+                shouldSort: false
+            });
         });
 
         window.addEventListener("load", function () {
@@ -176,9 +204,12 @@
             }
         });
 
+
         $('#addSubjectBtn').on('click', function(e) {
             e.preventDefault();
             document.getElementById('createSubjectLoader').style.display = 'block';
+            const selectedDays = document.getElementById('daysSelect').selectedOptions;
+            const days = Array.from(selectedDays).map(day => day.value);
 
             fetch('http://hnvs_backend.test/api/subject/create', {
                 method: 'POST',
@@ -195,6 +226,9 @@
                     section: document.getElementById('section').value,
                     description: document.getElementById('description').value,
                     teachers: document.getElementById('teacherSelect').value,
+                    time_start: document.getElementById('time_start').value,
+                    time_end: document.getElementById('time_end').value,
+                    day: days
                 })
             })
             .then(res => res.json())

@@ -76,13 +76,12 @@
                         <table class="table table-hover align-middle rounded overflow-hidden" style="font-size: 13px;">
                             <thead class="table-secondary border">
                                 <tr>
-                                    <th scope="">#</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Section</th>
                                     <th scope="col">Year Level</th>
-                                    <th scope="col">Semester</th>
+                                    <th scope="col">Schedule</th>
                                     <th scope="col">Teacher</th>
-                                    <th scope="col">School Year</th>
+                                    <th scope="col">Semester</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -202,6 +201,18 @@
             fetchStudents();
         })
 
+        function formatTime(timeStr) {
+            const [hour, minute] = timeStr.split(':');
+            const date = new Date();
+            date.setHours(hour, minute);
+
+            return date.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+        }
+
         let currentPage = 1;
         let currentSearch = '';
 
@@ -212,7 +223,7 @@
             if(subjects.length < 1) {
                 const emptyRow = document.createElement('tr');
                 const emptyCell = document.createElement('td');
-                emptyCell.colSpan = 5;
+                emptyCell.colSpan = 7;
                 emptyCell.style.textAlign = 'center';
                 emptyCell.classList.add('text-muted');
                 emptyCell.textContent = 'No records found';
@@ -224,13 +235,12 @@
             subjects.forEach((subject, index) => {
                 let row = document.createElement('tr');
                 row.innerHTML = `
-                <td>${index + 1}</td>
                 <td>${subject.name}</td>
                 <td>${subject.section}</td>
                 <td>${subject.year_level}</td>
-                <td>${subject.semester}</td>
+                <td>(${subject.day}) ${formatTime(subject.time_start)} - ${formatTime(subject.time_end)} </td>
                 <td>${subject.teachers.map(teacher => teacher.firstname + ' ' + teacher.lastname).join(', ')}</td>
-                <td>${subject.school_year}</td>
+                <td>${subject.semester}</td>
                 <td>
                     <div class="dropdown d-flex flex-row-reverse no_print" id="noPrint">
                         <div class="" data-bs-toggle="dropdown" style="cursor: pointer;" aria-expanded="false" >
@@ -252,7 +262,7 @@
                                 </a>
                             </li>
                             <li class="p-1">
-                                <div class="text-danger" id="subjectDeleteBtn" style="font-size: 14px" data-id="${subject.id}" data-name="${subject.name}" data-bs-toggle="modal" data-bs-target="#deleteSubjectModal">
+                                <div style="cursor: pointer" class="text-danger" id="subjectDeleteBtn" style="font-size: 14px" data-id="${subject.id}" data-name="${subject.name}" data-bs-toggle="modal" data-bs-target="#deleteSubjectModal">
                                     <svg class="text-danger me-2" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                                     Delete Subject
                                 </div>
@@ -269,7 +279,7 @@
 
         function renderPagination(meta, isSearcj = false) {
             const paginationInfo = document.getElementById('paginationInfo');
-            paginationInfo.textContent = `Showing ${(meta.current_page - 1) * meta.per_page + 1} to ${Math.min(meta.current_page * meta.per_page, meta.total)} of ${meta.total} students`;
+            paginationInfo.textContent = `Showing ${(meta.current_page - 1) * meta.per_page + 1} to ${Math.min(meta.current_page * meta.per_page, meta.total)} of ${meta.total} subjects`;
 
             const container = document.getElementById('pagination');
             container.innerHTML = '';

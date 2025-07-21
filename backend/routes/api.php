@@ -17,21 +17,26 @@ Route::post('/setup', [TeacherController::class, 'setup']);
 Route::post('/save/setup', [TeacherController::class, 'saveSetup']);
 
 
+
 Route::get('list', [AttendanceController::class, 'list']);
 
 
+
 Route::middleware(['auth:sanctum', 'preventBack'])->group(function() {
-    // Route::get('/current/user', [UserController::class, 'getuser']);
-    // Route::get('/user/list', [UserController::class, 'list']);
-    // Route::get('/search/user', [UserController::class, 'search']);
-    // Route::post('/create/user', [UserController::class, 'create']);
-    // Route::post('/find/user', [UserController::class, 'find']);
-    // Route::post('/edit/user', [UserController::class, 'edit']);
-    // Route::post('/delete/user', [UserController::class, 'delete']);
-    // Route::get('/count/user', [UserController::class, 'count']);
-    // Route::get('/select/user', function() {
-    //     return User::select('id', 'firstname', 'lastname')->where('role', '!=', 0)->get();
-    // });
+    Route::get('/trial', function () {
+        return response()->json(['message' => 'API is working']);
+    });
+    Route::get('/current/user', [UserController::class, 'getuser']);
+    Route::get('/user/list', [UserController::class, 'list']);
+    Route::get('/search/user', [UserController::class, 'search']);
+    Route::post('/create/user', [UserController::class, 'create']);
+    Route::post('/find/user', [UserController::class, 'find']);
+    Route::post('/edit/user', [UserController::class, 'edit']);
+    Route::post('/delete/user', [UserController::class, 'delete']);
+    Route::get('/count/user', [UserController::class, 'count']);
+    Route::get('/select/user', function() {
+        return User::select('id', 'firstname', 'lastname')->where('role', '!=', 0)->get();
+    });
 
     Route::get('/current/user', [TeacherController::class, 'getuser']);
     Route::get('/teachers/list', [TeacherController::class, 'list']);
@@ -80,3 +85,10 @@ Route::middleware(['auth:sanctum', 'preventBack'])->group(function() {
     Route::get('/logout', [UserController::class, 'logout']);
 });
 
+
+// mobile
+Route::middleware(['preventAccess'])->group(function() {
+    Route::post('mobile/logout', [UserController::class, 'mobileLogout']);
+
+    Route::post('/mobile/subjects-list', [TeacherController::class, 'subjectList']);
+});

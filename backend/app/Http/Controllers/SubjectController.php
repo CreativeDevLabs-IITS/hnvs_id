@@ -15,7 +15,7 @@ class SubjectController extends Controller
     public function list() {
         return response()->json([
             'subjects' => Subject::with('teachers')->paginate(10)
-        ]);
+        ], 200);
     }
 
     public function create(Request $request){
@@ -27,9 +27,12 @@ class SubjectController extends Controller
                 'semester' => 'required',
                 'description' => 'nullable',
                 'teachers' => 'required',
-                'teachers' => 'required',
-                'section' => 'required'
+                'section' => 'required',
+                'time_start' => 'required',
+                'time_end' => 'required'
             ]);
+
+            $validate['day'] = implode(',' , $request->day);
 
             $exist = Subject::where('name', $validate['name'])
             ->where('section', $validate['section'])->exists();
@@ -139,4 +142,5 @@ class SubjectController extends Controller
             ], 500);
         }
     }
+
 }

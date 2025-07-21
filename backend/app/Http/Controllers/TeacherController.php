@@ -14,7 +14,10 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\Teacher;
+use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Subject;
+
 
 class TeacherController extends Controller
 {
@@ -68,6 +71,8 @@ class TeacherController extends Controller
                 $path = $file->store('images', 'public');
                 $validate['image'] = $path;
             }
+
+            $validate['password'] = Hash::make($request->password);
 
             $teacher = Teacher::create($validate);
 
@@ -168,14 +173,6 @@ class TeacherController extends Controller
         ]);
     }
 
-    public function logout(Request $request) {
-        $user = Auth::user();
-        $user->tokens()->delete();
-        return response()->json([
-            'message' => 'Logout successfully'
-        ]);
-    }
-
     public function setup(Request $request) {
         try {
             $token = $request->token;
@@ -218,6 +215,27 @@ class TeacherController extends Controller
                 'message' => 'Password setup saved.'
             ]);
         }catch (ValidationException $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+        // mobile
+    public function subjectList(Request $request) {
+        try {
+            $daySelected = strtoupper($request->day);
+            $subjects = Subject::with('teachers')
+            ->whereHas('teachers', function($query) use ($request) {
+                $query->where('teachers.id', $request->id);
+            })
+            ->whereRaw("FIND_IN_SET(?, day)", [$daySelected])->get();
+
+            return response()->json([
+                'subjects' => $subjects,
+                'day' => $daySelected
+            ]);
+        }catch(Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()
             ]);
