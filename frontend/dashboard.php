@@ -79,6 +79,7 @@
         })
         .then(res => res.json())
         .then(data => {
+            console.log(data);
             if(data.user == 1 || data.user == 0) {
                 document.getElementById('teacherNumCon').style.display = 'block';
                 document.getElementById('teacher_num').textContent = data.teachers;

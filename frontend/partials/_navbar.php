@@ -69,6 +69,11 @@
                 role.textContent = 'Admin'
                 userRole.textContent = 'Admin'
             }
+
+            if(data.role == 2) {
+                role.textContent = 'Teacher'
+                userRole.textContent = 'Teacher'
+            }
         })
     })
 </script>

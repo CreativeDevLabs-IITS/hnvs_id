@@ -20,6 +20,10 @@ return new class extends Migration
             $table->string('section');
             $table->string('semester');
             $table->integer('is_specialized')->nullable();
+            $table->string('section');
+            $table->string('day');
+            $table->time('time_start');
+            $table->time('time_end');
             $table->timestamps();
         });
     }

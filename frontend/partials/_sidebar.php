@@ -112,8 +112,6 @@
                 document.getElementById('teachers_menu').style.display = 'block';
                 document.getElementById('students_menu').style.display = 'block';
                 document.getElementById('subjects_menu').style.display = 'block';
-                document.getElementById('strand_menu').style.display = 'block';
-                document.getElementById('sections_menu').style.display = 'block';
             }
 
             if (data.role == 2) {
@@ -121,8 +119,6 @@
                 document.getElementById('teachers_menu').style.display = 'none';
                 document.getElementById('students_menu').style.display = 'none';
                 document.getElementById('subjects_menu').style.display = 'none';
-                document.getElementById('strand_menu').style.display = 'none';
-                document.getElementById('sections_menu').style.display = 'none';
             }
         })
     })

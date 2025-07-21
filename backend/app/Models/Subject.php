@@ -15,7 +15,10 @@ class Subject extends Model
         'year_level',
         'semester',
         'is_specialized',
-        'section'
+        'section',
+        'day',
+        'time_start',
+        'time_end'
     ];
 
     public function teachers() {

@@ -332,6 +332,7 @@
             }
 
             students.forEach((student, index) => {
+                console.log(student.qr_code);
                 let row = document.createElement('tr');
                 row.innerHTML = `
                 <td>${(meta.current_page - 1) * meta.per_page + index + 1}</td>
