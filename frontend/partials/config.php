@@ -1,5 +1,5 @@
 <?php 
 
-    define('APP_URL', 'https://hnvs-id-be.creativedevlabs.com/');
+    define('APP_URL', 'https://hnvs-id-be.creativedevlabs.com');
 
 ?>
