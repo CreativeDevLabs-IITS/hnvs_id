@@ -1,5 +1,5 @@
 <?php 
 
-    define('APP_URL', 'http://hnvs_backend.test');
+    define('APP_URL', 'https://hnvs-id-be.creativedevlabs.com/');
 
 ?>
