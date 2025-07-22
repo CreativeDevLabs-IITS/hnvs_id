@@ -14,7 +14,7 @@ class UserAdminSeeder extends Seeder
      */
     public function run(): void
     {
-        User::created([
+        User::create([
             'firstname' => 'Jaevoy',
             'lastname' => 'Seloterio',
             'contact' => '0000000000',
