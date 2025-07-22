@@ -88,18 +88,18 @@ class StudentController extends Controller
             if($request->hasFile('image')) {
                 $file = $request->file('image');
                 $path = $file->store('images', 'public');
-                $validate['image'] = $path;
+                $validate['image'] = env('APP_URL') . $path;
             }
 
             if($request->hasFile('signature')) {
                 $signFile = $request->file('signature');
                 $signPath = $signFile->store('images', 'public');
-                $validate['signature'] = $signPath;
+                $validate['signature'] = env('APP_URL') . $signPath;
             }
 
             $student = Student::create($validate);
 
-            $qrData = 'http://hnvs.system.test/students.php?id=' . $student->id;
+            $qrData = env('FRONTEND_URL') . $student->id;
 
             $qrcode = QrCode::create($qrData);
             $writer = new PngWriter();
@@ -304,14 +304,14 @@ class StudentController extends Controller
                     'strand_id' => $strand->id
                 ]);
 
-                $qrData = env('APP_URL'). '/students?id=' . $student->id;;
+                $qrData = env('FRONTEND_URL'). '/students?id=' . $student->id;;
 
                 $qrcode = QrCode::create($qrData);
                 $writer = new PngWriter();
                 $result = $writer->write($qrcode);
                 $fileName = 'qr_code/' . uniqid() . '.png';
                 Storage::disk('public')->put($fileName, $result->getString());
-                $path = 'http://hnvs_backend.test' . $fileName;
+                $path = env('APP_URL') . $fileName;
                 $student->qr_code = $path;
                 $student->save();
             }
