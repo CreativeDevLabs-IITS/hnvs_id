@@ -79,7 +79,7 @@
             .then(res => {
                 if (res.token) {
                     localStorage.setItem('token', res.token);
-                    location.replace('https://hnvs-id.creativedevlabs.com/dashboard');
+                    location.replace('https://hnvs-id.creativedevlabs.com/dashboard.php');
                 }else {
                     Swal.fire({
                         position: "top-end",
