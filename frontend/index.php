@@ -15,7 +15,7 @@
     <div class="d-flex justify-content-center align-items-center main_con" style="height: 100vh;">
         <form class="form" >
             <div class="d-flex flex-column justify-content-center align-items-center">
-                <img src="http://hnvs_backend.test/images/logo.png" style="width: 18%;" alt="">
+                <img src="http://hnvs_backend.test/assets/logo.png" style="width: 18%;" alt="">
                 <div class="fw-semibold" style="font-size: 10px;">HILONGOS NATIONAL VOCATIONAL SCHOOL</div>
             </div>
             <p class="fw-semibold d-flex justify-content-center mt-4" style="font-size: 15px;">Welcome Back! </p>

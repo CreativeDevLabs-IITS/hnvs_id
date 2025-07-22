@@ -86,7 +86,7 @@
     
                     <div class=" d-flex flex-column gap-4 bg-white p-4 shadow rounded-4 mt-4">
                         <div class=" text-secondary">Image</div>
-                        <input type="file" id="profile" class="dropify" data-default-file="http://hnvs_backend.test/images/default.jpg">
+                        <input type="file" id="profile" class="dropify" data-default-file="http://hnvs_backend.test/assets/default.jpg">
                     </div>
                     <div class="d-flex gap-3 align-items-center mt-4">
                         <button class="btn btn-primary fw-semibold d-flex align-items-center" id="addTeacher" style="background-color: #3498db !important; border: none">
@@ -102,7 +102,7 @@
                 </div>
 
                 <div id="no-internet" class="justify-content-center flex-column align-items-center" style="height: 80%; display: none">
-                    <img src="http://hnvs_backend.test/images/no-connection.png" style="width: 10%;" alt="">
+                    <img src="http://hnvs_backend.test/assets/no-connection.png" style="width: 10%;" alt="">
                     <div class="text-secondary fs-6 text-danger">No internet connection</div>
                     <div class="text-secondary" style="font-size: 13px;">Please check your network settings and try again. Some features may not work until you're back online.</div>
                 </div>

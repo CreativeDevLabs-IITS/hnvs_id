@@ -74,13 +74,12 @@
                         <table class="table table-hover align-middle rounded overflow-hidden" style="font-size: 13px; overflow: visible !important">
                             <thead class="table-secondary border">
                                 <tr>
-                                    <th scope="">#</th>
+                                    <th scope="col">Actions</th>
                                     <th scope="col">Image</th>
                                     <th scope="col">Fullname</th>
                                     <th scope="col">Section</th>
                                     <th scope="col">Strand</th>
                                     <th scope="col">LRN</th>
-                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="student_table_body">
@@ -95,7 +94,7 @@
                 </div>
 
                 <div id="no-internet" class="justify-content-center flex-column align-items-center" style="height: 80%; display: none">
-                    <img src="http://hnvs_backend.test/images/no-connection.png" style="width: 10%;" alt="">
+                    <img src="http://hnvs_backend.test/assets/no-connection.png" style="width: 10%;" alt="">
                     <div class="text-secondary fs-6 text-danger">No internet connection</div>
                     <div class="text-secondary" style="font-size: 13px;">Please check your network settings and try again. Some features may not work until you're back online.</div>
                 </div>
@@ -337,14 +336,8 @@
             students.forEach((student, index) => {
                 let row = document.createElement('tr');
                 row.innerHTML = `
-                <td>${(meta.current_page - 1) * meta.per_page + index + 1}</td>
-                <td>${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${APP_URL}/storage/${student.image}" />` : 'No Image'}</td>
-                <td>${student.lastname + ', ' + student.firstname + ' ' + (student.suffix != null ? student.suffix : '') + ' ' + (student.middlename != null ? student.middlename.charAt(0) : '') + '.'}</td>
-                <td>${student.section.name}</td>
-                <td>${student.strand.cluster == 'Industrial Arts (IA)' ? `(IA) ${student.strand.specialization}` : student.strand.cluster == 'Family and Consumer Science (FCS)' ? `(FCS) ${student.strand.specialization}` : student.strand.cluster }</td>
-                <td>${student.lrn}</td>
                 <td>
-                    <div class="dropdown d-flex flex-row-reverse no_print">
+                    <div class="dropdown d-flex no_print">
                         <div class="" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
                             <svg xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="#002"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
                         </div>
@@ -389,6 +382,11 @@
                         </ul>
                     </div>
                 </td>
+                <td>${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${student.image}" />` : 'No Image'}</td>
+                <td>${student.lastname + ', ' + student.firstname + ' ' + (student.suffix != null ? student.suffix : '') + ' ' + (student.middlename != null ? student.middlename.charAt(0) : '') + '.'}</td>
+                <td>${student.section.name}</td>
+                <td>${student.strand.cluster == 'Industrial Arts (IA)' ? `(IA) ${student.strand.specialization}` : student.strand.cluster == 'Family and Consumer Science (FCS)' ? `(FCS) ${student.strand.specialization}` : student.strand.cluster }</td>
+                <td>${student.lrn}</td>
                 `;
 
                 tableBody.appendChild(row);

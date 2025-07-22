@@ -138,11 +138,11 @@
                         <div class="d-flex gap-5">
                             <div class="input-group">
                                 <label for="signature" class="text-dark">Student signature</label>
-                                <input type="file" id="signature" class="dropify" data-default-file="http://hnvs_backend.test/images/default-signature.png">
+                                <input type="file" id="signature" class="dropify" data-default-file="http://hnvs_backend.test/assets/default-signature.png">
                             </div>
                             <div class="input-group">
                                 <label for="studentImg" class="text-dark">Student image</label>
-                                <input type="file" id="studentImg" class="dropify" data-default-file="http://hnvs_backend.test/images/default.jpg">
+                                <input type="file" id="studentImg" class="dropify" data-default-file="http://hnvs_backend.test/assets/default.jpg">
                             </div>
                         </div>
                     </div>
@@ -157,7 +157,7 @@
                 </div>
 
                 <div id="no-internet" class="justify-content-center flex-column align-items-center" style="height: 80%; display: none">
-                    <img src="http://hnvs_backend.test/images/no-connection.png" style="width: 10%;" alt="">
+                    <img src="http://hnvs_backend.test/assets/no-connection.png" style="width: 10%;" alt="">
                     <div class="text-secondary fs-6 text-danger">No internet connection</div>
                     <div class="text-secondary" style="font-size: 13px;">Please check your network settings and try again. Some features may not work until you're back online.</div>
                 </div>

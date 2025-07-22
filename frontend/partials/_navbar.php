@@ -1,7 +1,7 @@
 <div style="background-color: #fff; width: 100%; box-shadow: 0 0 12px 0 #abb2b9; z-index: 3">
     <div class="d-flex justify-content-between align-items-center" style="position: sticky; top: 0; padding: 12px 18px">
         <div class="d-flex align-items-center gap-2">
-            <img src="http://hnvs_backend.test/images/logo.png" style="width: 35px;" alt="">
+            <img src="http://hnvs_backend.test/assets/logo.png" style="width: 35px;" alt="">
             <div class="fw-semibold" style="font-size: 18px;">HNVS</div>
         </div>
 
