@@ -127,7 +127,9 @@
     
 </div>
 
+
 <script>
+
     $(document).on('click', "#view_student", function() {
         let image = document.getElementById('studentImg');
 
@@ -151,7 +153,7 @@
         }else {
             document.getElementById('no-image').style.display = 'none';
             image.style.display = 'block';
-            image.src = 'http://hnvs_backend.test/' + $(this).data('image');
+            image.src = `${APP_URL}` + $(this).data('image');
         }
         document.getElementById('qrcode').src = $(this).data('qr');
 
@@ -166,8 +168,3 @@
     })
 </script>
 
-<!-- <script>
-    $(document).on('click', '#print', function() {
-        window.print();
-    })
-</script> -->

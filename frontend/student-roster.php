@@ -178,8 +178,11 @@
     <script src="http://hnvs_backend.test/dist/js/dropify.min.js"></script>
 
     <?php include 'partials/_logout.php' ?>
+    <?php include 'partials/config.php' ?>
 
     <script>
+        const APP_URL = "<?= APP_URL ?>"
+
         // prevent backing
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
@@ -195,7 +198,6 @@
             }
         });
 
-
         window.addEventListener("load", function () {
             setTimeout(() => {
                 if(navigator.onLine) {
@@ -208,7 +210,6 @@
             }, 800)
         })
 
-
         $(document).ready(function() {
             $('.dropify').dropify({
                 messages: {
@@ -220,10 +221,9 @@
             });
         });
 
-
         // populate strand dropdown
         $(document).ready(function() {
-            fetch('http://hnvs_backend.test/api/list/strands', {
+            fetch(`${APP_URL}/api/list/strands`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -251,10 +251,9 @@
             });
         })
 
-
         // populate section dropdown
         $(document).ready(function() {
-            fetch('http://hnvs_backend.test/api/section/list', {
+            fetch(`${APP_URL}/api/section/list`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -276,13 +275,12 @@
             });
         })
 
-
         // load subject name
         $(document).ready(function() {
             const urlParam = new URLSearchParams(window.location.search);
             const id = urlParam.get('id');
             
-            fetch('http://hnvs_backend.test/api/find/subject', {
+            fetch(`${APP_URL}/api/find/subject`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',
@@ -301,7 +299,6 @@
             })
         })
 
-
         // pupulate table and search
         let currentPage = 1;
         let currentSearch = '';
@@ -316,7 +313,7 @@
             const url_param = new URLSearchParams(window.location.search);
             const subject_id = url_param.get('id');
             currentSearch = '';
-            fetch(`http://hnvs_backend.test/api/student/roster?page=${page}`, {
+            fetch(`${APP_URL}/api/student/roster?page=${page}`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',
@@ -365,7 +362,6 @@
             })
         }
 
-
         let student_countInfo = 0;
         let totalFetchCount = '';
 
@@ -399,7 +395,7 @@
                 student_countInfo += 1;
                 let row = document.createElement('tr');
                 row.innerHTML = `
-                <td>${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="http://hnvs_backend.test/storage/${student.image}" />` : 'No Image'}</td>
+                <td>${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${APP_URL}/storage/${student.image}" />` : 'No Image'}</td>
                 <td>${student.lastname + ', ' + student.firstname + ' ' + (student.suffix != null ? student.suffix : '') + ' ' + (student.middlename != null ? student.middlename.charAt(0) : '') + '.'}</td>
                 <td>${student.section.name}</td>
                 <td>${student.strand.cluster == 'Industrial Arts (IA)' ? `(IA) ${student.strand.specialization}` : student.strand.cluster == 'Family and Consumer Science (FCS)' ? `(FCS) ${student.strand.specialization}` : student.strand.cluster }</td>
@@ -475,7 +471,6 @@
         const searchIcon = document.getElementById('searchIcon');
         const searchLoader = document.getElementById('searchLoader');
 
-
         search.addEventListener('input', () => {
             searchIcon.style.display = 'none',
             searchLoader.style.display = 'block';
@@ -519,7 +514,6 @@
             document.getElementById('AllBtn').style.color = '#fff';
         })
 
-
         // populate delete modal
         $(document).on('click', '#deleteBtn', function(e) {
             e.preventDefault();
@@ -527,13 +521,12 @@
             document.getElementById('studentName').textContent = $(this).data('name') + ' ' + $(this).data('lname');
         })
 
-
         // delete
         $(document).on('click', '#deleteStudentBtn', function(e) {
             e.preventDefault();
             let id = document.getElementById('studentId').value;
             
-            fetch('http://hnvs_backend.test/api/delete/student', {
+            fetch(`${APP_URL}/api/delete/student`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',
@@ -576,7 +569,6 @@
             })
         })
 
-
         // import roster
         $(document).on('click', '#importRoster', function() {
             document.getElementById('importSpinner').style.display = 'block';
@@ -584,7 +576,7 @@
             let formData = new FormData();
             formData.append('file', file);
 
-            fetch('http://hnvs_backend.test/api/subject/roster/import', {
+            fetch(`${APP_URL}/api/subject/roster/import`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',

@@ -39,8 +39,11 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 
+    <?php include 'partials/config.php' ?>
 
     <script>
+        const APP_URL = "<?= APP_URL ?>"
+
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if(token) {
@@ -64,7 +67,7 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            fetch(`http://hnvs_backend.test/api/login`, {
+            fetch(`${APP_URL}/api/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'Application/json',

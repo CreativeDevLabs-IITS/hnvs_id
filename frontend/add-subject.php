@@ -120,7 +120,7 @@
                 </div>
 
                 <div id="no-internet" class="justify-content-center flex-column align-items-center" style="height: 80%; display: none">
-                    <img src="https://hnvs-id-be.creativedevlabs.com/images/no-connection.png" style="width: 10%;" alt="">
+                    <img src="http://hnvs_backend.test/images/no-connection.png" style="width: 10%;" alt="">
                     <div class="text-secondary fs-6 text-danger">No internet connection</div>
                     <div class="text-secondary" style="font-size: 13px;">Please check your network settings and try again. Some features may not work until you're back online.</div>
                 </div>
@@ -135,14 +135,17 @@
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
     <?php include 'partials/_logout.php' ?>
+    <?php include 'partials/config.php' ?>
     
 
     <script>
+        const APP_URL = "<?= APP_URL  ?>"
+
         // prevent backing
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if(!token) {
-                location.replace('https://hnvs-id.creativedevlabs.com/');
+                location.replace('http://hnvs.system.test/');
             }else {
                 if (window.history && window.history.pushState) {
                     window.history.pushState(null, null, location.href);
@@ -175,7 +178,7 @@
 
         let teacherChoices = null;
 
-        fetch('https://hnvs-id-be.creativedevlabs.com/api/select/teachers',{
+        fetch(`${APP_URL}/api/select/teachers`,{
             method: 'GET',
             headers: {
                 'Accept': 'Application/json',
@@ -211,7 +214,7 @@
             const selectedDays = document.getElementById('daysSelect').selectedOptions;
             const days = Array.from(selectedDays).map(day => day.value);
 
-            fetch('https://hnvs-id-be.creativedevlabs.com/api/subject/create', {
+            fetch(`${APP_URL}/api/subject/create`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',
@@ -273,7 +276,7 @@
             e.preventDefault();
             document.getElementById('createSubjectAginLoader').style.display = 'block';
 
-            fetch('https://hnvs-id-be.creativedevlabs.com/api/subject/create', {
+            fetch(`${APP_URL}/api/subject/create`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',

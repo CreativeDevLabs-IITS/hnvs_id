@@ -108,8 +108,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 
     <?php include 'partials/_logout.php' ?>
+    <?php include 'partials/config.php' ?>
 
     <script>
+        const APP_URL = "<?= APP_URL ?>"
+
         // prevent backing
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
@@ -124,7 +127,6 @@
                 }
             }
         });
-
 
         window.addEventListener("load", function () {
             setTimeout(() => {
@@ -141,7 +143,7 @@
 
         // populate table on page load
         $(document).ready(function() {
-            fetch(`http://hnvs_backend.test/api/teachers/list`, {
+            fetch(`${APP_URL}/api/teachers/list`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application',
@@ -171,7 +173,7 @@
                     let row = document.createElement('tr');
                     row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${teacher.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="http://hnvs_backend.test/storage/${teacher.image}" />` : 'No Image'}</td>
+                    <td>${teacher.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${APP_URL}/storage/${teacher.image}" />` : 'No Image'}</td>
                     <td>${teacher.lastname}</td>
                     <td>${teacher.firstname}</td>
                     <td>${teacher.middlename}</td>
@@ -205,7 +207,7 @@
             searchLoader.style.display = 'block';
 
             if(search.contains(e.target)) {
-                fetch(`http://hnvs_backend.test/api/search/teacher?search=${encodeURIComponent(search.value)}`, {
+                fetch(`${APP_URL}/api/search/teacher?search=${encodeURIComponent(search.value)}`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'Application/json',
@@ -234,7 +236,7 @@
                         let row = document.createElement('tr');
                         row.innerHTML = `
                         <td>${index + 1}</td>
-                        <td>${teacher.image ? `<img style="height: 30px; 30px; border-radius: 30px" src="http://hnvs_backend.test/storage/${teacher.image}" />` : 'No Image'}</td>
+                        <td>${teacher.image ? `<img style="height: 30px; 30px; border-radius: 30px" src="${APP_URL}/storage/${teacher.image}" />` : 'No Image'}</td>
                         <td>${teacher.lastname}</td>
                         <td>${teacher.firstname}</td>
                         <td>${teacher.middlename}</td>
@@ -274,7 +276,7 @@
             e.preventDefault();
             let id = document.getElementById('teacherId').value;
             
-            fetch('http://hnvs_backend.test/api/delete/teacher', {
+            fetch(`${APP_URL}/api/delete/teacher`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',

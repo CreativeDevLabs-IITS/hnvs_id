@@ -114,13 +114,10 @@
 </div>
 
 
-
-
-
 <script>
 
     function fetchSections() {
-        fetch('http://hnvs_backend.test/api/section/list', {
+        fetch(`${APP_URL}/api/section/list`, {
             method: 'GET',
             headers: {
                 'Accept': 'Application/json',
@@ -176,7 +173,7 @@
         e.preventDefault();
         document.getElementById('saveSectionSpinner').style.display = 'block';
 
-        fetch('http://hnvs_backend.test/api/section/create', {
+        fetch(`${APP_URL}/api/section/create`, {
             method: 'POST',
             headers: {
                 'Accept': 'Application/json',
@@ -236,7 +233,7 @@
         e.preventDefault();
         document.getElementById('saveEditSpinner').style.display = 'block';
         
-        fetch('http://hnvs_backend.test/api/section/edit', {
+        fetch(`${APP_URL}/api/section/edit`, {
             method: 'POST',
             headers: {
                 'Accept': 'Application/json',
@@ -298,7 +295,7 @@
         e.preventDefault();
         document.getElementById('deleteSectionSpinner').style.display = 'block';
 
-        fetch('http://hnvs_backend.test/api/section/delete', {
+        fetch(`${APP_URL}/api/section/delete`, {
             method: 'POST',
             headers: {
                 'Accept': 'Application/json',

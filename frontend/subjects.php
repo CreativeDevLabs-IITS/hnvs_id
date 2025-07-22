@@ -166,8 +166,11 @@
     <script src="http://hnvs_backend.test/dist/js/dropify.min.js"></script>
 
     <?php include 'partials/_logout.php' ?>
+    <?php include 'partials/config.php' ?>
 
     <script>
+        const APP_URL = "<?= APP_URL ?>"
+
         // prevent backing
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
@@ -182,7 +185,6 @@
                 }
             }
         });
-
 
         window.addEventListener("load", function () {
             setTimeout(() => {
@@ -338,7 +340,7 @@
 
         function fetchStudents(page = 1, ) {
             currentSearch = '';
-            fetch(`http://hnvs_backend.test/api/subject/list?page=${page}`, {
+            fetch(`${APP_URL}/api/subject/list?page=${page}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -430,7 +432,7 @@
             e.preventDefault();
             document.getElementById('deleteSubjectSpinner').style.display = 'block';
             
-            fetch('http://hnvs_backend.test/api/subject/delete', {
+            fetch(`${APP_URL}/api/subject/delete`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',

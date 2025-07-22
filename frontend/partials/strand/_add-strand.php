@@ -83,7 +83,7 @@
         
 
         document.getElementById('createStrandLoader').style.display = 'block';
-        fetch('http://hnvs_backend.test/api/create/strand', {
+        fetch(`${APP_URL}/api/create/strand`, {
             method: 'POST',
             headers: {
                 'Accept': 'Application/json',

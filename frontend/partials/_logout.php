@@ -18,9 +18,10 @@
         </div>
     </div>
 
+
 <script>
     $(document).on('click', '#logoutBtn', function() {
-        fetch('http://hnvs_backend.test/api/logout', {
+        fetch(`${APP_URL}/api/logout`, {
             method: 'GET',
             headers: {
                 'Accept': 'Application/json',
