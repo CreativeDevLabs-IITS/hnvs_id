@@ -47,7 +47,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         const token = localStorage.getItem('token');
         if(!token) {
-            location.replace('http://hnvs.system.test/');
+            location.replace('https://hnvs-id.creativedevlabs.com/');
         }else {
             if (window.history && window.history.pushState) {
                 window.history.pushState(null, null, location.href);
