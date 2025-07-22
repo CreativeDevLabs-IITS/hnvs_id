@@ -153,7 +153,7 @@
         }else {
             document.getElementById('no-image').style.display = 'none';
             image.style.display = 'block';
-            image.src = `${APP_URL}` + $(this).data('image');
+            image.src = $(this).data('image');
         }
         document.getElementById('qrcode').src = $(this).data('qr');
 
