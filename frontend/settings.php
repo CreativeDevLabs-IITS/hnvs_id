@@ -1,6 +1,6 @@
 
 <?php include 'partials/_head.php' ?>
-
+    <?php include 'partials/config.php' ?>
     <div style="height: auto; background-color: #f1f1f1; " class="dashboard">
         <div style="position: sticky; top: 0; z-index: 5">
             <?php include 'partials/_navbar.php' ?>
@@ -101,6 +101,8 @@
     <?php include 'partials/_logout.php' ?>
 
     <script>
+        const APP_URl = "<?= APP_URL ?>"
+
         // prevent backing
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');

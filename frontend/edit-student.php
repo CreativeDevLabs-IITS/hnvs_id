@@ -172,9 +172,12 @@
     <script src="http://hnvs_backend.test/dist/js/dropify.min.js"></script>
 
     <?php include 'partials/_logout.php' ?>
+    <?php include 'partials/config.php' ?>
     
 
     <script>
+        const APP_URL = "<?= APP_URL ?>"
+
         // prevent backing
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
@@ -202,7 +205,7 @@
 
         // populate dropdown
         $(document).ready(function() {
-            fetch('http://hnvs_backend.test/api/section/strand/list', {
+            fetch(`${APP_URL}/api/section/strand/list`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -269,7 +272,7 @@
                 if(selected == 'Industrial Arts (IA)' || selected == 'Family and Consumer Science (FCS)') {
                     $('#specializationCon').slideDown(200).css('display', 'block');
         
-                    fetch('http://hnvs_backend.test/api/section/strand/list', {
+                    fetch(`${APP_URL}/api/section/strand/list`, {
                         method: 'GET',
                         headers: {
                             'Accept': 'Application/json',
@@ -323,7 +326,7 @@
             const dropifySign = $('#signature')
 
 
-            fetch('http://hnvs_backend.test/api/find/student', {
+            fetch(`${APP_URL}/api/find/student`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',
@@ -379,15 +382,15 @@
                         let signature = '';
 
                         if(student.image != null) {
-                            image = 'http://hnvs_backend.test/storage/' + student.image;
+                            image = `${APP_URL}/storage/` + student.image;
                         }else {
-                            image = 'http://hnvs_backend.test/images/default.jpg';
+                            image = `${APP_URL}/images/default.jpg`;
                         }
                         
                         if(student.signature != null) {
-                            signature = 'http://hnvs_backend.test/storage/' + student.signature;
+                            signature = `${APP_URL}/storage/` + student.signature;
                         }else {
-                            signature = 'http://hnvs_backend.test/images/default-signature.png';
+                            signature = `${APP_URL}/images/default-signature.png`;
                         }
 
                         dropifyInput.attr('data-default-file', image);
@@ -485,7 +488,7 @@
                 formData.append('suffix', suffix.value);
             }
             
-            fetch(`http://hnvs_backend.test/api/edit/student`, {
+            fetch(`${APP_URL}/api/edit/student`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Applicatin/json',

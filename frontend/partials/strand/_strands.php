@@ -53,9 +53,11 @@
 
 
 <script>
+    let APP_URL = "<?= APP_URL ?>"
+
     // populate table
     function fetchStrands() {
-        fetch('http://hnvs_backend.test/api/list/strands', {
+        fetch(`${APP_URL}/api/list/strands`, {
             method: 'GET',
             headers: {
                 'Accept': 'Application/json',
@@ -152,7 +154,7 @@
         e.preventDefault();
         document.getElementById('deleteStrandSpinner').style.display = 'block';
 
-        fetch('http://hnvs_backend.test/api/delete/strand', {
+        fetch(`${APP_URL}/api/delete/strand`, {
             method: 'POST',
             headers: {
                 'Accept': 'Application/json',

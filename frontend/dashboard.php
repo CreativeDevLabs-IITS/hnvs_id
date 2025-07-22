@@ -36,11 +36,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 
 
-<?php include 'partials/_footer.php' ?>
 <?php include 'partials/_logout.php' ?>
+<?php include 'partials/config.php' ?>
 
 
 <script>
+    const APP_URL = "<?= APP_URL ?>"
+
     // prevent backing
     document.addEventListener('DOMContentLoaded', () => {
         const token = localStorage.getItem('token');
@@ -58,7 +60,7 @@
 
 
     $(document).ready(() => {
-        fetch('http://hnvs_backend.test/api/count/students', {
+        fetch(`${APP_URL}/api/count/students`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -70,7 +72,7 @@
             document.getElementById('student_num').textContent = data.students;
         });
 
-        fetch('http://hnvs_backend.test/api/count/teachers', {
+        fetch(`${APP_URL}/api/count/teachers`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -90,3 +92,5 @@
 
 
 </script>
+
+<?php include 'partials/_footer.php' ?>

@@ -78,7 +78,7 @@
 
         // populate strand dropdown
         $(document).ready(function() {
-            fetch('http://hnvs_backend.test/api/list/strands', {
+            fetch(`${APP_URL}/api/list/strands`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -106,10 +106,9 @@
             });
         })
 
-
         // populate section dropdown
         $(document).ready(function() {
-            fetch('http://hnvs_backend.test/api/section/list', {
+            fetch(`${APP_URL}/api/section/list`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -145,7 +144,7 @@
             offFetchStudents();
 
             // fetch all ids to use in the future
-            fetch('http://hnvs_backend.test/api/student/unpaginated/list', {
+            fetch(`${APP_URL}/api/student/unpaginated/list`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -173,7 +172,7 @@
 
         function offFetchStudents(page = 1) {
             offcurrentSearch = ''; // clear search if it's a normal fetch
-            fetch(`http://hnvs_backend.test/api/student/list?page=${page}`, {
+            fetch(`${APP_URL}/api/student/list?page=${page}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -200,7 +199,7 @@
                 page: page
             });
 
-            fetch(`http://hnvs_backend.test/api/search/student?${params.toString()}`, {
+            fetch(`${APP_URL}/api/search/student?${params.toString()}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -246,7 +245,7 @@
                 let row = document.createElement('tr');
                 row.innerHTML = `
                 <td><input class="form-check-input studentCheckbox" type="checkbox" ${is_checked ? 'checked' : ''} value="${student.id}"></td>
-                <td>${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="http://hnvs_backend.test/storage/${student.image}" />` : 'No Image'}</td>
+                <td>${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${APP_URL}/storage/${student.image}" />` : 'No Image'}</td>
                 <td>${student.lastname + ', ' + student.firstname + ' ' + (student.suffix != null ? student.suffix : '') + ' ' + (student.middlename != null ? student.middlename.charAt(0) : '') + '.'}</td>
                 <td>${student.section.name}</td>
                 <td>${student.strand.cluster == 'Industrial Arts (IA)' ? `(IA) ${student.strand.specialization}` : student.strand.cluster == 'Family and Consumer Science (FCS)' ? `(FCS) ${student.strand.specialization}` : student.strand.cluster }</td>
@@ -450,7 +449,7 @@
             
             console.log(selectedBox);
 
-            fetch('http://hnvs_backend.test/api/subject/roster', {
+            fetch(`${APP_URL}/api/subject/roster`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application.json',

@@ -103,9 +103,12 @@
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
     <?php include 'partials/_logout.php' ?>
+    <?php include 'partials/config.php' ?>
     
 
     <script>
+        const APP_URL = "<?= APP_URL  ?>"
+
         // prevent backing
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
@@ -137,7 +140,7 @@
         $(document).ready(function () {
             let teacherChoices = null;
 
-            fetch('http://hnvs_backend.test/api/select/teachers', {
+            fetch(`${APP_URL}/api/select/teachers`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -161,7 +164,7 @@
                     const urlParam = new URLSearchParams(window.location.search);
                     const id = urlParam.get('id');
 
-                    fetch('http://hnvs_backend.test/api/find/subject', {
+                    fetch(`${APP_URL}/api/find/subject`, {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json',
@@ -201,7 +204,7 @@
 
             const selected = Array.from(document.getElementById('teacherSelect').selectedOptions).map(option => option.value);
 
-            fetch('http://hnvs_backend.test/api/subject/edit', {
+            fetch(`${APP_URL}/api/subject/edit`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',

@@ -159,6 +159,7 @@
     </div>
 
     <?php include 'partials/view-info.php' ?>
+    <?php include 'partials/config.php' ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     <script src="http://hnvs_backend.test/dist/js/dropify.min.js"></script>
@@ -166,6 +167,8 @@
     <?php include 'partials/_logout.php' ?>
 
     <script>
+        const APP_URL = "<?= APP_URL  ?>"
+
         // prevent backing
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
@@ -196,7 +199,7 @@
 
         // populate strand dropdown
         $(document).ready(function() {
-            fetch('http://hnvs_backend.test/api/list/strands', {
+            fetch(`${APP_URL}/api/list/strands`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -227,7 +230,7 @@
 
         // populate section dropdown
         $(document).ready(function() {
-            fetch('http://hnvs_backend.test/api/section/list', {
+            fetch(`${APP_URL}/api/section/list`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -270,8 +273,8 @@
         });
 
         function fetchStudents(page = 1) {
-            currentSearch = ''; // clear search if it's a normal fetch
-            fetch(`http://hnvs_backend.test/api/student/list?page=${page}`, {
+            currentSearch = '';
+            fetch(`${APP_URL}/api/student/list?page=${page}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -332,11 +335,10 @@
             }
 
             students.forEach((student, index) => {
-                console.log(student.qr_code);
                 let row = document.createElement('tr');
                 row.innerHTML = `
                 <td>${(meta.current_page - 1) * meta.per_page + index + 1}</td>
-                <td>${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="http://hnvs_backend.test/storage/${student.image}" />` : 'No Image'}</td>
+                <td>${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${APP_URL}/storage/${student.image}" />` : 'No Image'}</td>
                 <td>${student.lastname + ', ' + student.firstname + ' ' + (student.suffix != null ? student.suffix : '') + ' ' + (student.middlename != null ? student.middlename.charAt(0) : '') + '.'}</td>
                 <td>${student.section.name}</td>
                 <td>${student.strand.cluster == 'Industrial Arts (IA)' ? `(IA) ${student.strand.specialization}` : student.strand.cluster == 'Family and Consumer Science (FCS)' ? `(FCS) ${student.strand.specialization}` : student.strand.cluster }</td>
@@ -512,7 +514,7 @@
             e.preventDefault();
             let id = document.getElementById('studentId').value;
             
-            fetch('http://hnvs_backend.test/api/delete/student', {
+            fetch(`${APP_URL}/api/delete/student`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',
@@ -563,7 +565,7 @@
             let formData = new FormData();
             formData.append('file', file);
 
-            fetch('http://hnvs_backend.test/api/student/import', {
+            fetch(`${APP_URL}/api/student/import`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',

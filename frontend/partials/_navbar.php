@@ -36,11 +36,9 @@
 </div>
 
 
-
-
 <script>
     $(document).ready(function() {
-        fetch(`http://hnvs_backend.test/api/current/user`, {
+        fetch(`${APP_URL}/api/current/user`, {
             method: 'GET',
             headers: {
                 'Accept': 'Appplication/json',
@@ -55,9 +53,9 @@
             document.getElementById('user_name').textContent = data.firstname + ' ' + data.lastname;
             
             if(data.image == null) {
-                profileImg.src = 'http://hnvs_backend.test/images/default.jpg'
+                profileImg.src = `${APP_URL}/images/default.jpg`
             }else{
-                profileImg.src = `http://hnvs_backend.test/storage/${data.image}`
+                profileImg.src = `${APP_URL}/storage/${data.image}`
             }
 
             if(data.role == 0) {

@@ -87,14 +87,17 @@
     </div>
 </div>
 
+<?php include 'partials/config.php' ?>
+
 <script>
+    const APP_URL = "<?= APP_URL ?>"
 
     function populateForm() {
         return new Promise((resolve, reject) => {
             const urlParams = new URLSearchParams(window.location.search);
             const token = urlParams.get('token');
     
-            fetch('http://hnvs_backend.test/api/setup', {
+            fetch(`${APP_URL}/api/setup`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',
@@ -150,12 +153,10 @@
             }
         })
     });
-
     
     function delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
-
 
     async function showContent() {
         await delay(1000);
@@ -204,7 +205,7 @@
 
         }
 
-        fetch('http://hnvs_backend.test/api/save/setup', {
+        fetch(`${APP_URL}/api/save/setup`, {
             method: 'POST',
             headers: {
                 'Accept': 'Application/json',
