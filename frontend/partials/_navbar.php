@@ -53,7 +53,7 @@
             document.getElementById('user_name').textContent = data.firstname + ' ' + data.lastname;
             
             if(data.image == null) {
-                profileImg.src = `${APP_URL}/images/default.jpg`
+                profileImg.src = `${APP_URL}/assets/default.jpg`
             }else{
                 profileImg.src = `${APP_URL}/storage/${data.image}`
             }
