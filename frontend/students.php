@@ -94,7 +94,7 @@
                 </div>
 
                 <div id="no-internet" class="justify-content-center flex-column align-items-center" style="height: 80%; display: none">
-                    <img src="http://hnvs_backend.test/assets/no-connection.png" style="width: 10%;" alt="">
+                    <img src="https://hnvs-id-be.creativedevlabs.com/assets/no-connection.png" style="width: 10%;" alt="">
                     <div class="text-secondary fs-6 text-danger">No internet connection</div>
                     <div class="text-secondary" style="font-size: 13px;">Please check your network settings and try again. Some features may not work until you're back online.</div>
                 </div>
@@ -161,7 +161,7 @@
     <?php include 'partials/config.php' ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-    <script src="http://hnvs_backend.test/dist/js/dropify.min.js"></script>
+    <script src="https://hnvs-id-be.creativedevlabs.com/dist/js/dropify.min.js"></script>
 
     <?php include 'partials/_logout.php' ?>
 
@@ -172,7 +172,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if(!token) {
-                location.replace('http://hnvs.system.test/');
+                location.replace('https://hnvs-id.creativedevlabs.com/');
             }else {
                 if (window.history && window.history.pushState) {
                     window.history.pushState(null, null, location.href);
@@ -300,7 +300,7 @@
                 page: page
             });
 
-            fetch(`http://hnvs_backend.test/api/search/student?${search_params.toString()}`, {
+            fetch(`${APP_URL}/api/search/student?${search_params.toString()}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
