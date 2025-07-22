@@ -15,7 +15,7 @@
     <div class="d-flex justify-content-center align-items-center main_con" style="height: 100vh;">
         <form class="form" >
             <div class="d-flex flex-column justify-content-center align-items-center">
-                <img src="http://hnvs_backend.test/assets/logo.png" style="width: 18%;" alt="">
+                <img src="https://hnvs-id-be.creativedevlabs.com/assets/logo.png" style="width: 18%;" alt="">
                 <div class="fw-semibold" style="font-size: 10px;">HILONGOS NATIONAL VOCATIONAL SCHOOL</div>
             </div>
             <p class="fw-semibold d-flex justify-content-center mt-4" style="font-size: 15px;">Welcome Back! </p>
@@ -47,7 +47,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if(token) {
-                location.replace('http://hnvs.system.test/dashboard.php');
+                location.replace('https://hnvs-id.creativedevlabs.com/dashboard.php');
             }else {
                 if (window.history && window.history.pushState) {
                     window.history.pushState(null, null, location.href);
@@ -79,7 +79,7 @@
             .then(res => {
                 if (res.token) {
                     localStorage.setItem('token', res.token);
-                    location.replace('http://hnvs.system.test/dashboard');
+                    location.replace('https://hnvs-id.creativedevlabs.com/dashboard');
                 }else {
                     Swal.fire({
                         position: "top-end",
