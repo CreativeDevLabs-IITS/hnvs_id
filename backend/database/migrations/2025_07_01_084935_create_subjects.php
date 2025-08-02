@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('day');
             $table->time('time_start');
             $table->time('time_end');
+            $table->integer('grace_period');
             $table->timestamps();
         });
     }

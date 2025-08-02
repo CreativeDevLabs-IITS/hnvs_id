@@ -48,14 +48,13 @@
                         <table class="table table-hover align-middle rounded overflow-hidden" style="font-size: 13px;">
                             <thead class="table-secondary border">
                                 <tr>
-                                    <th scope="">#</th>
+                                    <th scope="col">Actions</th>
                                     <th scope="col">Image</th>
                                     <th scope="col">Lastname</th>
                                     <th scope="col">Firstname</th>
                                     <th scope="col">Middlename</th>
                                     <th scope="col">Suffix</th>
                                     <th scope="col">Contact</th>
-                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="table_body">
@@ -112,12 +111,13 @@
 
     <script>
         const APP_URL = "<?= APP_URL ?>"
+        const FRONTEND_URL = "<?= FRONTEND_URL ?>"
 
         // prevent backing
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if(!token) {
-                location.replace('https://hnvs-id.creativedevlabs.com/');
+                location.replace(`${FRONTEND_URL}`);
             }else {
                 if (window.history && window.history.pushState) {
                     window.history.pushState(null, null, location.href);
@@ -160,7 +160,7 @@
                 if(teachers.length  < 1) {
                     const emptyRow = document.createElement('tr');
                     const emptyCell = document.createElement('td');
-                    emptyCell.colSpan = 7;
+                    emptyCell.colSpan = 6;
                     emptyCell.style.textAlign = 'center';
                     emptyCell.classList.add('text-muted');
                     emptyCell.textContent = 'No records found';
@@ -172,13 +172,6 @@
                 teachers.forEach((teacher, index) => {
                     let row = document.createElement('tr');
                     row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${teacher.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${APP_URL}/storage/${teacher.image}" />` : 'No Image'}</td>
-                    <td>${teacher.lastname}</td>
-                    <td>${teacher.firstname}</td>
-                    <td>${teacher.middlename}</td>
-                    <td>${teacher.suffix != null ? teacher.suffix : '<div class="text-secondary">N/A</div>'}</td>
-                    <td>${teacher.contact}</td>
                     <td>
                         <div class="d-flex gap-2">
                             <a href="edit-teacher.php?id=${teacher.id}">
@@ -189,6 +182,12 @@
                             </div>
                         </div>
                     </td>
+                    <td>${teacher.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${APP_URL}/storage/${teacher.image}" />` : 'No Image'}</td>
+                    <td>${teacher.lastname}</td>
+                    <td>${teacher.firstname}</td>
+                    <td>${teacher.middlename}</td>
+                    <td>${teacher.suffix != null ? teacher.suffix : '<div class="text-secondary">N/A</div>'}</td>
+                    <td>${teacher.contact}</td>
                     `;
 
                     tableBody.appendChild(row);
@@ -223,7 +222,7 @@
                     if(teachers.length  < 1) {
                         const emptyRow = document.createElement('tr');
                         const emptyCell = document.createElement('td');
-                        emptyCell.colSpan = 7;
+                        emptyCell.colSpan = 6;
                         emptyCell.style.textAlign = 'center';
                         emptyCell.classList.add('text-muted');
                         emptyCell.textContent = 'No records found';
@@ -235,13 +234,6 @@
                     teachers.forEach((teacher, index) => {
                         let row = document.createElement('tr');
                         row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${teacher.image ? `<img style="height: 30px; 30px; border-radius: 30px" src="${APP_URL}/storage/${teacher.image}" />` : 'No Image'}</td>
-                        <td>${teacher.lastname}</td>
-                        <td>${teacher.firstname}</td>
-                        <td>${teacher.middlename}</td>
-                        <td>${teacher.suffix != null ? teacher.suffix : '<div class="text-secondary">N/A</div>'}</td>
-                        <td>${teacher.contact}</td>
                         <td>
                             <div class="d-flex gap-2">
                                 <a href="edit-teacher.php?id=${teacher.id}">
@@ -252,6 +244,12 @@
                                 </div>                          
                             </div>
                         </td>
+                        <td>${teacher.image ? `<img style="height: 30px; 30px; border-radius: 30px" src="${APP_URL}/storage/${teacher.image}" />` : 'No Image'}</td>
+                        <td>${teacher.lastname}</td>
+                        <td>${teacher.firstname}</td>
+                        <td>${teacher.middlename}</td>
+                        <td>${teacher.suffix != null ? teacher.suffix : '<div class="text-secondary">N/A</div>'}</td>
+                        <td>${teacher.contact}</td>
                         `;
 
                         tableBody.appendChild(row);

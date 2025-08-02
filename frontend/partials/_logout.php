@@ -32,7 +32,7 @@
         .then(response => {
             if(response.message) {
                 localStorage.removeItem('token');
-                location.replace('https://hnvs-id.creativedevlabs.com/');
+                location.replace(`${FRONTEND_URL}`);
             }
         })
     })

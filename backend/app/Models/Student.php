@@ -24,6 +24,7 @@ class Student extends Model
         'year_level',
         'section_id',
         'strand_id',
+        'qr_token'
     ];
 
     public function section() {
@@ -36,6 +37,10 @@ class Student extends Model
 
     public function subjects() {
         return $this->belongsToMany(Subject::class, 'subject_students');
+    }
+
+    public function attendances() {
+        return $this->belongsToMany(Subject::class, 'subject_attendance')->withTimestamps()->withPivot(['status', 'minutes_late']);
     }
 
 }
