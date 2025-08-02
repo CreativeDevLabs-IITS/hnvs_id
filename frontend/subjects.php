@@ -76,13 +76,13 @@
                         <table class="table table-hover align-middle rounded overflow-hidden" style="font-size: 13px;">
                             <thead class="table-secondary border">
                                 <tr>
+                                    <th scope="col">Action</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Section</th>
                                     <th scope="col">Year Level</th>
                                     <th scope="col">Schedule</th>
                                     <th scope="col">Teacher</th>
                                     <th scope="col">Semester</th>
-                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="subject_table_body">
@@ -170,12 +170,13 @@
 
     <script>
         const APP_URL = "<?= APP_URL ?>"
+        const FRONTEND_URL = "<?= FRONTEND_URL ?>"
 
         // prevent backing
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if(!token) {
-                location.replace('https://hnvs-id.creativedevlabs.com/');
+                location.replace(`${FRONTEND_URL}`);
             }else {
                 if (window.history && window.history.pushState) {
                     window.history.pushState(null, null, location.href);
@@ -237,26 +238,14 @@
             subjects.forEach((subject, index) => {
                 let row = document.createElement('tr');
                 row.innerHTML = `
-                <td>${subject.name}</td>
-                <td>${subject.section}</td>
-                <td>${subject.year_level}</td>
-                <td>(${subject.day}) ${formatTime(subject.time_start)} - ${formatTime(subject.time_end)} </td>
-                <td>${subject.teachers.map(teacher => teacher.firstname + ' ' + teacher.lastname).join(', ')}</td>
-                <td>${subject.semester}</td>
                 <td>
-                    <div class="dropdown d-flex flex-row-reverse no_print" id="noPrint">
+                    <div class="dropdown d-flex no_print" id="noPrint">
                         <div class="" data-bs-toggle="dropdown" style="cursor: pointer;" aria-expanded="false" >
                             <svg xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="#002"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
                         </div>
                         
 
                         <ul class="dropdown-menu">
-                            <li class="p-1">
-                                <a class="text-dark" href="student-roster.php?id=${subject.id}" style="text-decoration: none; font-size: 14px">
-                                    <svg class="text-dark me-2" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-text"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M9 12h6" /><path d="M9 16h6" /></svg>                            
-                                    Subject Roster
-                                </a>
-                            </li>
                             <li class="p-1">
                                 <a href="edit-subject.php?id=${subject.id}" style="text-decoration: none; font-size: 14px">
                                     <svg class="text-primary me-2" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
@@ -270,8 +259,17 @@
                                 </div>
                             </li>
                         </ul>
+                        <a class="text-primary" href="student-roster.php?id=${subject.id}" style="text-decoration: none; font-size: 14px">
+                            <svg class="text-primary me-2" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-text"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M9 12h6" /><path d="M9 16h6" /></svg>                            
+                        </a>
                     </div>
                 </td>
+                <td>${subject.name}</td>
+                <td>${subject.section}</td>
+                <td>${subject.year_level}</td>
+                <td>(${subject.day}) ${formatTime(subject.time_start)} - ${formatTime(subject.time_end)} </td>
+                <td>${subject.teachers.map(teacher => teacher.firstname + ' ' + teacher.lastname).join(', ')}</td>
+                <td>${subject.semester}</td>
                 `;
 
                 tbody.appendChild(row);

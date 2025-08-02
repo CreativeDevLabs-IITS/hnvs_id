@@ -221,24 +221,4 @@ class TeacherController extends Controller
         }
     }
 
-        // mobile
-    public function subjectList(Request $request) {
-        try {
-            $daySelected = strtoupper($request->day);
-            $subjects = Subject::with('teachers')
-            ->whereHas('teachers', function($query) use ($request) {
-                $query->where('teachers.id', $request->id);
-            })
-            ->whereRaw("FIND_IN_SET(?, day)", [$daySelected])->get();
-
-            return response()->json([
-                'subjects' => $subjects,
-                'day' => $daySelected
-            ]);
-        }catch(Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ]);
-        }
-    }
 }

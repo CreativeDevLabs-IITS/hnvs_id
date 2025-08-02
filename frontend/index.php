@@ -43,11 +43,12 @@
 
     <script>
         const APP_URL = "<?= APP_URL ?>"
+        const FRONTEND_URL = "<?= FRONTEND_URL ?>"
 
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if(token) {
-                location.replace('https://hnvs-id.creativedevlabs.com/dashboard.php');
+                location.replace(`${FRONTEND_URL}/dashboard.php`);
             }else {
                 if (window.history && window.history.pushState) {
                     window.history.pushState(null, null, location.href);
@@ -56,6 +57,7 @@
                     };
                 }
             }
+            
         });
 
 
@@ -79,7 +81,7 @@
             .then(res => {
                 if (res.token) {
                     localStorage.setItem('token', res.token);
-                    location.replace('https://hnvs-id.creativedevlabs.com/dashboard.php');
+                    location.replace(`${FRONTEND_URL}/dashboard.php`);
                 }else {
                     Swal.fire({
                         position: "top-end",

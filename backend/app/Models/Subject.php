@@ -28,4 +28,8 @@ class Subject extends Model
     public function students() {
         return $this->belongsToMany(Student::class, 'subject_students')->withPivot('student_id');
     }
+
+    public function attendance() {
+        return $this->belongsToMany(Student::class, 'subject_attendance')->withTimestamps()->withPivot([ 'status', 'minutes_late' ]);
+    }
 }

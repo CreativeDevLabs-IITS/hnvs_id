@@ -9,6 +9,7 @@ use App\Http\Controllers\StrandController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\QRCodeController;
 use App\Models\User;
 use App\Models\Teacher;
 
@@ -90,5 +91,10 @@ Route::middleware(['auth:sanctum', 'preventBack'])->group(function() {
 Route::middleware(['preventAccess'])->group(function() {
     Route::post('mobile/logout', [UserController::class, 'mobileLogout']);
 
-    Route::post('/mobile/subjects-list', [TeacherController::class, 'subjectList']);
+    Route::post('subject/qr-attendance', [QRCodeController::class, 'validateQr']);
+
+    Route::post('/mobile/subjects-list', [SubjectController::class, 'subjectListByDay']);
+    Route::post('/today/subject-list', [SubjectController::class, 'subjectListToday']);
+    Route::post('/current-class', [SubjectController::class, 'currentClass']);
+    Route::post('/update/attendance', [SubjectController::class, 'editAttendace']);
 });

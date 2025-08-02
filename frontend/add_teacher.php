@@ -121,11 +121,12 @@
 
     <script>
         const APP_URL = "<?= APP_URL  ?>"
+        const FRONTEND_URL = "<?= FRONTEND_URL ?>"
         // prevent backing
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if(!token) {
-                location.replace('https://hnvs-id.creativedevlabs.com/');
+                location.replace(`${FRONTEND_URL}`);
             }else {
                 if (window.history && window.history.pushState) {
                     window.history.pushState(null, null, location.href);
