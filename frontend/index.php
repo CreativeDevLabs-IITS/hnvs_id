@@ -81,6 +81,7 @@
             .then(res => {
                 if (res.token) {
                     localStorage.setItem('token', res.token);
+                    localStorage.setItem('role',res.role);
                     location.replace(`${FRONTEND_URL}/dashboard.php`);
                 }else {
                     Swal.fire({
