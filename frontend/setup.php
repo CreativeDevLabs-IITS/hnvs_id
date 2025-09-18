@@ -16,12 +16,12 @@
             <div id="expired" class="text-secondary fw-bold" style="font-size: 50px; margin-top: -30px; display: none">Expired Token</div>
             <div id="message" class="text-dark" style="font-size: 15px;"></div>
         </div>
-        <img id="notFoundIcon" src="http://hnvs_backend.test/images/woman.png" style="width: 380px; display: none" alt="">
-        <img id="ExpiredIcon" src="http://hnvs_backend.test/images/error.png" style="width: 350px; display: none" alt="">
+        <img id="notFoundIcon" src="https://hnvs-id-be.creativedevlabs.com/assets/woman.png" style="width: 380px; display: none" alt="">
+        <img id="ExpiredIcon" src="https://hnvs-id-be.creativedevlabs.com/assets/error.png" style="width: 350px; display: none" alt="">
     </div>
 
     <div id="no-internet" class="justify-content-center flex-column align-items-center" style="height: 100vh; display: none">
-        <img src="http://hnvs_backend.test/images/no-connection.png" style="width: 10%;" alt="">
+        <img src="https://hnvs-id-be.creativedevlabs.com/assets/no-connection.png" style="width: 10%;" alt="">
         <div class="text-secondary fs-6 text-danger">No internet connection</div>
         <div class="text-secondary" style="font-size: 13px;">Please check your network settings and try again. Some features may not work until you're back online.</div>
     </div>
@@ -30,7 +30,7 @@
         <!-- <div class="position-absolute" style="width: 100%; height: 150px; background-color: #000080; z-index: 0; top: 0"></div> -->
         <div class="bg-white shadow p-4" style="border-radius: 10px; border: 1px solid #000080; z-index: 1;">
             <div class="d-flex flex-column justify-content-center align-items-center">
-                <img src="http://hnvs_backend.test/images/logo.png" style="width: 50px;" alt="">
+                <img src="https://hnvs-id-be.creativedevlabs.com/assets/logo.png" style="width: 50px;" alt="">
                 <div class="fw-bold" style="font-size: 10px;">HILONGOS NATIONAL VOCATIONAL SCHOOL</div>
             </div>
             <div class="d-flex flex-column justify-content-center align-items-center mt-3">
@@ -87,14 +87,17 @@
     </div>
 </div>
 
+<?php include 'partials/config.php' ?>
+
 <script>
+    const APP_URL = "<?= APP_URL ?>"
 
     function populateForm() {
         return new Promise((resolve, reject) => {
             const urlParams = new URLSearchParams(window.location.search);
             const token = urlParams.get('token');
     
-            fetch('http://hnvs_backend.test/api/setup', {
+            fetch(`${APP_URL}/api/setup`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',
@@ -150,12 +153,10 @@
             }
         })
     });
-
     
     function delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
-
 
     async function showContent() {
         await delay(1000);
@@ -204,7 +205,7 @@
 
         }
 
-        fetch('http://hnvs_backend.test/api/save/setup', {
+        fetch(`${APP_URL}/api/save/setup`, {
             method: 'POST',
             headers: {
                 'Accept': 'Application/json',

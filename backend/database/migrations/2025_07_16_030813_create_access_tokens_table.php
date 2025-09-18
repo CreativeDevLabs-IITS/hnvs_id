@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('email_token')->nullable()->unique();
-            $table->timestamp('email_token_expires_at')->nullable();
+        Schema::create('access_tokens', function (Blueprint $table) {
+            $table->id();
+            $table->string('token');
+            $table->string('origin');
+            $table->timestamps();
         });
     }
 
@@ -22,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('access_tokens');
     }
 };

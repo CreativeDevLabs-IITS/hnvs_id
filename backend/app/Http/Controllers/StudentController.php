@@ -15,6 +15,7 @@ use App\Models\Strand;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\StudentImport;
 use App\Models\Subject;
+use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
@@ -88,28 +89,30 @@ class StudentController extends Controller
             if($request->hasFile('image')) {
                 $file = $request->file('image');
                 $path = $file->store('images', 'public');
-                $validate['image'] = $path;
+                $validate['image'] = env('APP_URL') . $path;
             }
 
             if($request->hasFile('signature')) {
                 $signFile = $request->file('signature');
                 $signPath = $signFile->store('images', 'public');
-                $validate['signature'] = $signPath;
+                $validate['signature'] = env('APP_URL') . $signPath;
             }
 
             $student = Student::create($validate);
 
-            $qrData = 'http://hnvs.system.test/students.php?id=' . $student->id;
+            $hashedQr = sha1(uniqid((string)$student->id, true));
+            $qrData = env('FRONTEND_URL') . $hashedQr;
 
             $qrcode = QrCode::create($qrData);
             $writer = new PngWriter();
             $result = $writer->write($qrcode);
             $fileName = 'qr_code/' . uniqid() . '.png';
             Storage::disk('public')->put($fileName, $result->getString());
-            $qr_path = 'http://hnvs_backend.test' . $fileName;
+            $qr_path = env('APP_URL') . $fileName;
             $student->qr_code = $qr_path;
-
+            $student->qr_token = $hashedQr;
             $student->save();
+
             return response()->json([
                 'message' => 'Student added successfully.',
                 'path' => Storage::url($fileName)
@@ -304,15 +307,17 @@ class StudentController extends Controller
                     'strand_id' => $strand->id
                 ]);
 
-                $qrData = env('APP_URL'). '/students?id=' . $student->id;;
+                $hashedQr = sha1(uniqid((string)$student->id, true));
+                $qrData = env('FRONTEND_URL') . $hashedQr;
 
                 $qrcode = QrCode::create($qrData);
                 $writer = new PngWriter();
                 $result = $writer->write($qrcode);
                 $fileName = 'qr_code/' . uniqid() . '.png';
                 Storage::disk('public')->put($fileName, $result->getString());
-                $path = 'http://hnvs_backend.test' . $fileName;
+                $path = env('APP_URL') . $fileName;
                 $student->qr_code = $path;
+                $student->qr_token = $hashedQr;
                 $student->save();
             }
 

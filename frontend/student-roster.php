@@ -44,11 +44,7 @@
                             <div class="text-secondary" style="font-size: 13px;">Section:</div>
                             <div class="fs-5 fw-semibold" style="margin-top: -5px; max-width: 280px;" id="subject_name"></div>
                         </div>
-                        <div class="d-flex gap-4 align-items-end">
-                            <div class="fw-semibold" id="AllBtn" style="padding: 2px 8px; color: #fff; border-radius: 5px; border: none; cursor: pointer">
-                                All
-                                <svg xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-caret-down"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 9c.852 0 1.297 .986 .783 1.623l-.076 .084l-6 6a1 1 0 0 1 -1.32 .083l-.094 -.083l-6 -6l-.083 -.094l-.054 -.077l-.054 -.096l-.017 -.036l-.027 -.067l-.032 -.108l-.01 -.053l-.01 -.06l-.004 -.057v-.118l.005 -.058l.009 -.06l.01 -.052l.032 -.108l.027 -.067l.07 -.132l.065 -.09l.073 -.081l.094 -.083l.077 -.054l.096 -.054l.036 -.017l.067 -.027l.108 -.032l.053 -.01l.06 -.01l.057 -.004l12.059 -.002z" /></svg>
-                            </div>
+                        <div class="d-flex gap-3 align-items-end">
                             <div class="input-group d-flex flex-column align-items-baseline" style="width: 270px">
                                 <label for="sem" style="font-size: 13px;" class="text-secondary">Stand</label>
                                 <select class="" id="strandOpt" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
@@ -63,6 +59,10 @@
                                     <option value="" class="text-secondary" selected disabled>Select section</option>
                                     <!-- section -->
                                 </select>                                
+                            </div>
+
+                            <div class="fw-semibold" id="AllBtn" style="display: none; padding: 2px 8px; border-radius: 5px; border: none; cursor: pointer; background-color: #3498db; color: #fff">
+                                Clear
                             </div>
 
                             <div class="dropdown d-flex flex-row-reverse" id="noPrint" style="cursor: pointer;">
@@ -109,7 +109,7 @@
                 </div>
 
                 <div id="no-internet" class="justify-content-center flex-column align-items-center" style="height: 80%; display: none">
-                    <img src="http://hnvs_backend.test/images/no-connection.png" style="width: 10%;" alt="">
+                    <img src="https://hnvs-id-be.creativedevlabs.com/assets/no-connection.png" style="width: 10%;" alt="">
                     <div class="text-secondary fs-6 text-danger">No internet connection</div>
                     <div class="text-secondary" style="font-size: 13px;">Please check your network settings and try again. Some features may not work until you're back online.</div>
                 </div>
@@ -175,16 +175,20 @@
     <?php include 'partials/add-roster.php' ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-    <script src="http://hnvs_backend.test/dist/js/dropify.min.js"></script>
+    <script src="https://hnvs-id-be.creativedevlabs.com/dist/js/dropify.min.js"></script>
 
     <?php include 'partials/_logout.php' ?>
+    <?php include 'partials/config.php' ?>
 
     <script>
+        const APP_URL = "<?= APP_URL ?>"
+        const FRONTEND_URL = "<?= FRONTEND_URL ?>"
+
         // prevent backing
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if(!token) {
-                location.replace('http://hnvs.system.test/');
+                location.replace(`${FRONTEND_URL}`);
             }else {
                 if (window.history && window.history.pushState) {
                     window.history.pushState(null, null, location.href);
@@ -194,7 +198,6 @@
                 }
             }
         });
-
 
         window.addEventListener("load", function () {
             setTimeout(() => {
@@ -208,7 +211,6 @@
             }, 800)
         })
 
-
         $(document).ready(function() {
             $('.dropify').dropify({
                 messages: {
@@ -220,10 +222,9 @@
             });
         });
 
-
         // populate strand dropdown
         $(document).ready(function() {
-            fetch('http://hnvs_backend.test/api/list/strands', {
+            fetch(`${APP_URL}/api/list/strands`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -251,10 +252,9 @@
             });
         })
 
-
         // populate section dropdown
         $(document).ready(function() {
-            fetch('http://hnvs_backend.test/api/section/list', {
+            fetch(`${APP_URL}/api/section/list`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -276,13 +276,12 @@
             });
         })
 
-
         // load subject name
         $(document).ready(function() {
             const urlParam = new URLSearchParams(window.location.search);
             const id = urlParam.get('id');
             
-            fetch('http://hnvs_backend.test/api/find/subject', {
+            fetch(`${APP_URL}/api/find/subject`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',
@@ -301,13 +300,11 @@
             })
         })
 
-
         // pupulate table and search
         let currentPage = 1;
         let currentSearch = '';
 
         document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById('AllBtn').style.backgroundColor = '#3498db';
             fetchStudents();
             fetchStudents();
         });
@@ -316,7 +313,7 @@
             const url_param = new URLSearchParams(window.location.search);
             const subject_id = url_param.get('id');
             currentSearch = '';
-            fetch(`http://hnvs_backend.test/api/student/roster?page=${page}`, {
+            fetch(`${APP_URL}/api/student/roster?page=${page}`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',
@@ -365,7 +362,6 @@
             })
         }
 
-
         let student_countInfo = 0;
         let totalFetchCount = '';
 
@@ -399,7 +395,7 @@
                 student_countInfo += 1;
                 let row = document.createElement('tr');
                 row.innerHTML = `
-                <td>${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="http://hnvs_backend.test/storage/${student.image}" />` : 'No Image'}</td>
+                <td>${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${student.image}" />` : 'No Image'}</td>
                 <td>${student.lastname + ', ' + student.firstname + ' ' + (student.suffix != null ? student.suffix : '') + ' ' + (student.middlename != null ? student.middlename.charAt(0) : '') + '.'}</td>
                 <td>${student.section.name}</td>
                 <td>${student.strand.cluster == 'Industrial Arts (IA)' ? `(IA) ${student.strand.specialization}` : student.strand.cluster == 'Family and Consumer Science (FCS)' ? `(FCS) ${student.strand.specialization}` : student.strand.cluster }</td>
@@ -475,7 +471,6 @@
         const searchIcon = document.getElementById('searchIcon');
         const searchLoader = document.getElementById('searchLoader');
 
-
         search.addEventListener('input', () => {
             searchIcon.style.display = 'none',
             searchLoader.style.display = 'block';
@@ -483,8 +478,10 @@
             currentSearch = search.value.trim();
 
             if(currentSearch === '') {
+                document.getElementById('AllBtn').style.display = 'none';
                 fetchStudents();
             } else {
+                document.getElementById('AllBtn').style.display = 'block';
                 fetchSearchResults(currentSearch, 1);
             }
 
@@ -497,28 +494,25 @@
 
         // filter by strand and section
         document.getElementById('strandOpt').addEventListener('change', () => {
-            document.getElementById('AllBtn').style.backgroundColor = 'transparent';
-            document.getElementById('AllBtn').style.color = '#000';
+            document.getElementById('AllBtn').style.display = 'block';
             currentSearch = search.value.trim();
             fetchSearchResults(currentSearch, 1);
         });
 
         document.getElementById('section').addEventListener('change', () => {
-            document.getElementById('AllBtn').style.backgroundColor = 'transparent';
-            document.getElementById('AllBtn').style.color = '#000';
+            document.getElementById('AllBtn').style.display = 'block';
             currentSearch = search.value.trim();
             fetchSearchResults(currentSearch, 1);
         });
 
         document.getElementById('AllBtn').addEventListener('click', () => {
             fetchStudents();
+            search.value = '';
             document.getElementById('strandOpt').value = '';
             document.getElementById('section').value = '';
             currentSearch.value = '';
-            document.getElementById('AllBtn').style.backgroundColor = '#3498db';
-            document.getElementById('AllBtn').style.color = '#fff';
+            document.getElementById('AllBtn').style.display = 'none';
         })
-
 
         // populate delete modal
         $(document).on('click', '#deleteBtn', function(e) {
@@ -527,13 +521,12 @@
             document.getElementById('studentName').textContent = $(this).data('name') + ' ' + $(this).data('lname');
         })
 
-
         // delete
         $(document).on('click', '#deleteStudentBtn', function(e) {
             e.preventDefault();
             let id = document.getElementById('studentId').value;
             
-            fetch('http://hnvs_backend.test/api/delete/student', {
+            fetch(`${APP_URL}/api/delete/student`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',
@@ -576,7 +569,6 @@
             })
         })
 
-
         // import roster
         $(document).on('click', '#importRoster', function() {
             document.getElementById('importSpinner').style.display = 'block';
@@ -584,7 +576,7 @@
             let formData = new FormData();
             formData.append('file', file);
 
-            fetch('http://hnvs_backend.test/api/subject/roster/import', {
+            fetch(`${APP_URL}/api/subject/roster/import`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',

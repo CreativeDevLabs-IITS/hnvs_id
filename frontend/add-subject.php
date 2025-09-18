@@ -72,6 +72,26 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="d-flex gap-5">
+                                <div class="d-flex flex-column input-group">
+                                    <label for="daysSelect" class="text-dark">Schedule Day/s</label>
+                                    <select id="daysSelect" class="form-select" style="border: none;" multiple>
+                                        <option value="MON">Monday</option>
+                                        <option value="TUE">Tuesday</option>
+                                        <option value="WED">Wednesday</option>
+                                        <option value="THU">Thursday</option>
+                                        <option value="FRI">Friday</option>
+                                    </select>
+                                </div>
+                                <div class="input-group d-flex flex-column align-items-baseline justify-content-between" style=" width: 100%">
+                                    <label for="time_start" class="text-dark">Time In</label>
+                                    <input type="time" name="time_start" id="time_start" style="width: 100%;" placeholder="">
+                                </div>
+                                <div class="input-group d-flex flex-column align-items-baseline justify-content-between" style=" width: 100%">
+                                    <label for="time_end" class="text-dark">Time Out</label>
+                                    <input type="time" name="time_end" id="time_end" style="width: 100%;" placeholder="">                              
+                                </div>
+                            </div>
                         </form>
                     </div>
 
@@ -95,12 +115,12 @@
                             <div class="loader2 me-2" style="display: none;" id="createSubjectAginLoader"></div>
                             Create & create another
                         </button>
-                        <a href="strands.php" class="btn btn-secondary fw-semibold text-white">Cancel</a>
+                        <a href="subjects.php" class="btn btn-secondary fw-semibold text-white">Cancel</a>
                     </div>
                 </div>
 
                 <div id="no-internet" class="justify-content-center flex-column align-items-center" style="height: 80%; display: none">
-                    <img src="http://hnvs_backend.test/images/no-connection.png" style="width: 10%;" alt="">
+                    <img src="https://hnvs-id-be.creativedevlabs.com/assets/no-connection.png" style="width: 10%;" alt="">
                     <div class="text-secondary fs-6 text-danger">No internet connection</div>
                     <div class="text-secondary" style="font-size: 13px;">Please check your network settings and try again. Some features may not work until you're back online.</div>
                 </div>
@@ -115,14 +135,18 @@
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
     <?php include 'partials/_logout.php' ?>
+    <?php include 'partials/config.php' ?>
     
 
     <script>
+        const APP_URL = "<?= APP_URL  ?>"
+        const FRONTEND_URL = "<?= FRONTEND_URL ?>"
+
         // prevent backing
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if(!token) {
-                location.replace('http://hnvs.system.test/');
+                location.replace(`${FRONTEND_URL}`);
             }else {
                 if (window.history && window.history.pushState) {
                     window.history.pushState(null, null, location.href);
@@ -131,6 +155,15 @@
                     };
                 }
             }
+
+            // populate schedule day choices
+            const daysSelect = document.getElementById('daysSelect');
+            const choices = new Choices(daysSelect, {
+                removeItemButton: true,
+                placeholderValue: 'Select day/s',
+                searchEnabled: false,
+                shouldSort: false
+            });
         });
 
         window.addEventListener("load", function () {
@@ -147,7 +180,7 @@
 
         let teacherChoices = null;
 
-        fetch('http://hnvs_backend.test/api/select/teachers',{
+        fetch(`${APP_URL}/api/select/teachers`,{
             method: 'GET',
             headers: {
                 'Accept': 'Application/json',
@@ -176,11 +209,14 @@
             }
         });
 
+
         $('#addSubjectBtn').on('click', function(e) {
             e.preventDefault();
             document.getElementById('createSubjectLoader').style.display = 'block';
+            const selectedDays = document.getElementById('daysSelect').selectedOptions;
+            const days = Array.from(selectedDays).map(day => day.value);
 
-            fetch('http://hnvs_backend.test/api/subject/create', {
+            fetch(`${APP_URL}/api/subject/create`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',
@@ -195,6 +231,9 @@
                     section: document.getElementById('section').value,
                     description: document.getElementById('description').value,
                     teachers: document.getElementById('teacherSelect').value,
+                    time_start: document.getElementById('time_start').value,
+                    time_end: document.getElementById('time_end').value,
+                    day: days
                 })
             })
             .then(res => res.json())
@@ -239,7 +278,7 @@
             e.preventDefault();
             document.getElementById('createSubjectAginLoader').style.display = 'block';
 
-            fetch('http://hnvs_backend.test/api/subject/create', {
+            fetch(`${APP_URL}/api/subject/create`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',

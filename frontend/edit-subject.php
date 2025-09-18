@@ -49,7 +49,15 @@
                                 </div>
                             </div>
                             <div class="d-flex gap-5">
-                                <div class="input-group d-flex flex-column align-items-baseline justify-content-between" style=" width: 47%">
+                                <div class="input-group d-flex flex-column align-items-baseline justify-content-between" style=" width: 100%">
+                                    <label for="section" class="text-dark">Section</label>
+                                    <select class="" name="section" id="section" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
+                                        <option value="" class="text-secondary" selected disabled>Select section</option>
+                                        <option value="A">Section A</option>
+                                        <option value="B">Section B</option>
+                                    </select>                                
+                                </div>
+                                <div class="input-group d-flex flex-column align-items-baseline justify-content-between" style=" width: 100%">
                                     <label for="sem" class="text-dark">Semester</label>
                                     <select class="" name="sem" id="sem" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
                                         <option value="" class="text-secondary" selected disabled>Select semester</option>
@@ -59,9 +67,29 @@
                                 </div>
                                 <div class="d-flex flex-column input-group">
                                     <label for="level" class="text-dark">Teacher</label>
-                                    <select id="teacherSelect" name="teachers[]" class="form-select" style="border: none;" multiple>
+                                    <select id="teacherSelect" name="teachers" class="form-select" style="border: none;">
                                         <!-- teachers -->
                                     </select>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-5">
+                                <div class="d-flex flex-column input-group">
+                                    <label for="daysSelect" class="text-dark">Schedule Day/s</label>
+                                    <select id="daysSelect" class="form-select" style="border: none;" multiple>
+                                        <option value="MON">Monday</option>
+                                        <option value="TUE">Tuesday</option>
+                                        <option value="WED">Wednesday</option>
+                                        <option value="THU">Thursday</option>
+                                        <option value="FRI">Friday</option>
+                                    </select>
+                                </div>
+                                <div class="input-group d-flex flex-column align-items-baseline justify-content-between" style=" width: 100%">
+                                    <label for="time_start" class="text-dark">Time In</label>
+                                    <input type="time" name="time_start" id="time_start" style="width: 100%;" placeholder="">
+                                </div>
+                                <div class="input-group d-flex flex-column align-items-baseline justify-content-between" style=" width: 100%">
+                                    <label for="time_end" class="text-dark">Time Out</label>
+                                    <input type="time" name="time_end" id="time_end" style="width: 100%;" placeholder="">                              
                                 </div>
                             </div>
                         </form>
@@ -88,7 +116,7 @@
                 </div>
 
                 <div id="no-internet" class="justify-content-center flex-column align-items-center" style="height: 80%; display: none">
-                    <img src="http://hnvs_backend.test/images/no-connection.png" style="width: 10%;" alt="">
+                    <img src="https://hnvs-id-be.creativedevlabs.com/assets/no-connection.png" style="width: 10%;" alt="">
                     <div class="text-secondary fs-6 text-danger">No internet connection</div>
                     <div class="text-secondary" style="font-size: 13px;">Please check your network settings and try again. Some features may not work until you're back online.</div>
                 </div>
@@ -103,14 +131,18 @@
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
     <?php include 'partials/_logout.php' ?>
+    <?php include 'partials/config.php' ?>
     
 
     <script>
+        const APP_URL = "<?= APP_URL  ?>"
+        const FRONTEND_URL = "<?= FRONTEND_URL ?>"
+
         // prevent backing
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if(!token) {
-                location.replace('http://hnvs.system.test/');
+                location.replace(`${FRONTEND_URL}`);
             }else {
                 if (window.history && window.history.pushState) {
                     window.history.pushState(null, null, location.href);
@@ -137,7 +169,7 @@
         $(document).ready(function () {
             let teacherChoices = null;
 
-            fetch('http://hnvs_backend.test/api/select/teachers', {
+            fetch(`${APP_URL}/api/select/teachers`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -158,10 +190,19 @@
                         itemSelectText: '',
                     });
 
+                    // populate schedule day choices
+                    const daysSelect = document.getElementById('daysSelect');
+                    const dayChoices = new Choices(daysSelect, {
+                        removeItemButton: true,
+                        placeholderValue: 'Select day/s',
+                        searchEnabled: false,
+                        shouldSort: false
+                    });
+
                     const urlParam = new URLSearchParams(window.location.search);
                     const id = urlParam.get('id');
 
-                    fetch('http://hnvs_backend.test/api/find/subject', {
+                    fetch(`${APP_URL}/api/find/subject`, {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json',
@@ -173,9 +214,15 @@
                         .then(res => res.json())
                         .then(data => {
                             const subject = data.subject;
+                            const days = subject.day;
+                            const splitDays = days.split(',');
+
                             document.getElementById('subjectName').value = subject.name;
                             document.getElementById('level').value = subject.year_level;
                             document.getElementById('sem').value = subject.semester;
+                            document.getElementById('time_start').value = subject.time_start;
+                            document.getElementById('time_end').value = subject.time_end;
+                            document.getElementById('section').value = subject.section
                             if (subject.description) {
                                 document.getElementById('description').value = subject.description;
                             }
@@ -186,6 +233,10 @@
                             teachersIds.forEach(id => {
                                 teacherChoices.setChoiceByValue(id);
                             });
+                            // set selected days
+                            splitDays.forEach(day => {
+                                dayChoices.setChoiceByValue(day);
+                            })
                         });
                 });
         });
@@ -198,10 +249,10 @@
 
             document.getElementById('editSubjectLoader').style.display = 'block';
             const checkbox = document.getElementById('checkSpecialized');
+            const selectedDays = document.getElementById('daysSelect').selectedOptions;
+            const days = Array.from(selectedDays).map(day => day.value);
 
-            const selected = Array.from(document.getElementById('teacherSelect').selectedOptions).map(option => option.value);
-
-            fetch('http://hnvs_backend.test/api/subject/edit', {
+            fetch(`${APP_URL}/api/subject/edit`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',
@@ -215,7 +266,11 @@
                     year_level: document.getElementById('level').value,
                     semester: document.getElementById('sem').value,
                     description: document.getElementById('description').value,
-                    teachers: selected,
+                    teachers: document.getElementById('teacherSelect').value,
+                    section: document.getElementById('section').value,
+                    time_start: document.getElementById('time_start').value,
+                    time_end: document.getElementById('time_end').value,
+                    day: days
                 })
             })
             .then(res => res.json())
@@ -232,9 +287,9 @@
                         showConfirmButton: false,
                         timer: 900,
                     })
-                    // .then (() => {
-                    //     location.href = 'subjects.php';
-                    // });
+                    .then (() => {
+                        location.href = 'subjects.php';
+                    });
                 }else {
                     Swal.fire({
                         position: "top-end",

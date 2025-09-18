@@ -1,7 +1,7 @@
 <div style="background-color: #fff; width: 100%; box-shadow: 0 0 12px 0 #abb2b9; z-index: 3">
     <div class="d-flex justify-content-between align-items-center" style="position: sticky; top: 0; padding: 12px 18px">
         <div class="d-flex align-items-center gap-2">
-            <img src="http://hnvs_backend.test/images/logo.png" style="width: 35px;" alt="">
+            <img src="https://hnvs-id-be.creativedevlabs.com/assets/logo.png" style="width: 35px;" alt="">
             <div class="fw-semibold" style="font-size: 18px;">HNVS</div>
         </div>
 
@@ -36,11 +36,9 @@
 </div>
 
 
-
-
 <script>
     $(document).ready(function() {
-        fetch(`http://hnvs_backend.test/api/current/user`, {
+        fetch(`${APP_URL}/api/current/user`, {
             method: 'GET',
             headers: {
                 'Accept': 'Appplication/json',
@@ -55,9 +53,9 @@
             document.getElementById('user_name').textContent = data.firstname + ' ' + data.lastname;
             
             if(data.image == null) {
-                profileImg.src = 'http://hnvs_backend.test/images/default.jpg'
+                profileImg.src = `${APP_URL}/assets/default.jpg`
             }else{
-                profileImg.src = `http://hnvs_backend.test/storage/${data.image}`
+                profileImg.src = `${APP_URL}/storage/${data.image}`
             }
 
             if(data.role == 0) {
@@ -68,6 +66,11 @@
             if(data.role == 1) {
                 role.textContent = 'Admin'
                 userRole.textContent = 'Admin'
+            }
+
+            if(data.role == 2) {
+                role.textContent = 'Teacher'
+                userRole.textContent = 'Teacher'
             }
         })
     })

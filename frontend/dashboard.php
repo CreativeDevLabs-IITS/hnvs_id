@@ -36,16 +36,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 
 
-<?php include 'partials/_footer.php' ?>
 <?php include 'partials/_logout.php' ?>
+<?php include 'partials/config.php' ?>
 
 
 <script>
+    const APP_URL = "<?= APP_URL ?>"
+    const FRONTEND_URL = "<?= FRONTEND_URL ?>"
+
     // prevent backing
     document.addEventListener('DOMContentLoaded', () => {
         const token = localStorage.getItem('token');
         if(!token) {
-            location.replace('http://hnvs.system.test/');
+            location.replace(`${FRONTEND_URL}`);
         }else {
             if (window.history && window.history.pushState) {
                 window.history.pushState(null, null, location.href);
@@ -58,7 +61,7 @@
 
 
     $(document).ready(() => {
-        fetch('http://hnvs_backend.test/api/count/students', {
+        fetch(`${APP_URL}/api/count/students`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -70,7 +73,7 @@
             document.getElementById('student_num').textContent = data.students;
         });
 
-        fetch('http://hnvs_backend.test/api/count/teachers', {
+        fetch(`${APP_URL}/api/count/teachers`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -79,6 +82,7 @@
         })
         .then(res => res.json())
         .then(data => {
+            console.log(data);
             if(data.user == 1 || data.user == 0) {
                 document.getElementById('teacherNumCon').style.display = 'block';
                 document.getElementById('teacher_num').textContent = data.teachers;
@@ -89,3 +93,5 @@
 
 
 </script>
+
+<?php include 'partials/_footer.php' ?>

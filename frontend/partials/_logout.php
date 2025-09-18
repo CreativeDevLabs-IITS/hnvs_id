@@ -18,9 +18,10 @@
         </div>
     </div>
 
+
 <script>
     $(document).on('click', '#logoutBtn', function() {
-        fetch('http://hnvs_backend.test/api/logout', {
+        fetch(`${APP_URL}/api/logout`, {
             method: 'GET',
             headers: {
                 'Accept': 'Application/json',
@@ -31,7 +32,8 @@
         .then(response => {
             if(response.message) {
                 localStorage.removeItem('token');
-                location.replace('http://hnvs.system.test/');
+                localStorage.removeItem('role');
+                location.replace(`${FRONTEND_URL}`);
             }
         })
     })

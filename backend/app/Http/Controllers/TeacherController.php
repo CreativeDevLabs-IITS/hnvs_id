@@ -14,7 +14,10 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\Teacher;
+use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Subject;
+
 
 class TeacherController extends Controller
 {
@@ -24,22 +27,24 @@ class TeacherController extends Controller
 
     public function list() {
         return response()->json([
-            'teachers' => Teacher::all()
+            'teachers' => Teacher::paginate(10)
         ]);
     }
 
     public function search(Request $request) {
         try {
-            $teacher = Teacher::query();
+            $teachers = Teacher::query();
 
-            if($request->has('search')) {
+            if($request->filled('search')) {
                 $search = $request->input('search');
-                $teacher->where('firstname', 'LIKE', "%{$search}%")
-                ->orWhere('lastname', 'LIKE', "%{$search}%");
+                $teachers->where(function ($query) use ($search) {
+                    $query->where('firstname', 'LIKE', "%{$search}%")
+                          ->orWhere('lastname', 'LIKE', "%{$search}%");
+                });
             }
 
             return response()->json([
-                'teachers' => $teacher->get()
+                'teachers' => $teachers->paginate(10)
             ]);
         }catch(Exception $e) {
             return response()->json([
@@ -68,6 +73,8 @@ class TeacherController extends Controller
                 $path = $file->store('images', 'public');
                 $validate['image'] = $path;
             }
+
+            $validate['password'] = Hash::make($request->password);
 
             $teacher = Teacher::create($validate);
 
@@ -168,14 +175,6 @@ class TeacherController extends Controller
         ]);
     }
 
-    public function logout(Request $request) {
-        $user = Auth::user();
-        $user->tokens()->delete();
-        return response()->json([
-            'message' => 'Logout successfully'
-        ]);
-    }
-
     public function setup(Request $request) {
         try {
             $token = $request->token;
@@ -223,4 +222,5 @@ class TeacherController extends Controller
             ]);
         }
     }
+
 }

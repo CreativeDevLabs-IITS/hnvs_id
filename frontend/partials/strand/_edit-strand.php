@@ -54,7 +54,7 @@
 
     // populate table
     function fetchAndPopulateTable() {
-        fetch('http://hnvs_backend.test/api/find/strand', {
+        fetch(`${APP_URL}/api/find/strand`, {
             method: 'POST',
             headers: {
                 'Accept': 'Application/json',
@@ -117,7 +117,7 @@
         document.getElementById('editStrandLoader').style.display = 'block';
         console.log(document.getElementById('strandId').value);
         
-        fetch('http://hnvs_backend.test/api/update/strand', {
+        fetch(`${APP_URL}/api/update/strand`, {
             method: 'POST',
             headers: {
                 'Accept': 'Application/json',

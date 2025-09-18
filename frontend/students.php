@@ -74,13 +74,12 @@
                         <table class="table table-hover align-middle rounded overflow-hidden" style="font-size: 13px; overflow: visible !important">
                             <thead class="table-secondary border">
                                 <tr>
-                                    <th scope="">#</th>
+                                    <th scope="col">Actions</th>
                                     <th scope="col">Image</th>
                                     <th scope="col">Fullname</th>
                                     <th scope="col">Section</th>
                                     <th scope="col">Strand</th>
                                     <th scope="col">LRN</th>
-                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="student_table_body">
@@ -95,7 +94,7 @@
                 </div>
 
                 <div id="no-internet" class="justify-content-center flex-column align-items-center" style="height: 80%; display: none">
-                    <img src="http://hnvs_backend.test/images/no-connection.png" style="width: 10%;" alt="">
+                    <img src="https://hnvs-id-be.creativedevlabs.com/assets/no-connection.png" style="width: 10%;" alt="">
                     <div class="text-secondary fs-6 text-danger">No internet connection</div>
                     <div class="text-secondary" style="font-size: 13px;">Please check your network settings and try again. Some features may not work until you're back online.</div>
                 </div>
@@ -159,18 +158,22 @@
     </div>
 
     <?php include 'partials/view-info.php' ?>
+    <?php include 'partials/config.php' ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-    <script src="http://hnvs_backend.test/dist/js/dropify.min.js"></script>
+    <script src="https://hnvs-id-be.creativedevlabs.com/dist/js/dropify.min.js"></script>
 
     <?php include 'partials/_logout.php' ?>
 
     <script>
+        const APP_URL = "<?= APP_URL  ?>"
+        const FRONTEND_URL = "<? FRONTEND_URL?>"
+
         // prevent backing
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if(!token) {
-                location.replace('http://hnvs.system.test/');
+                location.replace(`${FRONTEND_URL}`);
             }else {
                 if (window.history && window.history.pushState) {
                     window.history.pushState(null, null, location.href);
@@ -196,7 +199,7 @@
 
         // populate strand dropdown
         $(document).ready(function() {
-            fetch('http://hnvs_backend.test/api/list/strands', {
+            fetch(`${APP_URL}/api/list/strands`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -227,7 +230,7 @@
 
         // populate section dropdown
         $(document).ready(function() {
-            fetch('http://hnvs_backend.test/api/section/list', {
+            fetch(`${APP_URL}/api/section/list`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -270,8 +273,8 @@
         });
 
         function fetchStudents(page = 1) {
-            currentSearch = ''; // clear search if it's a normal fetch
-            fetch(`http://hnvs_backend.test/api/student/list?page=${page}`, {
+            currentSearch = '';
+            fetch(`${APP_URL}/api/student/list?page=${page}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -298,7 +301,7 @@
                 page: page
             });
 
-            fetch(`http://hnvs_backend.test/api/search/student?${search_params.toString()}`, {
+            fetch(`${APP_URL}/api/search/student?${search_params.toString()}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -334,14 +337,8 @@
             students.forEach((student, index) => {
                 let row = document.createElement('tr');
                 row.innerHTML = `
-                <td>${(meta.current_page - 1) * meta.per_page + index + 1}</td>
-                <td>${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="http://hnvs_backend.test/storage/${student.image}" />` : 'No Image'}</td>
-                <td>${student.lastname + ', ' + student.firstname + ' ' + (student.suffix != null ? student.suffix : '') + ' ' + (student.middlename != null ? student.middlename.charAt(0) : '') + '.'}</td>
-                <td>${student.section.name}</td>
-                <td>${student.strand.cluster == 'Industrial Arts (IA)' ? `(IA) ${student.strand.specialization}` : student.strand.cluster == 'Family and Consumer Science (FCS)' ? `(FCS) ${student.strand.specialization}` : student.strand.cluster }</td>
-                <td>${student.lrn}</td>
                 <td>
-                    <div class="dropdown d-flex flex-row-reverse no_print">
+                    <div class="dropdown d-flex no_print">
                         <div class="" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
                             <svg xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="#002"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
                         </div>
@@ -386,6 +383,11 @@
                         </ul>
                     </div>
                 </td>
+                <td>${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${student.image}" />` : 'No Image'}</td>
+                <td>${student.lastname + ', ' + student.firstname + ' ' + (student.suffix != null ? student.suffix : '') + ' ' + (student.middlename != null ? student.middlename.charAt(0) : '') + '.'}</td>
+                <td>${student.section.name}</td>
+                <td>${student.strand.cluster == 'Industrial Arts (IA)' ? `(IA) ${student.strand.specialization}` : student.strand.cluster == 'Family and Consumer Science (FCS)' ? `(FCS) ${student.strand.specialization}` : student.strand.cluster }</td>
+                <td>${student.lrn}</td>
                 `;
 
                 tableBody.appendChild(row);
@@ -511,7 +513,7 @@
             e.preventDefault();
             let id = document.getElementById('studentId').value;
             
-            fetch('http://hnvs_backend.test/api/delete/student', {
+            fetch(`${APP_URL}/api/delete/student`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',
@@ -562,7 +564,7 @@
             let formData = new FormData();
             formData.append('file', file);
 
-            fetch('http://hnvs_backend.test/api/student/import', {
+            fetch(`${APP_URL}/api/student/import`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',

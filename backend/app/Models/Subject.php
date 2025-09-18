@@ -15,7 +15,10 @@ class Subject extends Model
         'year_level',
         'semester',
         'is_specialized',
-        'section'
+        'section',
+        'day',
+        'time_start',
+        'time_end'
     ];
 
     public function teachers() {
@@ -24,5 +27,9 @@ class Subject extends Model
 
     public function students() {
         return $this->belongsToMany(Student::class, 'subject_students')->withPivot('student_id');
+    }
+
+    public function attendance() {
+        return $this->belongsToMany(Student::class, 'subject_attendance')->withTimestamps()->withPivot([ 'status', 'minutes_late' ]);
     }
 }

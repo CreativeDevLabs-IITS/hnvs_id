@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('teachers', function (Blueprint $table) {
-            $table->string('email_token')->nullable()->unique();
-            $table->timestamp('email_token_expires_at')->nullable();
+        Schema::create('subject_teacher', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('subject_id')->constrained()->onDelete('cascade');
+            $table->foreignId('teacher_id')->constrained('teachers')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -22,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('teachers', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('subject_teacher');
     }
 };

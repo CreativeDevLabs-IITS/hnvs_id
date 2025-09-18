@@ -76,14 +76,13 @@
                         <table class="table table-hover align-middle rounded overflow-hidden" style="font-size: 13px;">
                             <thead class="table-secondary border">
                                 <tr>
-                                    <th scope="">#</th>
+                                    <th scope="col">Action</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Section</th>
                                     <th scope="col">Year Level</th>
-                                    <th scope="col">Semester</th>
+                                    <th scope="col">Schedule</th>
                                     <th scope="col">Teacher</th>
-                                    <th scope="col">School Year</th>
-                                    <th scope="col">Action</th>
+                                    <th scope="col">Semester</th>
                                 </tr>
                             </thead>
                             <tbody id="subject_table_body">
@@ -98,7 +97,7 @@
                 </div>
 
                 <div id="no-internet" class="justify-content-center flex-column align-items-center" style="height: 80%; display: none">
-                    <img src="http://hnvs_backend.test/images/no-connection.png" style="width: 10%;" alt="">
+                    <img src="https://hnvs-id-be.creativedevlabs.com/assets/no-connection.png" style="width: 10%;" alt="">
                     <div class="text-secondary fs-6 text-danger">No internet connection</div>
                     <div class="text-secondary" style="font-size: 13px;">Please check your network settings and try again. Some features may not work until you're back online.</div>
                 </div>
@@ -164,16 +163,20 @@
     <?php include 'partials/view-info.php' ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-    <script src="http://hnvs_backend.test/dist/js/dropify.min.js"></script>
+    <script src="https://hnvs-id-be.creativedevlabs.com/dist/js/dropify.min.js"></script>
 
     <?php include 'partials/_logout.php' ?>
+    <?php include 'partials/config.php' ?>
 
     <script>
+        const APP_URL = "<?= APP_URL ?>"
+        const FRONTEND_URL = "<?= FRONTEND_URL ?>"
+
         // prevent backing
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if(!token) {
-                location.replace('http://hnvs.system.test/');
+                location.replace(`${FRONTEND_URL}`);
             }else {
                 if (window.history && window.history.pushState) {
                     window.history.pushState(null, null, location.href);
@@ -183,7 +186,6 @@
                 }
             }
         });
-
 
         window.addEventListener("load", function () {
             setTimeout(() => {
@@ -202,6 +204,18 @@
             fetchStudents();
         })
 
+        function formatTime(timeStr) {
+            const [hour, minute] = timeStr.split(':');
+            const date = new Date();
+            date.setHours(hour, minute);
+
+            return date.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+        }
+
         let currentPage = 1;
         let currentSearch = '';
 
@@ -212,7 +226,7 @@
             if(subjects.length < 1) {
                 const emptyRow = document.createElement('tr');
                 const emptyCell = document.createElement('td');
-                emptyCell.colSpan = 5;
+                emptyCell.colSpan = 7;
                 emptyCell.style.textAlign = 'center';
                 emptyCell.classList.add('text-muted');
                 emptyCell.textContent = 'No records found';
@@ -224,15 +238,8 @@
             subjects.forEach((subject, index) => {
                 let row = document.createElement('tr');
                 row.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${subject.name}</td>
-                <td>${subject.section}</td>
-                <td>${subject.year_level}</td>
-                <td>${subject.semester}</td>
-                <td>${subject.teachers.map(teacher => teacher.firstname + ' ' + teacher.lastname).join(', ')}</td>
-                <td>${subject.school_year}</td>
                 <td>
-                    <div class="dropdown d-flex flex-row-reverse no_print" id="noPrint">
+                    <div class="dropdown d-flex no_print" id="noPrint">
                         <div class="" data-bs-toggle="dropdown" style="cursor: pointer;" aria-expanded="false" >
                             <svg xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="#002"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
                         </div>
@@ -240,26 +247,29 @@
 
                         <ul class="dropdown-menu">
                             <li class="p-1">
-                                <a class="text-dark" href="student-roster.php?id=${subject.id}" style="text-decoration: none; font-size: 14px">
-                                    <svg class="text-dark me-2" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-text"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M9 12h6" /><path d="M9 16h6" /></svg>                            
-                                    Subject Roster
-                                </a>
-                            </li>
-                            <li class="p-1">
                                 <a href="edit-subject.php?id=${subject.id}" style="text-decoration: none; font-size: 14px">
                                     <svg class="text-primary me-2" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
                                     Edit subject
                                 </a>
                             </li>
                             <li class="p-1">
-                                <div class="text-danger" id="subjectDeleteBtn" style="font-size: 14px" data-id="${subject.id}" data-name="${subject.name}" data-bs-toggle="modal" data-bs-target="#deleteSubjectModal">
+                                <div style="cursor: pointer" class="text-danger" id="subjectDeleteBtn" style="font-size: 14px" data-id="${subject.id}" data-name="${subject.name}" data-bs-toggle="modal" data-bs-target="#deleteSubjectModal">
                                     <svg class="text-danger me-2" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                                     Delete Subject
                                 </div>
                             </li>
                         </ul>
+                        <a class="text-primary" href="student-roster.php?id=${subject.id}" style="text-decoration: none; font-size: 14px">
+                            <svg class="text-primary me-2" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-text"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M9 12h6" /><path d="M9 16h6" /></svg>                            
+                        </a>
                     </div>
                 </td>
+                <td>${subject.name}</td>
+                <td>${subject.section}</td>
+                <td>${subject.year_level}</td>
+                <td>(${subject.day}) ${formatTime(subject.time_start)} - ${formatTime(subject.time_end)} </td>
+                <td>${subject.teachers.map(teacher => teacher.firstname + ' ' + teacher.lastname).join(', ')}</td>
+                <td>${subject.semester}</td>
                 `;
 
                 tbody.appendChild(row);
@@ -269,7 +279,7 @@
 
         function renderPagination(meta, isSearcj = false) {
             const paginationInfo = document.getElementById('paginationInfo');
-            paginationInfo.textContent = `Showing ${(meta.current_page - 1) * meta.per_page + 1} to ${Math.min(meta.current_page * meta.per_page, meta.total)} of ${meta.total} students`;
+            paginationInfo.textContent = `Showing ${(meta.current_page - 1) * meta.per_page + 1} to ${Math.min(meta.current_page * meta.per_page, meta.total)} of ${meta.total} subjects`;
 
             const container = document.getElementById('pagination');
             container.innerHTML = '';
@@ -328,7 +338,7 @@
 
         function fetchStudents(page = 1, ) {
             currentSearch = '';
-            fetch(`http://hnvs_backend.test/api/subject/list?page=${page}`, {
+            fetch(`${APP_URL}/api/subject/list?page=${page}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'Application/json',
@@ -420,7 +430,7 @@
             e.preventDefault();
             document.getElementById('deleteSubjectSpinner').style.display = 'block';
             
-            fetch('http://hnvs_backend.test/api/subject/delete', {
+            fetch(`${APP_URL}/api/subject/delete`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Application/json',

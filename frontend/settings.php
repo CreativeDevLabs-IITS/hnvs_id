@@ -1,6 +1,6 @@
 
 <?php include 'partials/_head.php' ?>
-
+    <?php include 'partials/config.php' ?>
     <div style="height: auto; background-color: #f1f1f1; " class="dashboard">
         <div style="position: sticky; top: 0; z-index: 5">
             <?php include 'partials/_navbar.php' ?>
@@ -29,14 +29,14 @@
                                 General Settings
                             </button>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" id="strandBtn" style="display: none;" role="presentation">
                             <button class="nav-link d-flex align-items-center" id="tab2-tab" data-bs-toggle="tab" onclick="displayContent('tab2')" data-bs-target="#tab2"
                                     type="button" role="tab" aria-controls="tab2" aria-selected="false">
                                 <svg class="me-1" xmlns="http://www.w3.org/2000/svg"  width="16"  height="16"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-library"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 3m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 7.26a2.005 2.005 0 0 0 -1.012 1.737v10c0 1.1 .9 2 2 2h10c.75 0 1.158 -.385 1.5 -1" /><path d="M11 7h5" /><path d="M11 10h6" /><path d="M11 13h3" /></svg>
                                 Strands
                             </button>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" id="sectionsBtn" style="display: none;" role="presentation">
                             <button class="nav-link d-flex align-items-center" id="tab3-tab" onclick="displayContent('tab3')" data-bs-toggle="tab" data-bs-target="#tab3"
                                     type="button" role="tab" aria-controls="tab3" aria-selected="false">
                                 <svg class="me-1" xmlns="http://www.w3.org/2000/svg"  width="18"  height="18"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-users-group"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1" /><path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M17 10h2a2 2 0 0 1 2 2v1" /><path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M3 13v-1a2 2 0 0 1 2 -2h2" /></svg>
@@ -57,14 +57,14 @@
                         
                         <!-- no internet -->
                         <div id="no-internet" class="justify-content-center flex-column align-items-center" style="height: 80%; display: none">
-                            <img src="http://hnvs_backend.test/images/no-connection.png" style="width: 10%;" alt="">
+                            <img src="https://hnvs-id-be.creativedevlabs.com/assets/no-connection.png" style="width: 10%;" alt="">
                             <div class="text-secondary fs-6 text-danger">No internet connection</div>
                             <div class="text-secondary" style="font-size: 13px;">Please check your network settings and try again. Some features may not work until you're back online.</div>
                         </div>
 
                         <!-- content -->
                         <div style="display: none;" class="tab-pane fade show active p-4 border border-top-0" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
-                            <div class="text-dark">lol</div>
+                            <div class="text-dark"></div>
                         </div>
 
                         <!-- strand tabs -->
@@ -101,11 +101,14 @@
     <?php include 'partials/_logout.php' ?>
 
     <script>
+        const APP_URl = "<?= APP_URL ?>"
+        const FRONTEND_URL = "<?= FRONTEND_URL ?>"
+
         // prevent backing
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if(!token) {
-                location.replace('http://hnvs.system.test/');
+                location.replace(`${FRONTEND_URL}`);
             }else {
                 if (window.history && window.history.pushState) {
                     window.history.pushState(null, null, location.href);
@@ -116,6 +119,12 @@
             }
             document.getElementById('no-internet').style.display = 'none'; 
 
+            const role = localStorage.getItem('role');
+            if(role != 2) {
+                document.getElementById('strandBtn').style.display = 'block';
+                document.getElementById('sectionsBtn').style.display = 'block';
+            }
+            
             setTimeout(() => {
                 if(navigator.onLine) {
                     document.getElementById('screenLoaderCon').style.display = 'none';

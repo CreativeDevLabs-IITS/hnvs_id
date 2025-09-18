@@ -10,10 +10,14 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TeacherCredential;
+use App\Models\Teacher;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Exception;
 use App\Models\User;
+use Laravel\Sanctum\PersonalAccessToken;
+use App\Models\Teeacher;
+use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
@@ -162,7 +166,7 @@ class UserController extends Controller
     public function count() {
         return response()->json([
             'teachers' => User::count(),
-            'user' => Auth::user()->role
+            'user' => Auth::user()
         ]);
     }
 
@@ -170,7 +174,7 @@ class UserController extends Controller
         $user = Auth::user();
         $user->tokens()->delete();
         return response()->json([
-            'message' => 'Logout successfully'
+            'message' => 'Logged out successfully'
         ]);
     }
 
@@ -219,6 +223,28 @@ class UserController extends Controller
             return response()->json([
                 'error' => $e->getMessage()
             ]);
+        }
+    }
+
+
+
+    // mobile
+    public function mobileLogout(Request $request) {
+        try {
+            $token = PersonalAccessToken::where('token', hash('sha256', $request->token))->first();
+
+            if($token) {
+                $token->delete();
+            }
+
+            return response()->json([
+                'message' => 'Logged out successfully.'
+            ], 200);
+
+        }catch(Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 422);
         }
     }
 }
