@@ -9,6 +9,7 @@ use App\Http\Controllers\StrandController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\BgRemoveController;
 use App\Models\User;
 use App\Models\Teacher;
 
@@ -78,5 +79,7 @@ Route::middleware(['auth:sanctum', 'preventBack'])->group(function() {
     Route::post('/subject/roster/import', [SubjectController::class, 'subjectRosterImport']);
 
     Route::get('/logout', [UserController::class, 'logout']);
+
+    Route::post('api/remove-bg', [BgRemoveController::class, 'remove']);
 });
 

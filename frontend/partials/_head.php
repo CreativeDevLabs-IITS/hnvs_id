@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="http://hnvs_backend.test/dist/css/dropify.min.css">
     <link rel="stylesheet" href="css/pagesstyles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
     <title>HNVS</title>
 </head>
 <body>
