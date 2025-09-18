@@ -9,7 +9,7 @@
     <div class="offcanvas-body">
         <div class="top-con px-3 pb-3">
             <div class="d-flex justify-content-end gap-4 mb-4">
-                <form class="form" style="width: 40%">
+                <form class="form">
                     <button>
                         <div class="loader" style="display: none;" id="offcanvasearchLoader"></div>
                         <svg id="offSearchIcon" width="17" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="search">
@@ -26,10 +26,6 @@
                     <div class="fs-5 fw-semibold" style="margin-top: -5px;" id="subject_name_offCanvas"></div>
                 </div>
                 <div class="d-flex gap-4 align-items-end">
-                    <div class="fw-semibold" id="offAllBtn" style="padding: 2px 8px; color: #fff; border-radius: 5px; border: none; cursor: pointer">
-                        All
-                        <svg xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-caret-down"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 9c.852 0 1.297 .986 .783 1.623l-.076 .084l-6 6a1 1 0 0 1 -1.32 .083l-.094 -.083l-6 -6l-.083 -.094l-.054 -.077l-.054 -.096l-.017 -.036l-.027 -.067l-.032 -.108l-.01 -.053l-.01 -.06l-.004 -.057v-.118l.005 -.058l.009 -.06l.01 -.052l.032 -.108l.027 -.067l.07 -.132l.065 -.09l.073 -.081l.094 -.083l.077 -.054l.096 -.054l.036 -.017l.067 -.027l.108 -.032l.053 -.01l.06 -.01l.057 -.004l12.059 -.002z" /></svg>
-                    </div>
                     <div class="input-group d-flex flex-column align-items-baseline" style="width: 260px">
                         <label for="sem" style="font-size: 13px;" class="text-secondary">Stand</label>
                         <select class="" name="sem" id="offStrand" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
@@ -44,6 +40,9 @@
                             <option value="" class="text-secondary" selected disabled>Select section</option>
                             <!-- section -->
                         </select>                                
+                    </div>
+                    <div class="" id="offAllBtn" style="display: none; padding: 2px 8px; border-radius: 5px; border: none; cursor: pointer; background-color: #0b5ed7; color: #fff">
+                        Clear
                     </div>
                 </div>
             </div>
@@ -139,8 +138,6 @@
         $(document).on('click', '#rosrterOffcanvas', function() {
             document.getElementById('offStrand').value = '';
             document.getElementById('offSection').value = '';
-            document.getElementById('offAllBtn').style.color = '#fff';
-            document.getElementById('offAllBtn').style.backgroundColor = '#3498db';
             offFetchStudents();
 
             // fetch all ids to use in the future
@@ -322,18 +319,16 @@
         const offSearchLoader = document.getElementById('offcanvasearchLoader');
 
         offSearch.addEventListener('input', () => {
-            document.getElementById('offAllBtn').style.backgroundColor = 'transparent';
-            document.getElementById('offAllBtn').style.color = '#000';
             offSearchIcon.style.display = 'none',
             offSearchLoader.style.display = 'block';
-
+            
             offcurrentSearch = offSearch.value.trim();
-
+            
             if(offcurrentSearch === '') {
-                document.getElementById('offAllBtn').style.backgroundColor = '#3498db';
-                document.getElementById('offAllBtn').style.color = '#fff';
+                document.getElementById('offAllBtn').style.display = 'none';
                 offFetchStudents();
             } else {
+                document.getElementById('offAllBtn').style.display = 'block';
                 offFetchSearchResults(offcurrentSearch, 1);
             }
 
@@ -347,26 +342,24 @@
 
         // filter by strand and section
         document.getElementById('offStrand').addEventListener('change', () => {
-            document.getElementById('offAllBtn').style.backgroundColor = 'transparent';
-            document.getElementById('offAllBtn').style.color = '#000';
+            document.getElementById('offAllBtn').style.display = 'block';
             offcurrentSearch = offSearch.value.trim();
             offFetchSearchResults(offcurrentSearch, 1);
         });
 
         document.getElementById('offSection').addEventListener('change', () => {
-            document.getElementById('offAllBtn').style.backgroundColor = 'transparent';
-            document.getElementById('offAllBtn').style.color = '#000';
+            document.getElementById('offAllBtn').style.display = 'block';
             offcurrentSearch = offSearch.value.trim();
             offFetchSearchResults(offcurrentSearch, 1);
         });
 
         document.getElementById('offAllBtn').addEventListener('click', () => {
+            document.getElementById('offAllBtn').style.display = 'none';
             offFetchStudents();
+            offSearch.value = '';
             document.getElementById('offStrand').value = '';
             document.getElementById('offSection').value = '';
             offcurrentSearch.value = '';
-            document.getElementById('offAllBtn').style.backgroundColor = '#3498db';
-            document.getElementById('offAllBtn').style.color = '#fff';
         })
 
         function updateCountValue() {

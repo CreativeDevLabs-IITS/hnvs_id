@@ -44,11 +44,7 @@
                             <div class="text-secondary" style="font-size: 13px;">Section:</div>
                             <div class="fs-5 fw-semibold" style="margin-top: -5px; max-width: 280px;" id="subject_name"></div>
                         </div>
-                        <div class="d-flex gap-4 align-items-end">
-                            <div class="fw-semibold" id="AllBtn" style="padding: 2px 8px; color: #fff; border-radius: 5px; border: none; cursor: pointer">
-                                All
-                                <svg xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-caret-down"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 9c.852 0 1.297 .986 .783 1.623l-.076 .084l-6 6a1 1 0 0 1 -1.32 .083l-.094 -.083l-6 -6l-.083 -.094l-.054 -.077l-.054 -.096l-.017 -.036l-.027 -.067l-.032 -.108l-.01 -.053l-.01 -.06l-.004 -.057v-.118l.005 -.058l.009 -.06l.01 -.052l.032 -.108l.027 -.067l.07 -.132l.065 -.09l.073 -.081l.094 -.083l.077 -.054l.096 -.054l.036 -.017l.067 -.027l.108 -.032l.053 -.01l.06 -.01l.057 -.004l12.059 -.002z" /></svg>
-                            </div>
+                        <div class="d-flex gap-3 align-items-end">
                             <div class="input-group d-flex flex-column align-items-baseline" style="width: 270px">
                                 <label for="sem" style="font-size: 13px;" class="text-secondary">Stand</label>
                                 <select class="" id="strandOpt" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
@@ -63,6 +59,10 @@
                                     <option value="" class="text-secondary" selected disabled>Select section</option>
                                     <!-- section -->
                                 </select>                                
+                            </div>
+
+                            <div class="fw-semibold" id="AllBtn" style="display: none; padding: 2px 8px; border-radius: 5px; border: none; cursor: pointer; background-color: #3498db; color: #fff">
+                                Clear
                             </div>
 
                             <div class="dropdown d-flex flex-row-reverse" id="noPrint" style="cursor: pointer;">
@@ -305,7 +305,6 @@
         let currentSearch = '';
 
         document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById('AllBtn').style.backgroundColor = '#3498db';
             fetchStudents();
             fetchStudents();
         });
@@ -479,8 +478,10 @@
             currentSearch = search.value.trim();
 
             if(currentSearch === '') {
+                document.getElementById('AllBtn').style.display = 'none';
                 fetchStudents();
             } else {
+                document.getElementById('AllBtn').style.display = 'block';
                 fetchSearchResults(currentSearch, 1);
             }
 
@@ -493,26 +494,24 @@
 
         // filter by strand and section
         document.getElementById('strandOpt').addEventListener('change', () => {
-            document.getElementById('AllBtn').style.backgroundColor = 'transparent';
-            document.getElementById('AllBtn').style.color = '#000';
+            document.getElementById('AllBtn').style.display = 'block';
             currentSearch = search.value.trim();
             fetchSearchResults(currentSearch, 1);
         });
 
         document.getElementById('section').addEventListener('change', () => {
-            document.getElementById('AllBtn').style.backgroundColor = 'transparent';
-            document.getElementById('AllBtn').style.color = '#000';
+            document.getElementById('AllBtn').style.display = 'block';
             currentSearch = search.value.trim();
             fetchSearchResults(currentSearch, 1);
         });
 
         document.getElementById('AllBtn').addEventListener('click', () => {
             fetchStudents();
+            search.value = '';
             document.getElementById('strandOpt').value = '';
             document.getElementById('section').value = '';
             currentSearch.value = '';
-            document.getElementById('AllBtn').style.backgroundColor = '#3498db';
-            document.getElementById('AllBtn').style.color = '#fff';
+            document.getElementById('AllBtn').style.display = 'none';
         })
 
         // populate delete modal

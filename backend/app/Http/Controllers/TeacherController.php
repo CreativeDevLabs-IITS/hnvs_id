@@ -27,22 +27,24 @@ class TeacherController extends Controller
 
     public function list() {
         return response()->json([
-            'teachers' => Teacher::all()
+            'teachers' => Teacher::paginate(10)
         ]);
     }
 
     public function search(Request $request) {
         try {
-            $teacher = Teacher::query();
+            $teachers = Teacher::query();
 
-            if($request->has('search')) {
+            if($request->filled('search')) {
                 $search = $request->input('search');
-                $teacher->where('firstname', 'LIKE', "%{$search}%")
-                ->orWhere('lastname', 'LIKE', "%{$search}%");
+                $teachers->where(function ($query) use ($search) {
+                    $query->where('firstname', 'LIKE', "%{$search}%")
+                          ->orWhere('lastname', 'LIKE', "%{$search}%");
+                });
             }
 
             return response()->json([
-                'teachers' => $teacher->get()
+                'teachers' => $teachers->paginate(10)
             ]);
         }catch(Exception $e) {
             return response()->json([

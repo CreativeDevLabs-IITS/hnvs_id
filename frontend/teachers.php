@@ -61,6 +61,10 @@
                                 
                             </tbody>
                         </table>
+                        <div class="d-flex justify-content-between align-items-center" style="min-width: 50%; max-width: 55%">
+                            <div id="paginationInfo" style="font-size: 14px;"></div>
+                            <div class="" id="pagination"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -142,58 +146,154 @@
 
 
         // populate table on page load
-        $(document).ready(function() {
-            fetch(`${APP_URL}/api/teachers/list`, {
+        let currentPage = 1;
+        let currentSearch = '';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchTeachers();
+        })        
+
+        function fetchTeachers(page = 1) {
+            currentSearch = '';
+            fetch(`${APP_URL}/api/teachers/list?page=${page}`, {
                 method: 'GET',
                 headers: {
-                    'Accept': 'Application',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
                 }
             })
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
-                const teachers = data.teachers
-                console.log(teachers);
-                const tableBody = document.getElementById('table_body');
-                tableBody.innerHTML = '';
-
-                if(teachers.length  < 1) {
-                    const emptyRow = document.createElement('tr');
-                    const emptyCell = document.createElement('td');
-                    emptyCell.colSpan = 6;
-                    emptyCell.style.textAlign = 'center';
-                    emptyCell.classList.add('text-muted');
-                    emptyCell.textContent = 'No records found';
-
-                    emptyRow.appendChild(emptyCell);
-                    tableBody.appendChild(emptyRow);
-                }
-
-                teachers.forEach((teacher, index) => {
-                    let row = document.createElement('tr');
-                    row.innerHTML = `
-                    <td>
-                        <div class="d-flex gap-2">
-                            <a href="edit-teacher.php?id=${teacher.id}">
-                                <svg class="text-primary" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
-                            </a>
-                            <div id="deleteBtn" data-id="${teacher.id}" data-name="${teacher.firstname}" data-lname="${teacher.lastname}" data-bs-toggle="modal" data-bs-target="#deleteTeacher">
-                                <svg class="text-danger" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
-                            </div>
-                        </div>
-                    </td>
-                    <td>${teacher.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${APP_URL}/storage/${teacher.image}" />` : 'No Image'}</td>
-                    <td>${teacher.lastname}</td>
-                    <td>${teacher.firstname}</td>
-                    <td>${teacher.middlename}</td>
-                    <td>${teacher.suffix != null ? teacher.suffix : '<div class="text-secondary">N/A</div>'}</td>
-                    <td>${teacher.contact}</td>
-                    `;
-
-                    tableBody.appendChild(row);
-                })
+                const teachers = data.teachers.data;
+                const meta = data.teachers;
+                renderTable(teachers, meta);
+                renderPagination(meta, false);
             })
-        });
+        }
+
+        function fetchSearchResults(search, page = 1) {
+            const search_param = new URLSearchParams({
+                search: search,
+                page: page
+            });
+
+            fetch(`${APP_URL}/api/search/teacher?${search_param.toString()}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const teachers = data.teachers.data;
+                const meta = data.teachers;
+                renderTable(teachers, meta);
+                renderPagination(meta, true);
+            })
+        }
+
+        function renderTable(teachers, meta) {
+            const tableBody = document.getElementById('table_body');
+            tableBody.innerHTML = '';
+
+            if(teachers.length  < 1) {
+                const emptyRow = document.createElement('tr');
+                const emptyCell = document.createElement('td');
+                emptyCell.colSpan = 6;
+                emptyCell.style.textAlign = 'center';
+                emptyCell.classList.add('text-muted');
+                emptyCell.textContent = 'No records found';
+
+                emptyRow.appendChild(emptyCell);
+                tableBody.appendChild(emptyRow);
+            }
+
+            teachers.forEach((teacher, index) => {
+                let row = document.createElement('tr');
+                row.innerHTML = `
+                <td>
+                    <div class="d-flex gap-2">
+                        <a href="edit-teacher.php?id=${teacher.id}">
+                            <svg class="text-primary" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
+                        </a>
+                        <div id="deleteBtn" data-id="${teacher.id}" data-name="${teacher.firstname}" data-lname="${teacher.lastname}" data-bs-toggle="modal" data-bs-target="#deleteTeacher">
+                            <svg class="text-danger" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                        </div>
+                    </div>
+                </td>
+                <td>${teacher.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${APP_URL}/storage/${teacher.image}" />` : 'No Image'}</td>
+                <td>${teacher.lastname}</td>
+                <td>${teacher.firstname}</td>
+                <td>${teacher.middlename}</td>
+                <td>${teacher.suffix != null ? teacher.suffix : '<div class="text-secondary">N/A</div>'}</td>
+                <td>${teacher.contact}</td>
+                `;
+
+                tableBody.appendChild(row);
+            })
+        }
+
+        function renderPagination(meta, isSearch = false) {
+            const paginationInfo = document.getElementById('paginationInfo');
+            paginationInfo.textContent = `Showing ${(meta.current_page - 1) * meta.per_page + 1} to ${Math.min(meta.current_page * meta.per_page, meta.total)} of ${meta.total} teachers`;
+
+            const container = document.getElementById('pagination');
+            container.innerHTML = '';
+
+            const totalPages = meta.last_page;
+            const current = meta.current_page;
+            const maxVisible = 5;
+            let start = Math.max(1, current - Math.floor(maxVisible / 2));
+            let end = Math.min(totalPages, start + maxVisible - 1);
+
+            if (end - start < maxVisible - 1) {
+                start = Math.max(1, end - maxVisible + 1);
+            }
+
+            if (current > 1) {
+                const prev = document.createElement('button');
+                prev.textContent = '<';
+                prev.style.border = 'none';
+                prev.style.padding = '1px 5px';
+                prev.style.backgroundColor = '#ccd1d1';
+                prev.style.marginRight = '8px';
+                prev.style.borderRadius = '4px'
+                prev.onclick = () => isSearch ? fetchSearchResults(currentSearch, current -1) : fetchTeachers(current - 1);
+                container.appendChild(prev);
+            }
+
+            for (let i = start; i <= end; i++) {
+                const btn = document.createElement('button');
+                btn.style.padding = '6px 10px';
+                btn.style.border = '1px solid #aeb6bf';
+                btn.style.backgroundColor = '#d7dbdd';
+                if (i === current) {
+                    btn.style.padding = '7px 12px';
+                    btn.style.border = 'none';
+                    btn.style.backgroundColor = '#3498db';
+                    btn.style.color = '#fff';
+                }
+                btn.textContent = i;
+                btn.disabled = i === current;
+                btn.onclick = () => isSearch ? fetchSearchResults(currentSearch, i) : fetchTeachers(i);
+                container.appendChild(btn);
+            }
+
+            if(current < totalPages) {
+                const next = document.createElement('button');
+                next.textContent = '>';
+                next.style.border = 'none';
+                next.style.padding = '1px 5px';
+                next.style.backgroundColor = '#ccd1d1';
+                next.style.marginLeft = '8px';
+                next.style.borderRadius = '4px'
+                next.onclick = () => isSearch ? fetchSearchResults(currentSearch, current + 1) : fetchTeachers(current + 1);
+                container.appendChild(next);
+            }
+        }
+
+
 
 
         // pupulate table on search
@@ -201,65 +301,21 @@
         const searchIcon = document.getElementById('searchIcon');
         const searchLoader = document.getElementById('searchLoader')
 
-        search.addEventListener('input', function(e) {
+        search.addEventListener('input', () => {
             searchIcon.style.display = 'none';
             searchLoader.style.display = 'block';
 
-            if(search.contains(e.target)) {
-                fetch(`${APP_URL}/api/search/teacher?search=${encodeURIComponent(search.value)}`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'Application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    }
-                })
-                .then(res => res.json())
-                .then(data => {
-                    const teachers = data.teachers
-                    const tableBody = document.getElementById('table_body');
-                    tableBody.innerHTML = '';
+            currentSearch = search.value.trim();
 
-                    if(teachers.length  < 1) {
-                        const emptyRow = document.createElement('tr');
-                        const emptyCell = document.createElement('td');
-                        emptyCell.colSpan = 6;
-                        emptyCell.style.textAlign = 'center';
-                        emptyCell.classList.add('text-muted');
-                        emptyCell.textContent = 'No records found';
-
-                        emptyRow.appendChild(emptyCell);
-                        tableBody.appendChild(emptyRow);
-                    }
-
-                    teachers.forEach((teacher, index) => {
-                        let row = document.createElement('tr');
-                        row.innerHTML = `
-                        <td>
-                            <div class="d-flex gap-2">
-                                <a href="edit-teacher.php?id=${teacher.id}">
-                                    <svg class="text-primary" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
-                                </a>                                
-                                <div id="deleteBtn" data-id="${teacher.id}" data-name="${teacher.firstname}">
-                                    <svg class="text-danger" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
-                                </div>                          
-                            </div>
-                        </td>
-                        <td>${teacher.image ? `<img style="height: 30px; 30px; border-radius: 30px" src="${APP_URL}/storage/${teacher.image}" />` : 'No Image'}</td>
-                        <td>${teacher.lastname}</td>
-                        <td>${teacher.firstname}</td>
-                        <td>${teacher.middlename}</td>
-                        <td>${teacher.suffix != null ? teacher.suffix : '<div class="text-secondary">N/A</div>'}</td>
-                        <td>${teacher.contact}</td>
-                        `;
-
-                        tableBody.appendChild(row);
-                    })
-                })
-                .finally(() => {
-                    searchLoader.style.display = 'none';
-                    searchIcon.style.display = 'block';
-                })
+            if(currentSearch === '') {
+                fetchTeachers();
+            }else {
+                fetchSearchResults(currentSearch, 1);
             }
+            setTimeout(() => {
+                searchLoader.style.display = 'none';
+                searchIcon.style.display = 'block';
+            }, 300);
         })
 
         // populate delete modal

@@ -32,6 +32,7 @@
         .then(response => {
             if(response.message) {
                 localStorage.removeItem('token');
+                localStorage.removeItem('role');
                 location.replace(`${FRONTEND_URL}`);
             }
         })
