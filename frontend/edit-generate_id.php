@@ -41,10 +41,13 @@
 
 <script>
     // prevent backing
+          const APP_URL = "<?= APP_URL ?>"
+        const FRONTEND_URL = "<?= FRONTEND_URL ?>"
+
     document.addEventListener('DOMContentLoaded', () => {
         const token = localStorage.getItem('token');
         if(!token) {
-            location.replace('http://hnvs.system.test/');
+            location.replace(`${FRONTEND_URL}`);
         }else {
             if (window.history && window.history.pushState) {
                 window.history.pushState(null, null, location.href);
