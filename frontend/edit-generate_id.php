@@ -217,14 +217,19 @@
       position: absolute;
       right: 10px;
       bottom: 60px;
-      width: 65px;
-      height: 65px;
+      width: 70px;
+      height: 70px;
       z-index: 2;
+      background-color: #fff; /* ✅ White background */
+      padding: 2px; /* space sa loob */
+   
+      box-shadow: 0 0 3px rgba(0,0,0,0.2); /* optional, para lumutang ng konti */
     }
 
     .qr-code img {
       width: 100%;
       height: 100%;
+      object-fit: contain; /* para sure sakto yung QR */
     }
 
     .track {
