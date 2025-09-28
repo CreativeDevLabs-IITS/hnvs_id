@@ -83,13 +83,12 @@ Route::middleware(['auth:sanctum', 'preventBack'])->group(function() {
     Route::post('/section/create', [StrandController::class, 'addSection']);
     Route::post('/section/edit', [StrandController::class, 'editSection']);
     Route::post('/section/delete', [StrandController::class, 'deleteSection']);
-
     Route::post('/subject/roster', [StudentController::class, 'subjectStudents']);
     Route::post('/subject/roster/import', [SubjectController::class, 'subjectRosterImport']);
-
     Route::get('/logout', [UserController::class, 'logout']);
-
     Route::post('api/remove-bg', [BgRemoveController::class, 'remove']);
+    Route::get('/students', [StudentController::class, 'index']); // lahat ng students
+    Route::post('/students/search', [StudentController::class, 'searchgenerateid']); // search
 });
 
 
@@ -104,3 +103,5 @@ Route::middleware(['preventAccess'])->group(function() {
     Route::post('/current-class', [SubjectController::class, 'currentClass']);
     Route::post('/update/attendance', [SubjectController::class, 'editAttendace']);
 });
+
+

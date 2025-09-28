@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('year_level');
             $table->foreignId('section_id');
             $table->foreignId('strand_id');
-            $table->string('qr_token');
+            $table->string('qr_token')->nullable();
             $table->timestamps();
         });
     }
