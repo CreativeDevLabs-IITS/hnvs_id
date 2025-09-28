@@ -5,7 +5,6 @@
         <div style="position: sticky; top: 0; z-index: 5">
             <?php include 'partials/_navbar.php' ?>
         </div>
-        
         <div style="display: grid; grid-template-columns: 250px 1fr">
             <?php include 'partials/_sidebar.php' ?>
             <div class="py-3 pe-3 ps-5">
@@ -26,23 +25,15 @@
                         <?php include 'partials/id/id_card-back.php'; ?>
                     </div>
                 </div>
-
             </div>
         </div>
-
     </div>
-
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-
     <?php include 'partials/_logout.php' ?>
-
-<script>
-    // prevent backing
-          const APP_URL = "<?= APP_URL ?>"
+    <script>
+        const APP_URL = "<?= APP_URL ?>"
         const FRONTEND_URL = "<?= FRONTEND_URL ?>"
-
-    document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {
         const token = localStorage.getItem('token');
         if(!token) {
             location.replace(`${FRONTEND_URL}`);
@@ -56,6 +47,3 @@
         }
     });
 </script>
-
-  
-  

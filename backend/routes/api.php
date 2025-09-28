@@ -89,6 +89,8 @@ Route::middleware(['auth:sanctum', 'preventBack'])->group(function() {
     Route::post('api/remove-bg', [BgRemoveController::class, 'remove']);
     Route::get('/students', [StudentController::class, 'index']); // lahat ng students
     Route::post('/students/search', [StudentController::class, 'searchgenerateid']); // search
+    Route::get('/showstudentid/{id}', [StudentController::class, 'show']);
+
 });
 
 
