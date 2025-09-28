@@ -305,7 +305,7 @@ class StudentController extends Controller
                     'year_level' => $row['year_level'],
                     'section_id' => $section->id,
                     'strand_id' => $strand->id
-                ]);
+                ]); 
 
                 $hashedQr = sha1(uniqid((string)$student->id, true));
                 $qrData = env('FRONTEND_URL') . $hashedQr;
