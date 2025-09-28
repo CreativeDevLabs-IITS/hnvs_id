@@ -364,27 +364,30 @@ class StudentController extends Controller
             ]);
         }
     }
-
-     // lahat ng students
     public function index()
     {
-        return response()->json(Student::all());
+        $students = Student::with('section')->get();
+        return response()->json($students);
     }
-
-    // search students by query
     public function searchgenerateid(Request $request)
     {
         $query = $request->input('query');
-
         if (!$query) {
             return response()->json([]);
         }
-
         $students = Student::where('firstname', 'LIKE', "%{$query}%")
             ->orWhere('middlename', 'LIKE', "%{$query}%")
             ->orWhere('lastname', 'LIKE', "%{$query}%")
             ->get();
-
         return response()->json($students);
+    }
+
+    public function show($id)
+    {
+        $student = Student::find($id);
+        if (!$student) {
+            return response()->json(['message' => 'Not found'], 404);
+        }
+        return response()->json($student);
     }
 }
