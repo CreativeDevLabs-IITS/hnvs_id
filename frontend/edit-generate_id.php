@@ -18,15 +18,13 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="fs-4 mt-2">Edit Generate ID</div>
                 </div>
-
-                <!-- Id Cards Side by Side -->
                 <div style="display: flex; justify-content: center; gap: 20px; margin-top: 30px;">
-                  <div>
-                    <?php include 'partials/id/id_card-front.php'; ?>
-                  </div>
-                  <div>
-                    <?php include 'partials/id/id_card-back.php'; ?>
-                  </div>
+                    <div>
+                        <?php include 'partials/id/id_card-front.php'; ?>
+                    </div>
+                    <div>
+                        <?php include 'partials/id/id_card-back.php'; ?>
+                    </div>
                 </div>
 
             </div>
