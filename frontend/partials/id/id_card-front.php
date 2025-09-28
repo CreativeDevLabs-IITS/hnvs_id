@@ -254,59 +254,100 @@
   </style>
 </head>
 <body>
-  <div class="id-card">
-    <div class="watermark-logo">
-      <img src="http://hnvs_backend.test/storage/gallery/hnvsbg.png" alt="Background Logo" />
-    </div>
-<div class="logo-school"></div>
-    <div class="header">
-      <img src="http://hnvs_backend.test/storage/gallery/hnvslogo.png" alt="Logo" />
-      <div class="school-info">
-        <div class="school-name">HILONGOS NATIONAL <br /><span>VOCATIONAL SCHOOL</span></div>
-        <div class="school-level">SENIOR HIGH <br> SCHOOL DEPARTMENT</div>
-        <div class="school-id">SCHOOL ID: 303374</div>
+    <div class="id-card">
+      <div class="watermark-logo">
+        <img src="http://hnvs_backend.test/storage/gallery/hnvsbg.png" alt="Background Logo" />
       </div>
-    </div>
+      <div class="logo-school"></div>
 
-    <div class="lrn">
-      <div class="lrn-label">LRN</div>
-      <div class="lrn-bar">123456789812</div>
-    </div>
-
-    <div class="photo">
-      <img src="http://hnvs_backend.test/storage/gallery/bayot.png" alt="Logos" />
-    </div>
-
-    <div class="signature">
-      <img src="http://hnvs_backend.test/storage/gallery/signatures.png" alt="Signature" />
-    </div>
-
-    <div class="bottom-container">
-      <div class="left-box">
-        <div class="name">
-          <div class="last-name">VILLAHERMOSA</div>
-          <div class="first-name">APPLE MARIE <span class="middle-name">M.</span></div>
-        </div>
-        <div class="info">
-          <div class="dob">Date of Birth:</div>
-          <div class="dob-num">12/15/2003</div>
-          <div class="address">Address:</div>
-          <div class="brgy-address">Marangog, Hilongos</div>
+      <div class="header">
+        <img src="http://hnvs_backend.test/storage/gallery/hnvslogo.png" alt="Logo" />
+        <div class="school-info">
+          <div class="school-name">HILONGOS NATIONAL <br /><span>VOCATIONAL SCHOOL</span></div>
+          <div class="school-level">SENIOR HIGH <br> SCHOOL DEPARTMENT</div>
+          <div class="school-id">SCHOOL ID: 303374</div>
         </div>
       </div>
-    </div>
 
-    <div class="qr-code">
-      <img src="http://hnvs_backend.test/storage/gallery/QR.png" alt="QR" />
-    </div>
-
-    <div class="track">
-      <div class="strand">
-        SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
+      <div class="lrn">
+        <div class="lrn-label">LRN</div>
+        <div class="lrn-bar" id="student-lrn">123456789812</div>
       </div>
-      <div class="doorway-word">Doorway:</div>
-      <div class="doorway">DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
+
+      <div class="photo">
+        <img id="student-photo" src="http://hnvs_backend.test/storage/gallery/bayot.png" alt="Photo" />
+      </div>
+
+      <div class="signature">
+        <img id="student-signature" src="http://hnvs_backend.test/storage/gallery/signatures.png" alt="Signature" />
+      </div>
+
+      <div class="bottom-container">
+        <div class="left-box">
+          <div class="name">
+            <div class="last-name" id="student-lastname">VILLAHERMOSA</div>
+            <div class="first-name">
+              <span id="student-firstname">APPLE MARIE</span>
+              <span class="middle-name" id="student-middlename">M.</span>
+            </div>
+          </div>
+          <div class="info">
+            <div class="dob">Date of Birth:</div>
+            <div class="dob-num" id="student-dob">12/15/2003</div>
+            <div class="address">Address:</div>
+            <div class="brgy-address" id="student-address">Marangog, Hilongos</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qr-code">
+        <img id="student-qr" src="http://hnvs_backend.test/storage/gallery/QR.png" alt="QR" />
+      </div>
+
+      <div class="track">
+        <div class="strand" id="student-strand">
+          SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
+        </div>
+        <div class="doorway-word">Doorway:</div>
+        <div class="doorway" id="student-doorway">
+          DRIVING NC II AND AUTOMOTIVE SERVICING NC I
+        </div>
+      </div>
     </div>
-  </div>
 </body>
 </html>
+
+
+<script>
+const APP_URL = "http://backend.test";
+const studentId = new URLSearchParams(window.location.search).get("id");
+const token = localStorage.getItem('token'); 
+
+fetch(`${APP_URL}/api/showstudentid/${studentId}`, {
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+    }
+})
+.then(res => {
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    return res.json();
+})
+.then(student => {
+    document.getElementById("student-lrn").innerText = student.lrn ?? "-";
+    document.getElementById("student-lastname").innerText = student.lastname ?? "-";
+    document.getElementById("student-firstname").innerText = student.firstname ?? "-";
+    document.getElementById("student-middlename").innerText = student.middlename ?? "-";
+    document.getElementById("student-dob").innerText = student.birthdate ?? "-";
+    document.getElementById("student-address").innerText = student.address ?? "-";
+    document.getElementById("student-strand").innerText = student.strand ?? "-";
+    document.getElementById("student-doorway").innerText = student.doorway ?? "-";
+    document.getElementById("student-photo").src = student.photo ?? "http://hnvs_backend.test/storage/gallery/bayot.png";
+    document.getElementById("student-signature").src = student.signature ?? "http://hnvs_backend.test/storage/gallery/signatures.png";
+    document.getElementById("student-qr").src = student.qr_code ?? "http://hnvs_backend.test/storage/gallery/QR.png";
+})
+.catch(err => {
+    console.error("Error:", err);
+});
+</script>

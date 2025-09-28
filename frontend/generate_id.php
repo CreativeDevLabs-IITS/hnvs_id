@@ -78,13 +78,12 @@
 
     let students = []; 
 
- function showStudentInfo(student) {
+    function showStudentInfo(student) {
     infoDiv.innerHTML = `
         <div style="border:1px solid #ddd; padding:15px; border-radius:5px; margin-top:15px; background:#fafafa;">
             <h5>${student.firstname ?? ""} ${student.middlename ?? ""} ${student.lastname ?? ""}</h5>
-            <p><strong>Address:</strong> ${student.municipality ?? "-"}</p>
-            <p><strong>Contact:</strong> ${student.contact ?? "-"}</p>
-
+            <p><strong>Year Level:</strong> ${student.year_level ?? "-"}</p>
+            <p><strong>Section:</strong> ${student.section?.name ?? "-"}</p>
             <div style="margin-top:15px; text-align:right;">
                 <button onclick="window.location.href='edit-generate_id.php?id=${student.id}'" 
                     style="
