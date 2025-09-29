@@ -1,5 +1,5 @@
 <?php include 'partials/_head.php' ?>
- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -500,9 +500,7 @@
             background: linear-gradient(90deg, #2b2a2c 60%, #212122 100%);
             transform: translateY(-2px) scale(1.04);
         }
-  </style>
-
-
+</style>
     <div style="height: auto; background-color: #f1f1f1; " class="dashboard">
         <div style="position: sticky; top: 0; z-index: 5">
             <?php include 'partials/_navbar.php' ?>
@@ -520,28 +518,27 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="fs-4 mt-2">Edit Generate ID</div>
                 </div>
-
-  <div style="width:100%; display:flex; flex-direction:column; align-items:center; margin-top:20px;">
-  <div style="margin-bottom: 20px;">
-    <button id="showFront" class="switch-btn active">Front</button>
-    <button id="showBack" class="switch-btn">Back</button>
-    <button id="editBtn" class="switch-btn">Edit</button>
-    <button id="saveAsBtn" class="switch-btn" style="display:none;">Save as</button>
-    <button id="printBtn" class="switch-btn">Print</button>
-  </div>
-  <div style="display: flex; gap: 20px; margin-bottom: 10px;">
-    <div id="fontSizeControls" style="display:none;">
-      <label for="nameFontSize" style="font-weight:bold;">Name Font Size:</label>
-      <input type="range" id="nameFontSize" min="16" max="48" value="24" style="vertical-align:middle;">
-      <span id="fontSizeValue">24</span>px
-    </div>
-    <div id="firstNameFontSizeControls" style="display:none;">
-      <label for="firstNameFontSize" style="font-weight:bold;">First Name Font Size:</label>
-      <input type="range" id="firstNameFontSize" min="10" max="30" value="13" style="vertical-align:middle;">
-      <span id="firstNameFontSizeValue">13</span>px
-    </div>
-  </div>
-</div>
+          <div style="width:100%; display:flex; flex-direction:column; align-items:center; margin-top:20px;">
+          <div style="margin-bottom: 20px;">
+            <button id="showFront" class="switch-btn active">Front</button>
+            <button id="showBack" class="switch-btn">Back</button>
+            <button id="editBtn" class="switch-btn">Edit</button>
+            <button id="saveBtn" class="switch-btn">Save</button>
+            <button id="printBtn" class="switch-btn">Print</button>
+          </div>
+          <div style="display: flex; gap: 20px; margin-bottom: 10px;">
+            <div id="fontSizeControls" style="display:none;">
+              <label for="nameFontSize" style="font-weight:bold;">Name Font Size:</label>
+              <input type="range" id="nameFontSize" min="16" max="48" value="24" style="vertical-align:middle;">
+              <span id="fontSizeValue">24</span>px
+            </div>
+            <div id="firstNameFontSizeControls" style="display:none;">
+              <label for="firstNameFontSize" style="font-weight:bold;">First Name Font Size:</label>
+              <input type="range" id="firstNameFontSize" min="10" max="30" value="13" style="vertical-align:middle;">
+              <span id="firstNameFontSizeValue">13</span>px
+            </div>
+          </div>
+        </div>
 
 <!-- Id Cards Side by Side -->
 <div style="display: flex; justify-content: center; gap: 20px; margin-top: 5px;">
@@ -690,33 +687,34 @@
 <?php include 'partials/_logout.php' ?>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const idFront = document.getElementById('idFront');
-  const idBack = document.getElementById('idBack');
-  const frontBtn = document.getElementById('showFront');
-  const backBtn = document.getElementById('showBack');
+  document.addEventListener('DOMContentLoaded', () => {
+    const idFront = document.getElementById('idFront');
+    const idBack = document.getElementById('idBack');
+    const frontBtn = document.getElementById('showFront');
+    const backBtn = document.getElementById('showBack');
 
-  // Show Front
-  frontBtn.addEventListener('click', () => {
-    idFront.style.display = 'block';
-    idBack.style.display = 'none';
-    frontBtn.classList.add('active');
-    backBtn.classList.remove('active');
-  });
+    // Show Front
+    frontBtn.addEventListener('click', () => {
+      idFront.style.display = 'block';
+      idBack.style.display = 'none';
+      frontBtn.classList.add('active');
+      backBtn.classList.remove('active');
+    });
 
-  // Show Back
-  backBtn.addEventListener('click', () => {
-    idFront.style.display = 'none';
-    idBack.style.display = 'block';
-    backBtn.classList.add('active');
-    frontBtn.classList.remove('active');
+    // Show Back
+    backBtn.addEventListener('click', () => {
+      idFront.style.display = 'none';
+      idBack.style.display = 'block';
+      backBtn.classList.add('active');
+      frontBtn.classList.remove('active');
+    });
   });
-});
 </script>
 <script>
 const params = new URLSearchParams(window.location.search);
 const studentId = params.get('id') || 1;
 
+// --- fetch student info ---
 fetch(`http://backend.test/api/showstudentid/${studentId}`, {
   method: 'GET',
   headers: {
@@ -729,20 +727,38 @@ fetch(`http://backend.test/api/showstudentid/${studentId}`, {
   return res.json();
 })
 .then(data => {
-  // match sa imong column names
+  // 👉 populate sa UI
   document.getElementById('lrn-bar').textContent = data.lrn;
-  // document.getElementById('student-photo').src  = `/storage/gallery/${data.photo ?? 'default.png'}`; 
-  // document.getElementById('student-signature').src = `/storage/gallery/${data.signature}`;
-
   document.getElementById('last-name').textContent  = data.lastname;
   document.getElementById('first-name').firstChild.textContent = data.firstname + ' ';
   document.getElementById('middle-name').textContent = data.middlename ? data.middlename.charAt(0) + '.' : '';
   document.getElementById('dob-num').textContent   = data.birthdate;
   document.getElementById('cnumber').textContent   = data.emergency_contact;
   document.getElementById('brgy-address').textContent = `${data.barangay}, ${data.municipality}`;
-    if (data.qr_code) {
-      document.getElementById('student-qr').src = data.qr_code;
-    }
-  })
+  if (data.qr_code) {
+    document.getElementById('student-qr').src = data.qr_code;
+  }
+})
 .catch(err => console.error(err));
+
+// --- button event ---
+document.getElementById('saveBtn').addEventListener('click', function () {
+  fetch(`http://backend.test/api/save-generated-id`, {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Authorization": "Bearer " + localStorage.getItem("token"),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      student_id: studentId
+    })
+  })
+  .then(res => res.json())
+  .then(res => {
+    console.log("Saved generated ID:", res);
+    alert("Generated ID saved successfully!");
+  })
+  .catch(err => console.error("Save error:", err));
+});
 </script>

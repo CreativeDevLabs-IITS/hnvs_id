@@ -9,11 +9,9 @@ use App\Http\Controllers\StrandController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AttendanceController;
-
 use App\Http\Controllers\BgRemoveController;
-
 use App\Http\Controllers\QRCodeController;
-
+use App\Http\Controllers\GenerateidController;
 use App\Models\User;
 use App\Models\Teacher;
 
@@ -87,9 +85,11 @@ Route::middleware(['auth:sanctum', 'preventBack'])->group(function() {
     Route::post('/subject/roster/import', [SubjectController::class, 'subjectRosterImport']);
     Route::get('/logout', [UserController::class, 'logout']);
     Route::post('api/remove-bg', [BgRemoveController::class, 'remove']);
-    Route::get('/students', [StudentController::class, 'index']); // lahat ng students
-    Route::post('/students/search', [StudentController::class, 'searchgenerateid']); // search
+    Route::get('/students', [StudentController::class, 'index']); 
+    Route::post('/students/search', [StudentController::class, 'searchgenerateid']); 
     Route::get('/showstudentid/{id}', [StudentController::class, 'show']);
+    Route::post('/save-generated-id', [GenerateidController::class, 'store']);
+    Route::get('/showgeneratedids', [StudentController::class, 'index']);
 
 });
 
