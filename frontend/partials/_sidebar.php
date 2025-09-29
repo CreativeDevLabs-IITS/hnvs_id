@@ -50,7 +50,7 @@
 
                         <!-- Submenu -->
                         <div class="collapse ps-4" id="generateSubMenu">
-                            <a href="studentlist.php"
+                            <a href="studentgeneratedidlist.php"
                             class="d-flex align-items-center py-1 px-3 <?= (strpos($currentPage, 'studentlist.php') !== false) ? 'fw-bold' : '' ?>"
                             style="font-size: 14px; text-decoration: none; color: #566573;">
                                 <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
