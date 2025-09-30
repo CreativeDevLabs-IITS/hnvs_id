@@ -89,8 +89,8 @@ Route::middleware(['auth:sanctum', 'preventBack'])->group(function() {
     Route::post('/students/search', [StudentController::class, 'searchgenerateid']); 
     Route::get('/showstudentid/{id}', [StudentController::class, 'show']);
     Route::post('/save-generated-id', [GenerateidController::class, 'store']);
-    Route::get('/showgeneratedids', [StudentController::class, 'index']);
-
+    Route::get('/showgeneratedids', [GenerateidController::class, 'index']);
+    Route::delete('/deletegenerate/{id}', [GenerateidController::class, 'destroy']);
 });
 
 

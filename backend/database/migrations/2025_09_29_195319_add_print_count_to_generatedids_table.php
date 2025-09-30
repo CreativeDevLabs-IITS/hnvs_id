@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('generatedids', function (Blueprint $table) {
+        Schema::table('generate_ids', function (Blueprint $table) {
             $table->unsignedInteger('print_count')->default(1);
         });
     }
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('generatedids', function (Blueprint $table) {
+        Schema::table('generate_ids', function (Blueprint $table) {
             $table->dropColumn('print_count');
         });
     }
