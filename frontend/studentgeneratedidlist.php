@@ -1,10 +1,54 @@
 <style>
+    .pagination-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+    }
+    .pagination {
+        display: flex;
+        gap: 6px;
+        justify-content: center;
+        flex: 1;
+    }
+    .pagination .page-btn {
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        background: #f9f9f9;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+    .pagination .page-btn:hover {
+        background: #e2e6ea;
+    }
+    .pagination .page-btn.active {
+        background: #007bff;
+        color: white;
+        border-color: #007bff;
+    }
+    .pagination-info {
+        font-size: 13px;
+        color: #555;
+        flex-shrink: 0;
+        text-align: left;
+    }
+
     .table-container {
     position: relative;
     background: #fff;
     border-radius: 12px;
     padding: 15px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .dropdown-menu {
+        z-index: 2000 !important;  
+    }
+    
+    .table-container,
+    #taskTable,
+    .table-header {
+        overflow: visible !important;
     }
     .table-header {
     margin-bottom: 12px;
@@ -66,6 +110,7 @@
     border-bottom: 1px solid #e2e8f0;
     }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?php include 'partials/_head.php' ?>
     <div style="height: auto; background-color: #f1f1f1; " class="dashboard">
         <div style="position: sticky; top: 0; z-index: 5">
@@ -84,25 +129,32 @@
                 <div class="d-flex justify-content-between align-items-center" style="position:relative;">
                     <div class="fs-4 mt-2">Generated ID</div>
                     </div>
-                    <div class="table-container">
+                    <div class="table-container mt-2">
                         <div class="table-header">
                             <div class="search-box">
-                            <input type="text" id="searchInput" placeholder="Search student...">
-                            <span class="search-icon">🔍</span>
+                                <input type="text" id="searchInput" placeholder="Search student...">
+                                <span class="search-icon">🔍</span>
                             </div>
                         </div>
                         <table id="taskTable" class="table table-hover align-middle shadow-sm rounded-3 overflow-hidden mt-2">
                             <thead>
-                            <tr>
-                                <th scope="col">Fullname</th>
-                                <th scope="col">Address</th>
-                                <th scope="col">Age</th>
-                                <th scope="col">LRN</th>
-                                <th scope="col">Contact</th>
-                            </tr>
+                                <tr>
+                                    <th scope="col">Action</th> <!-- Action sa kaliwa -->
+                                    <th scope="col">Fullname</th>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">Age</th>
+                                    <th scope="col">LRN</th>
+                                    <th scope="col">Contact</th>
+                                </tr>
                             </thead>
-                        <tbody id="studentTableBody"></tbody>
+                            <tbody id="studentTableBody"></tbody>
                         </table>
+
+                        <!-- Pagination wrapper -->
+                        <div class="pagination-wrapper">
+                            <div id="paginationInfo" class="pagination-info"></div>
+                            <div id="paginationControls" class="pagination"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -129,29 +181,132 @@
     });
     </script>
 
-    <script>
-        fetch("http://backend.test/api/showgeneratedids", {
+<script>
+    const rowsPerPage = 5; 
+    let currentPage = 1;
+    let students = [];
+
+    function renderTablePage(page = 1) {
+        const tbody = document.getElementById("studentTableBody");
+        tbody.innerHTML = "";
+        if (students.length === 0) {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td colspan="6" class="text-center text-muted py-4">
+                     No students found.
+                </td>
+            `;
+            tbody.appendChild(tr);
+
+            document.getElementById("paginationControls").innerHTML = "";
+            document.getElementById("paginationInfo").textContent = "";
+            return; // exit function
+        }
+
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const paginatedStudents = students.slice(start, end);
+
+        paginatedStudents.forEach(student => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            ⋮
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">👁 View</a></li>
+                            <li><a class="dropdown-item" href="#">✏ Edit</a></li>
+                            <li><a class="dropdown-item text-danger btn-delete" data-id="${student.id}" href="#">🗑 Delete</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td>${student.lastname}, ${student.firstname} ${student.middlename ?? ""}</td>
+                <td>${student.barangay}, ${student.municipality}</td>
+                <td>${student.age ?? "-"}</td>
+                <td>${student.lrn ?? "-"}</td>
+                <td>${student.emergency_contact ?? "-"}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // Attach delete events
+        document.querySelectorAll(".btn-delete").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                const id = btn.getAttribute("data-id");
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "This record will be permanently deleted!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#6c757d",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`http://backend.test/api/deletegenerate/${id}`, {
+                            method: "DELETE",
+                            headers: {
+                                "Accept": "application/json",
+                                "Authorization": "Bearer " + localStorage.getItem("token")
+                            }
+                        })
+                        .then(res => res.json())
+                        .then(resp => {
+                            Swal.fire("Deleted!", resp.message, "success");
+                            students = students.filter(s => s.id != id);
+                            renderTablePage(currentPage);
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            Swal.fire("Error!", "Something went wrong.", "error");
+                        });
+                    }
+                });
+            });
+        });
+
+        renderPaginationControls();
+        renderPaginationInfo(start, end, students.length);
+    }
+
+    function renderPaginationControls() {
+        const totalPages = Math.ceil(students.length / rowsPerPage);
+        const paginationDiv = document.getElementById("paginationControls");
+        paginationDiv.innerHTML = "";
+
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement("button");
+            btn.textContent = i;
+            btn.className = "page-btn " + (i === currentPage ? "active" : "");
+            btn.addEventListener("click", () => {
+                currentPage = i;
+                renderTablePage(currentPage);
+            });
+            paginationDiv.appendChild(btn);
+        }
+    }
+
+    function renderPaginationInfo(start, end, total) {
+        const infoDiv = document.getElementById("paginationInfo");
+        const showingStart = total === 0 ? 0 : start + 1;
+        const showingEnd = Math.min(end, total);
+        infoDiv.textContent = `Showing ${showingStart} to ${showingEnd} of ${total} students`;
+    }
+
+    fetch("http://backend.test/api/showgeneratedids", {
         headers: {
             "Accept": "application/json",
             "Authorization": "Bearer " + localStorage.getItem("token")
         }
-        })
-        .then(res => res.json())
-        .then(data => {
-        const tbody = document.getElementById("studentTableBody");
-        tbody.innerHTML = ""; 
-
-        data.forEach(student => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-            <td>${student.lastname}, ${student.firstname} ${student.middlename ?? ""}</td>
-            <td>${student.barangay}, ${student.municipality}</td>
-            <td>${student.age}</td>
-            <td>${student.lrn}</td>
-            <td>${student.emergency_contact}</td>
-            `;
-            tbody.appendChild(tr);
-        });
-        })
-        .catch(err => console.error(err));
-    </script>
+    })
+    .then(res => res.json())
+    .then(data => {
+        students = data;
+        renderTablePage(currentPage);
+    })
+    .catch(err => console.error(err));
+</script>

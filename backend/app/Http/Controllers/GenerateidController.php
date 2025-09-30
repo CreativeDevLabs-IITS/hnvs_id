@@ -9,21 +9,19 @@ class GenerateidController extends Controller
 {
     public function index()
     {
-        $students = Student::select(
+        $students = Generateid::join('students', 'generate_ids.student_id', '=', 'students.id')
+            ->select(
                 'students.id',
                 'students.firstname',
                 'students.middlename',
                 'students.lastname',
-                'students.gender',
+                'students.age',
                 'students.barangay',
+                'students.lrn',
                 'students.municipality',
-                'students.emergency_contact'
+                'students.emergency_contact',
+                'generate_ids.print_count'
             )
-            ->withCount([
-                'generatedIds as print_count' => function ($query) {
-                    $query->select(\DB::raw("COALESCE(SUM(print_count),0)"));
-                }
-            ])
             ->get();
 
         return response()->json($students);
@@ -45,6 +43,22 @@ class GenerateidController extends Controller
         return response()->json([
             'message' => 'Generated ID saved successfully',
             'data' => $generated
+        ]);
+    }
+
+
+    public function destroy($id)
+    {
+        $generated = Generateid::where('student_id', $id)->first();
+        if (!$generated) {
+            return response()->json([
+                'message' => 'Generated ID not found'
+            ], 404);
+        }
+        $generated->delete();
+
+        return response()->json([
+            'message' => 'Generated ID deleted successfully'
         ]);
     }
 }

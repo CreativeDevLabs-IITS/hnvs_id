@@ -41,6 +41,11 @@ class Student extends Model
 
     public function attendances() {
         return $this->belongsToMany(Subject::class, 'subject_attendance')->withTimestamps()->withPivot(['status', 'minutes_late']);
+    } 
+
+    public function generatedIds()
+    {
+        return $this->hasMany(Generateid::class, 'student_id');
     }
 
 }
