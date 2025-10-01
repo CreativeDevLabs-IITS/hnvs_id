@@ -20,6 +20,8 @@ class GenerateidController extends Controller
                 'students.lrn',
                 'students.municipality',
                 'students.emergency_contact',
+                'students.image',
+                'students.signature',
                 'generate_ids.print_count'
             )
             ->get();
@@ -30,8 +32,13 @@ class GenerateidController extends Controller
     {
         $request->validate([
             'student_id' => 'required|exists:students,id',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'signature' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // FILE na din
         ]);
+
+        // hanapin kung may existing generate record
         $generated = Generateid::where('student_id', $request->student_id)->first();
+
         if ($generated) {
             $generated->increment('print_count');
         } else {
@@ -40,13 +47,34 @@ class GenerateidController extends Controller
                 'print_count' => 1,
             ]);
         }
+
+        $student = Student::findOrFail($request->student_id);
+
+        // Save uploaded image
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images'), $filename);
+
+            $student->image = env('APP_URL') . '/images/' . $filename;
+        }
+
+        // Save uploaded signature
+        if ($request->hasFile('signature')) {
+            $file = $request->file('signature');
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images'), $filename);
+
+            $student->signature = env('APP_URL') . '/images/' . $filename;
+        }
+
+        $student->save();
+
         return response()->json([
             'message' => 'Generated ID saved successfully',
             'data' => $generated
         ]);
     }
-
-
     public function destroy($id)
     {
         $generated = Generateid::where('student_id', $id)->first();

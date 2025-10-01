@@ -145,6 +145,7 @@
                                     <th scope="col">Age</th>
                                     <th scope="col">LRN</th>
                                     <th scope="col">Contact</th>
+                                    <th scope="col">Image</th>
                                 </tr>
                             </thead>
                             <tbody id="studentTableBody"></tbody>
@@ -193,16 +194,15 @@
             const tr = document.createElement("tr");
             tr.innerHTML = `
                 <td colspan="6" class="text-center text-muted py-4">
-                     No students found.
+                    No students found.
                 </td>
             `;
             tbody.appendChild(tr);
 
             document.getElementById("paginationControls").innerHTML = "";
             document.getElementById("paginationInfo").textContent = "";
-            return; // exit function
+            return;
         }
-
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
         const paginatedStudents = students.slice(start, end);
@@ -227,6 +227,12 @@
                 <td>${student.age ?? "-"}</td>
                 <td>${student.lrn ?? "-"}</td>
                 <td>${student.emergency_contact ?? "-"}</td>
+                <td>
+                    ${student.image 
+                        ? `<img src="${student.image}" alt="Student Photo" width="50" height="50" style="object-fit:cover;border-radius:5px;">`
+                        : "-"
+                    }
+                </td>
             `;
             tbody.appendChild(tr);
         });
