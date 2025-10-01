@@ -354,10 +354,10 @@
                                 data-birth="${student.birthdate}"
                                 data-age="${student.age}"
                                 data-level="${student.year_level}"
-                                data-section="${student.section.name}"
-                                data-strand="${student.strand.cluster}"
+data-section="${student.section?.name || ''}"
+data-strand="${student.strand?.cluster || ''}"
                                 data-lrn="${student.lrn}"
-                                data-specialization="${student.strand.specialization}"
+data-specialization="${student.strand?.specialization || ''}"
                                 data-image="${student.image}"
                                 data-brgy="${student.barangay}"
                                 data-municipal="${student.municipality}"
@@ -385,9 +385,17 @@
                 </td>
                 <td>${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${student.image}" />` : 'No Image'}</td>
                 <td>${student.lastname + ', ' + student.firstname + ' ' + (student.suffix != null ? student.suffix : '') + ' ' + (student.middlename != null ? student.middlename.charAt(0) : '') + '.'}</td>
-                <td>${student.section.name}</td>
-                <td>${student.strand.cluster == 'Industrial Arts (IA)' ? `(IA) ${student.strand.specialization}` : student.strand.cluster == 'Family and Consumer Science (FCS)' ? `(FCS) ${student.strand.specialization}` : student.strand.cluster }</td>
-                <td>${student.lrn}</td>
+                <td>${student.section ? student.section.name : '—'}</td>
+<td>
+  ${student.strand 
+    ? (student.strand.cluster === 'Industrial Arts (IA)' 
+        ? `(IA) ${student.strand.specialization}`
+        : student.strand.cluster === 'Family and Consumer Science (FCS)' 
+          ? `(FCS) ${student.strand.specialization}`
+          : student.strand.cluster)
+    : '—'}
+</td>
+
                 `;
 
                 tableBody.appendChild(row);

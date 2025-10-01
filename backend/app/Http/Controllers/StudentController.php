@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Logo\Logo;
 use Exception;
 use App\Models\Student;
 use App\Models\Section;
@@ -102,12 +104,20 @@ class StudentController extends Controller
 
             $hashedQr = sha1(uniqid((string)$student->id, true));
             $qrData = env('FRONTEND_URL') . $hashedQr;
+            $qrcode = QrCode::create($qrData)
+                ->setSize(300)
+                ->setMargin(10);
 
-            $qrcode = QrCode::create($qrData);
+            $logo = Logo::create(public_path('storage/gallery/hnvslogoqr.png'))
+                ->setResizeToWidth(60)
+                ->setPunchoutBackground(true);
+
             $writer = new PngWriter();
-            $result = $writer->write($qrcode);
+            $result = $writer->write($qrcode, $logo);
+
             $fileName = 'qr_code/' . uniqid() . '.png';
             Storage::disk('public')->put($fileName, $result->getString());
+
             $qr_path = env('APP_URL') . $fileName;
             $student->qr_code = $qr_path;
             $student->qr_token = $hashedQr;
@@ -275,51 +285,51 @@ class StudentController extends Controller
             $import = new StudentImport;
             Excel::import($import, $request->file('file'));
 
-            foreach($import->rows as $row) {
-                $section = Section::where('name', $row['section'])->first();
-                $strand= '';
+           foreach ($import->rows as $row) {
+    // Hanapin ang section sa database
+    $section = Section::where('name', $row['section'])->first();
 
-                if($row['specialization'] != '') {
-                    $strand = Strand::where('specialization', $row['specialization'])->first();
-                }else {
-                    $strand = Strand::where('cluster', $row['strand'])->first();
-                }
+    // Hanapin ang strand sa database
+    $strand = Strand::where('cluster', $row['strand'])->first();
 
-                if(!$section || !$strand) {
-                    $skipped[] =  $row['firstname']. ' ' . $row['lastname'];
-                    continue;
-                }
+    // I-check kung may section at strand
+    if (!$section || !$strand) {
+        $skipped[] = $row['firstname'] . ' ' . $row['lastname'];
+        continue;
+    }
 
-                $student = Student::create([
-                    'firstname' => $row['firstname'],
-                    'middlename' => $row['middlename'],
-                    'lastname' => $row['lastname'],
-                    'suffix' => $row['suffix'] ?? null,
-                    'barangay' => $row['barangay'],
-                    'municipality' => $row['municipality'],
-                    'age' => $row['age'],
-                    'contact' => $row['contact'],
-                    'lrn' => $row['lrn'],
-                    'emergency_contact' => $row['emergency_contact'],
-                    'birthdate' => $row['birthdate'],
-                    'year_level' => $row['year_level'],
-                    'section_id' => $section->id,
-                    'strand_id' => $strand->id
-                ]); 
+    // I-create ang student
+    $student = Student::create([
+        'firstname' => $row['firstname'],
+        'middlename' => $row['middlename'],
+        'lastname' => $row['lastname'],
+        'suffix' => $row['suffix'] ?? null,
+        'barangay' => $row['barangay'],
+        'municipality' => $row['municipality'],
+        'age' => $row['age'],
+        'contact' => $row['contact'],
+        'lrn' => $row['lrn'],
+        'emergency_contact' => $row['emergency_contact'],
+        'birthdate' => $row['birthdate'],
+        'year_level' => $row['year_level'],
+        'section_id' => $section->id,
+        'strand_id' => $strand->id
+    ]);
 
-                $hashedQr = sha1(uniqid((string)$student->id, true));
-                $qrData = env('FRONTEND_URL') . $hashedQr;
+    // Generate QR code
+    $hashedQr = sha1(uniqid((string)$student->id, true));
+    $qrData = env('FRONTEND_URL') . $hashedQr;
 
-                $qrcode = QrCode::create($qrData);
-                $writer = new PngWriter();
-                $result = $writer->write($qrcode);
-                $fileName = 'qr_code/' . uniqid() . '.png';
-                Storage::disk('public')->put($fileName, $result->getString());
-                $path = env('APP_URL') . $fileName;
-                $student->qr_code = $path;
-                $student->qr_token = $hashedQr;
-                $student->save();
-            }
+    $qrcode = QrCode::create($qrData);
+    $writer = new PngWriter();
+    $result = $writer->write($qrcode);
+    $fileName = 'qr_code/' . uniqid() . '.png';
+    Storage::disk('public')->put($fileName, $result->getString());
+    $path = env('APP_URL') . $fileName;
+    $student->qr_code = $path;
+    $student->qr_token = $hashedQr;
+    $student->save();
+}
 
             return response()->json([
                 'message' => 'Students imported successfully',
