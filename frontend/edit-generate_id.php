@@ -566,12 +566,14 @@
       <div class="lrn-bar" id="lrn-bar"></div>
     </div>
 
-    <div class="photo">
+    <div class="photo" id="photoDrop">
       <img id="student-photo" src="bakla.png" alt="Photo" />
+      <input type="file" id="photoInput" accept="image/*" style="display:none;" />
     </div>
 
-    <div class="signature">
+    <div class="signature" id="signatureDrop">
       <img id="student-signature" src="signatura.png" alt="Signature" />
+      <input type="file" id="signatureInput" accept="image/*" style="display:none;" />
     </div>
 
     <div class="bottom-container">
@@ -722,12 +724,8 @@ fetch(`http://backend.test/api/showstudentid/${studentId}`, {
     'Authorization': 'Bearer ' + localStorage.getItem('token')
   }
 })
-.then(res => {
-  if (!res.ok) throw new Error('Failed to fetch');
-  return res.json();
-})
+.then(res => res.json())
 .then(data => {
-  // 👉 populate sa UI
   document.getElementById('lrn-bar').textContent = data.lrn;
   document.getElementById('last-name').textContent  = data.lastname;
   document.getElementById('first-name').firstChild.textContent = data.firstname + ' ';
@@ -735,24 +733,96 @@ fetch(`http://backend.test/api/showstudentid/${studentId}`, {
   document.getElementById('dob-num').textContent   = data.birthdate;
   document.getElementById('cnumber').textContent   = data.emergency_contact;
   document.getElementById('brgy-address').textContent = `${data.barangay}, ${data.municipality}`;
+
+  // student photo
+  document.getElementById('student-photo').src = data.image || "bakla.png";
+
+  // signature
+  document.getElementById('student-signature').src = data.signature || "signatura.png";
+
+  // qr
   if (data.qr_code) {
     document.getElementById('student-qr').src = data.qr_code;
   }
-})
-.catch(err => console.error(err));
+});
 
-// --- button event ---
+// ================= PHOTO =================
+let selectedImage = null;
+
+document.getElementById('student-photo').addEventListener('click', () => {
+  document.getElementById('photoInput').click();
+});
+
+document.getElementById('photoInput').addEventListener('change', function() {
+  if (this.files && this.files[0]) {
+    selectedImage = this.files[0];
+    document.getElementById('student-photo').src = URL.createObjectURL(this.files[0]);
+  }
+});
+
+const photoDrop = document.getElementById('photoDrop');
+photoDrop.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  photoDrop.classList.add('dragover');
+});
+photoDrop.addEventListener('dragleave', () => photoDrop.classList.remove('dragover'));
+photoDrop.addEventListener('drop', (e) => {
+  e.preventDefault();
+  photoDrop.classList.remove('dragover');
+  if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+    selectedImage = e.dataTransfer.files[0];
+    document.getElementById('student-photo').src = URL.createObjectURL(selectedImage);
+  }
+});
+
+// ================= SIGNATURE =================
+let selectedSignature = null;
+
+document.getElementById('student-signature').addEventListener('click', () => {
+  document.getElementById('signatureInput').click();
+});
+
+document.getElementById('signatureInput').addEventListener('change', function() {
+  if (this.files && this.files[0]) {
+    selectedSignature = this.files[0];
+    document.getElementById('student-signature').src = URL.createObjectURL(this.files[0]);
+  }
+});
+
+const signatureDrop = document.getElementById('signatureDrop');
+signatureDrop.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  signatureDrop.classList.add('dragover');
+});
+signatureDrop.addEventListener('dragleave', () => signatureDrop.classList.remove('dragover'));
+signatureDrop.addEventListener('drop', (e) => {
+  e.preventDefault();
+  signatureDrop.classList.remove('dragover');
+  if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+    selectedSignature = e.dataTransfer.files[0];
+    document.getElementById('student-signature').src = URL.createObjectURL(selectedSignature);
+  }
+});
+
+// ================= SAVE =================
 document.getElementById('saveBtn').addEventListener('click', function () {
+  const formData = new FormData();
+  formData.append('student_id', studentId);
+
+  if (selectedImage) {
+    formData.append('image', selectedImage);
+  }
+  if (selectedSignature) {
+    formData.append('signature', selectedSignature);
+  }
+
   fetch(`http://backend.test/api/save-generated-id`, {
     method: "POST",
     headers: {
-      "Accept": "application/json",
       "Authorization": "Bearer " + localStorage.getItem("token"),
-      "Content-Type": "application/json",
+      "Accept": "application/json"
     },
-    body: JSON.stringify({
-      student_id: studentId
-    })
+    body: formData
   })
   .then(res => res.json())
   .then(res => {
