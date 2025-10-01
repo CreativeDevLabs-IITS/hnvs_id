@@ -383,13 +383,13 @@
                         let signature = '';
 
                         if(student.image != null) {
-                            image = `${APP_URL}/storage/` + student.image;
+                            image = student.image;
                         }else {
                             image = `${APP_URL}/images/default.jpg`;
                         }
                         
                         if(student.signature != null) {
-                            signature = `${APP_URL}/storage/` + student.signature;
+                            signature = student.signature;
                         }else {
                             signature = `${APP_URL}/images/default-signature.png`;
                         }

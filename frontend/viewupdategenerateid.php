@@ -555,395 +555,365 @@
                             </div>
                     </div>
                 </div>
-<!-- Id Cards Side by Side -->
-<div style="display: flex; justify-content: center; gap: 20px; margin-top: 5px;">
-  <!-- ID FRONT -->
-  <div class="id-card" id="idFront" style="display: block;">
-    <div class="watermark-logo">
-      <img src="gear.png" alt="Background Logo" />
-    </div>
-
-    <div class="logo-school"></div>
-
-    <div class="header">
-      <img src="logo.png" alt="Logo" />
-      <div class="school-info">
-        <div class="school-name">HILONGOS NATIONAL <br /><span>VOCATIONAL SCHOOL</span></div>
-        <div class="school-level">SENIOR HIGH <br> SCHOOL DEPARTMENT</div>
-        <div class="school-id">SCHOOL ID: 303374</div>
-      </div>
-    </div>
-
-  <!-- imong HTML code nimo diri -->
-    <div class="lrn">
-      <div class="lrn-label">LRN</div>
-      <div class="lrn-bar" id="lrn-bar"></div>
-    </div>
-
-    <div class="photo" id="photoDrop">
-      <img id="student-photo" src="bakla.png" alt="Photo" />
-      <input type="file" id="photoInput" accept="image/*" style="display:none;" />
-    </div>
-
-    <div class="signature" id="signatureDrop">
-      <img id="student-signature" src="signatura.png" alt="Signature" />
-      <input type="file" id="signatureInput" accept="image/*" style="display:none;" />
-    </div>
-
-    <div class="bottom-container">
-      <div class="left-box">
-        <div class="name">
-          <div class="last-name" id="last-name"></div>
-          <div class="first-name" id="first-name">
-            <span class="middle-name" id="middle-name"></span>
-          </div>
-        </div>
-        <div class="info">
-          <div class="dob">Date of Birth:</div>
-          <div class="dob-num" id="dob-num"></div>
-          <div class="address">Address:</div>
-          <div class="brgy-address" id="brgy-address"></div>
-        </div>
-      </div>
-    </div>
-  <div class="qr-code">
-    <img id="student-qr" src="" alt="QR" />
-  </div>
-    <div class="track">
-      <div class="strand">
-        SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
-      </div>
-      <div class="doorway-word">Doorway:</div>
-      <div class="doorway">DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
-    </div>
-  </div>
-
-  <!-- ID BACK -->
-  <div class="id back" id="idBack" style="display: none;">
-    <div class="id-card-back back-top">
-      <div class="left-content">
-        <div class="left-bar year-strip">
-          <table id="schoolYearTable">
-            <tr>
-              <td class="word-school-year"></td>
-              <td class="year-cell"><div class="rotated-text">2024-2025</div></td>
-              <td class="empty-cell"></td>
-              <td class="empty-cell"></td>
-            </tr>
-            <tr>
-              <td class="word-school-year"><div class="rotated-text">SCHOOL YEAR</div></td>
-              <td class="year-cell"><div class="rotated-text">2023-2024</div></td>
-              <td class="empty-cell"></td>
-              <td class="empty-cell"></td>
-            </tr>
-            <tr>
-              <td class="word-school-year"></td>
-              <td class="semester-cell"><div class="rotated-text">Semester</div></td>
-              <td class="first-cell"><div class="rotated-text">First</div></td>
-              <td class="second-cell"><div class="rotated-text">Second</div></td>
-            </tr>
-          </table>
-        </div>
-      </div>
-
-      <div class="right-content">
-        <div class="top-text">
-          This is to certify that the person whose<br>
-          picture and signature appear herein<br>
-          is a bonafide student of <b>Hilongos<br>
-          National Vocaational School.</b>
+    <!-- Id Cards Side by Side -->
+    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 5px;">
+    <!-- ID FRONT -->
+    <div class="id-card" id="idFront" style="display: block;">
+        <div class="watermark-logo">
+        <img src="gear.png" alt="Background Logo" />
         </div>
 
-        <div class="back-signature">
-          <div class="signature-img-wrap">
-            <img src="" alt="signature" class="back-signature-img">
-          </div>
-          <div class="signature-name">RICHARD A. GABISON PhD, DPA</div>
-          <div class="director">School Principal IV</div>
+        <div class="logo-school"></div>
+
+        <div class="header">
+        <img src="logo.png" alt="Logo" />
+        <div class="school-info">
+            <div class="school-name">HILONGOS NATIONAL <br /><span>VOCATIONAL SCHOOL</span></div>
+            <div class="school-level">SENIOR HIGH <br> SCHOOL DEPARTMENT</div>
+            <div class="school-id">SCHOOL ID: 303374</div>
+        </div>
         </div>
 
-        <div class="reminders">
-          <b>IMPORTANT REMINDERS</b><br>
-          Always wear this ID while inside<br>
-          the school campus.<br>
-          <b>Do not forget your<br>STUDENT LRN NUMBER.</b>
+    <!-- imong HTML code nimo diri -->
+        <div class="lrn">
+        <div class="lrn-label">LRN</div>
+        <div class="lrn-bar" id="lrn-bar"></div>
         </div>
 
-        <div class="contact_1">
-          If lost and found, please surrender<br>
-          this ID to the<br><b>
-          HNVS SHS OFFICE,</b><br>
-          Hilongos National Vocational School <br>RV Fulache St. Hilongos, Leyte
+        <div class="photo" id="photoDrop">
+        <img id="student-photo" src="bakla.png" alt="Photo" />
+        <input type="file" id="photoInput" accept="image/*" style="display:none;" />
         </div>
 
-        <div class="contact">
-          <b>In case of emergency,<br>please contact</b>
-          <div class="contact-name" id="ename">EFREN IBAÑEZ</div>
-          <div class="contact-number" id="cnumber">0935-121-9395</div>
+        <div class="signature" id="signatureDrop">
+        <img id="student-signature" src="signatura.png" alt="Signature" />
+        <input type="file" id="signatureInput" accept="image/*" style="display:none;" />
         </div>
 
-        <div class="qr-box">
-          PLEASE SCAN THE QR<br>
-          CODE AT THE FRONT<br>
-          FOR MORE VALIDATION &<br>
-          CONTACT INFORMATION.
+        <div class="bottom-container">
+        <div class="left-box">
+            <div class="name">
+            <div class="last-name" id="last-name"></div>
+            <div class="first-name" id="first-name">
+                <span class="middle-name" id="middle-name"></span>
+            </div>
+            </div>
+            <div class="info">
+            <div class="dob">Date of Birth:</div>
+            <div class="dob-num" id="dob-num"></div>
+            <div class="address">Address:</div>
+            <div class="brgy-address" id="brgy-address"></div>
+            </div>
         </div>
-      </div>
+        </div>
+        <div class="qr-code">
+            <img id="student-qr" src="" alt="QR" />
+        </div>
+            <div class="track">
+            <div class="strand">
+                SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
+            </div>
+            <div class="doorway-word">Doorway:</div>
+            <div class="doorway">DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
+            </div>
+        </div>
+
+    <!-- ID BACK -->
+    <div class="id back" id="idBack" style="display: none;">
+        <div class="id-card-back back-top">
+        <div class="left-content">
+            <div class="left-bar year-strip">
+            <table id="schoolYearTable">
+                <tr>
+                <td class="word-school-year"></td>
+                <td class="year-cell"><div class="rotated-text">2024-2025</div></td>
+                <td class="empty-cell"></td>
+                <td class="empty-cell"></td>
+                </tr>
+                <tr>
+                <td class="word-school-year"><div class="rotated-text">SCHOOL YEAR</div></td>
+                <td class="year-cell"><div class="rotated-text">2023-2024</div></td>
+                <td class="empty-cell"></td>
+                <td class="empty-cell"></td>
+                </tr>
+                <tr>
+                <td class="word-school-year"></td>
+                <td class="semester-cell"><div class="rotated-text">Semester</div></td>
+                <td class="first-cell"><div class="rotated-text">First</div></td>
+                <td class="second-cell"><div class="rotated-text">Second</div></td>
+                </tr>
+            </table>
+            </div>
+        </div>
+
+        <div class="right-content">
+            <div class="top-text">
+            This is to certify that the person whose<br>
+            picture and signature appear herein<br>
+            is a bonafide student of <b>Hilongos<br>
+            National Vocaational School.</b>
+            </div>
+
+            <div class="back-signature">
+            <div class="signature-img-wrap">
+                <img src="" alt="signature" class="back-signature-img">
+            </div>
+            <div class="signature-name">RICHARD A. GABISON PhD, DPA</div>
+            <div class="director">School Principal IV</div>
+            </div>
+
+            <div class="reminders">
+            <b>IMPORTANT REMINDERS</b><br>
+            Always wear this ID while inside<br>
+            the school campus.<br>
+            <b>Do not forget your<br>STUDENT LRN NUMBER.</b>
+            </div>
+
+            <div class="contact_1">
+            If lost and found, please surrender<br>
+            this ID to the<br><b>
+            HNVS SHS OFFICE,</b><br>
+            Hilongos National Vocational School <br>RV Fulache St. Hilongos, Leyte
+            </div>
+
+            <div class="contact">
+            <b>In case of emergency,<br>please contact</b>
+            <div class="contact-name" id="ename">EFREN IBAÑEZ</div>
+            <div class="contact-number" id="cnumber">0935-121-9395</div>
+            </div>
+
+            <div class="qr-box">
+            PLEASE SCAN THE QR<br>
+            CODE AT THE FRONT<br>
+            FOR MORE VALIDATION &<br>
+            CONTACT INFORMATION.
+            </div>
+        </div>
+        </div>
+        <div class="facebook-footer back-bottom">
+        https://www.hnvs.edu.ph.com/
+        </div>
     </div>
-    <div class="facebook-footer back-bottom">
-      https://www.hnvs.edu.ph.com/
     </div>
-  </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
-<?php include 'partials/_logout.php' ?>
+    <?php include 'partials/_logout.php' ?>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const idFront = document.getElementById('idFront');
-    const idBack = document.getElementById('idBack');
-    const frontBtn = document.getElementById('showFront');
-    const backBtn = document.getElementById('showBack');
-
-    // Show Front
-    frontBtn.addEventListener('click', () => {
-      idFront.style.display = 'block';
-      idBack.style.display = 'none';
-      frontBtn.classList.add('active');
-      backBtn.classList.remove('active');
-    });
-
-    // Show Back
-    backBtn.addEventListener('click', () => {
-      idFront.style.display = 'none';
-      idBack.style.display = 'block';
-      backBtn.classList.add('active');
-      frontBtn.classList.remove('active');
-    });
-  });
-</script>
-<script>
-const params = new URLSearchParams(window.location.search);
-const studentId = params.get('id') || 1;
-
-// fetch student info
-fetch(`http://backend.test/api/showstudentid/${studentId}`, {
-  method: 'GET',
-  headers: {
-    'Accept': 'application/json',
-    'Authorization': 'Bearer ' + localStorage.getItem('token')
-  }
-})
-.then(res => res.json())
-.then(data => {
-  document.getElementById('lrn-bar').textContent = data.lrn;
-  document.getElementById('last-name').textContent  = data.lastname;
-  document.getElementById('first-name').firstChild.textContent = data.firstname + ' ';
-  document.getElementById('middle-name').textContent = data.middlename ? data.middlename.charAt(0) + '.' : '';
-  document.getElementById('dob-num').textContent   = data.birthdate;
-  document.getElementById('cnumber').textContent   = data.emergency_contact;
-  document.getElementById('brgy-address').textContent = `${data.barangay}, ${data.municipality}`;
-  document.getElementById('student-photo').src = data.image || "bakla.png";
-  document.getElementById('student-signature').src = data.signature || "signatura.png";
-  if (data.qr_code) {
-    document.getElementById('student-qr').src = data.qr_code;
-  }
-
-  // --- Restore photo position & size ---
-  if (data.photo_position) {
-    try {
-      const pos = JSON.parse(data.photo_position);
-      const photo = document.getElementById('student-photo');
-      photo.style.position = 'absolute';
-      photo.style.left = pos.left + 'px';
-      photo.style.top = pos.top + 'px';
-      photo.style.width = pos.width + 'px';
-      photo.style.height = pos.height + 'px';
-    } catch (e) {
-      console.error('Invalid photo_position JSON:', e);
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const idFront = document.getElementById('idFront');
+            const idBack = document.getElementById('idBack');
+            const frontBtn = document.getElementById('showFront');
+            const backBtn = document.getElementById('showBack');
+            frontBtn.addEventListener('click', () => {
+            idFront.style.display = 'block';
+            idBack.style.display = 'none';
+            frontBtn.classList.add('active');
+            backBtn.classList.remove('active');
+            });
+            backBtn.addEventListener('click', () => {
+            idFront.style.display = 'none';
+            idBack.style.display = 'block';
+            backBtn.classList.add('active');
+            frontBtn.classList.remove('active');
+            });
+        });
+    </script>
+    <script>
+    const params = new URLSearchParams(window.location.search);
+    const studentId = params.get('id') || 1;
+    fetch(`http://backend.test/api/showstudentid/${studentId}`, {
+    method: 'GET',
+    headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
     }
-  }
-
-  // --- Restore signature position & size ---
-  if (data.signature_position) {
-    try {
-      const pos = JSON.parse(data.signature_position);
-      const signature = document.getElementById('student-signature');
-      signature.style.position = 'absolute';
-      signature.style.left = pos.left + 'px';
-      signature.style.top = pos.top + 'px';
-      signature.style.width = pos.width + 'px';
-      signature.style.height = pos.height + 'px';
-    } catch (e) {
-      console.error('Invalid signature_position JSON:', e);
+    })
+    .then(res => res.json())
+    .then(data => {
+    document.getElementById('lrn-bar').textContent = data.lrn;
+    document.getElementById('last-name').textContent  = data.lastname;
+    document.getElementById('first-name').firstChild.textContent = data.firstname + ' ';
+    document.getElementById('middle-name').textContent = data.middlename ? data.middlename.charAt(0) + '.' : '';
+    document.getElementById('dob-num').textContent   = data.birthdate;
+    document.getElementById('cnumber').textContent   = data.emergency_contact;
+    document.getElementById('brgy-address').textContent = `${data.barangay}, ${data.municipality}`;
+    document.getElementById('student-photo').src = data.image || "bakla.png";
+    document.getElementById('student-signature').src = data.signature || "signatura.png";
+    if (data.qr_path) {
+        document.getElementById('student-qr').src = data.qr_path;
     }
-  }
-});
-let editMode = false;
-let selectedImage = null;
-let selectedSignature = null;
-
-function makeDraggable(el) {
-  let isDragging = false;
-  let offsetX, offsetY;
-  let sizeW = el.offsetWidth;
-  let sizeH = el.offsetHeight;
-
-  el.ondragstart = () => false;
-
-  el.addEventListener("mousedown", (e) => {
-    if (!editMode) return;
-    isDragging = true;
-    offsetX = e.clientX - el.offsetLeft;
-    offsetY = e.clientY - el.offsetTop;
-    el.style.position = "absolute";
-    el.style.zIndex = 1000;
-    el.style.cursor = "move";
-  });
-
-  document.addEventListener("mousemove", (e) => {
-    if (!isDragging) return;
-    el.style.left = (e.clientX - offsetX) + "px";
-    el.style.top = (e.clientY - offsetY) + "px";
-  });
-
-  document.addEventListener("mouseup", () => {
-    isDragging = false;
-    if (editMode) el.style.cursor = "pointer";
-  });
-
-  el.addEventListener("wheel", (e) => {
+    if (data.photo_position) {
+        try {
+        const pos = JSON.parse(data.photo_position);
+        const photo = document.getElementById('student-photo');
+        photo.style.position = 'absolute';
+        photo.style.left = pos.left + 'px';
+        photo.style.top = pos.top + 'px';
+        photo.style.width = pos.width + 'px';
+        photo.style.height = pos.height + 'px';
+        } catch (e) {
+        console.error('Invalid photo_position JSON:', e);
+        }
+    }
+    if (data.signature_position) {
+        try {
+        const pos = JSON.parse(data.signature_position);
+        const signature = document.getElementById('student-signature');
+        signature.style.position = 'absolute';
+        signature.style.left = pos.left + 'px';
+        signature.style.top = pos.top + 'px';
+        signature.style.width = pos.width + 'px';
+        signature.style.height = pos.height + 'px';
+        } catch (e) {
+        console.error('Invalid signature_position JSON:', e);
+        }
+    }
+    });
+    let editMode = false;
+    let selectedImage = null;
+    let selectedSignature = null;
+    function makeDraggable(el) {
+    let isDragging = false;
+    let offsetX, offsetY;
+    let sizeW = el.offsetWidth;
+    let sizeH = el.offsetHeight;
+    el.ondragstart = () => false;
+    el.addEventListener("mousedown", (e) => {
+        if (!editMode) return;
+        isDragging = true;
+        offsetX = e.clientX - el.offsetLeft;
+        offsetY = e.clientY - el.offsetTop;
+        el.style.position = "absolute";
+        el.style.zIndex = 1000;
+        el.style.cursor = "move";
+    });
+    document.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        el.style.left = (e.clientX - offsetX) + "px";
+        el.style.top = (e.clientY - offsetY) + "px";
+    });
+    document.addEventListener("mouseup", () => {
+        isDragging = false;
+        if (editMode) el.style.cursor = "pointer";
+    });
+    el.addEventListener("wheel", (e) => {
+        if (!editMode) return;
+        e.preventDefault();
+        if (e.deltaY < 0) { sizeW += 10; sizeH += 10; } 
+        else { sizeW -= 10; sizeH -= 10; }
+        if (sizeW < 30) sizeW = 30;
+        if (sizeH < 30) sizeH = 30;
+        el.style.width = sizeW + "px";
+        el.style.height = sizeH + "px";
+    });
+    }
+    document.getElementById('editBtn').addEventListener('click', () => {
+    editMode = true;
+    const photo = document.getElementById('student-photo');
+    const signature = document.getElementById('student-signature');
+    if (photo) {
+        photo.classList.add("editable-photo");
+        makeDraggable(photo);
+    }
+    if (signature) {
+        signature.classList.add("editable-signature");
+        makeDraggable(signature);
+    }
+    });
+    document.getElementById('photoInput').addEventListener('change', function() {
+    if (editMode && this.files && this.files[0]) {
+        selectedImage = this.files[0];
+        document.getElementById('student-photo').src = URL.createObjectURL(this.files[0]);
+    }
+    });
+    const photoDrop = document.getElementById('photoDrop');
+    photoDrop.addEventListener('dragover', (e) => {
     if (!editMode) return;
     e.preventDefault();
-    if (e.deltaY < 0) { sizeW += 10; sizeH += 10; } 
-    else { sizeW -= 10; sizeH -= 10; }
-    if (sizeW < 30) sizeW = 30;
-    if (sizeH < 30) sizeH = 30;
-    el.style.width = sizeW + "px";
-    el.style.height = sizeH + "px";
-  });
-}
-
-document.getElementById('editBtn').addEventListener('click', () => {
-  editMode = true;
-
-  const photo = document.getElementById('student-photo');
-  const signature = document.getElementById('student-signature');
-
-  if (photo) {
-    photo.classList.add("editable-photo");
-    makeDraggable(photo);
-  }
-
-  if (signature) {
-    signature.classList.add("editable-signature");
-    makeDraggable(signature);
-  }
-});
-
-// ================= PHOTO =================
-document.getElementById('photoInput').addEventListener('change', function() {
-  if (editMode && this.files && this.files[0]) {
-    selectedImage = this.files[0];
-    document.getElementById('student-photo').src = URL.createObjectURL(this.files[0]);
-  }
-});
-const photoDrop = document.getElementById('photoDrop');
-photoDrop.addEventListener('dragover', (e) => {
-  if (!editMode) return;
-  e.preventDefault();
-  photoDrop.classList.add('dragover');
-});
-photoDrop.addEventListener('dragleave', () => {
-  if (!editMode) return;
-  photoDrop.classList.remove('dragover');
-});
-photoDrop.addEventListener('drop', (e) => {
-  if (!editMode) return;
-  e.preventDefault();
-  photoDrop.classList.remove('dragover');
-  if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-    selectedImage = e.dataTransfer.files[0];
-    document.getElementById('student-photo').src = URL.createObjectURL(selectedImage);
-  }
-});
-
-// ================= SIGNATURE =================
-document.getElementById('signatureInput').addEventListener('change', function() {
-  if (editMode && this.files && this.files[0]) {
-    selectedSignature = this.files[0];
-    document.getElementById('student-signature').src = URL.createObjectURL(this.files[0]);
-  }
-});
-
-const signatureDrop = document.getElementById('signatureDrop');
-signatureDrop.addEventListener('dragover', (e) => {
-  if (!editMode) return;
-  e.preventDefault();
-  signatureDrop.classList.add('dragover');
-});
-signatureDrop.addEventListener('dragleave', () => {
-  if (!editMode) return;
-  signatureDrop.classList.remove('dragover');
-});
-signatureDrop.addEventListener('drop', (e) => {
-  if (!editMode) return;
-  e.preventDefault();
-  signatureDrop.classList.remove('dragover');
-  if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-    selectedSignature = e.dataTransfer.files[0];
-    document.getElementById('student-signature').src = URL.createObjectURL(selectedSignature);
-  }
-});
-const notyf = new Notyf({
-    position: { x: 'right', y: 'top' },
-    duration: 3000, 
-    ripple: true,   
-    dismissible: true 
-});
-
-document.getElementById('saveBtn').addEventListener('click', function () {
-  const formData = new FormData();
-  formData.append('student_id', studentId);
-
-  const photo = document.getElementById('student-photo');
-  const signature = document.getElementById('student-signature');
-
-  formData.append('photo_position', JSON.stringify({
-    left: photo.offsetLeft,
-    top: photo.offsetTop,
-    width: photo.offsetWidth,
-    height: photo.offsetHeight
-  }));
-  formData.append('signature_position', JSON.stringify({
-    left: signature.offsetLeft,
-    top: signature.offsetTop,
-    width: signature.offsetWidth,
-    height: signature.offsetHeight
-  }));
-
-  if (selectedImage) formData.append('image', selectedImage);
-  if (selectedSignature) formData.append('signature', selectedSignature);
-
-  fetch(`http://backend.test/api/save-generated-id`, {
-    method: "POST",
-    headers: {
-      "Authorization": "Bearer " + localStorage.getItem("token"),
-      "Accept": "application/json"
-    },
-    body: formData
-  })
-  .then(res => res.json())
-  .then(res => {
-    notyf.success("Generated ID saved successfully!");
-    editMode = false; 
-  })
-  .catch(err => {
-    console.error("Save error:", err);
-    notyf.error("Failed to save Generated ID.");
-  });
-});
-</script>
+    photoDrop.classList.add('dragover');
+    });
+    photoDrop.addEventListener('dragleave', () => {
+    if (!editMode) return;
+    photoDrop.classList.remove('dragover');
+    });
+    photoDrop.addEventListener('drop', (e) => {
+    if (!editMode) return;
+    e.preventDefault();
+    photoDrop.classList.remove('dragover');
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        selectedImage = e.dataTransfer.files[0];
+        document.getElementById('student-photo').src = URL.createObjectURL(selectedImage);
+    }
+    });
+    document.getElementById('signatureInput').addEventListener('change', function() {
+    if (editMode && this.files && this.files[0]) {
+        selectedSignature = this.files[0];
+        document.getElementById('student-signature').src = URL.createObjectURL(this.files[0]);
+    }
+    });
+    const signatureDrop = document.getElementById('signatureDrop');
+    signatureDrop.addEventListener('dragover', (e) => {
+    if (!editMode) return;
+    e.preventDefault();
+    signatureDrop.classList.add('dragover');
+    });
+    signatureDrop.addEventListener('dragleave', () => {
+    if (!editMode) return;
+    signatureDrop.classList.remove('dragover');
+    });
+    signatureDrop.addEventListener('drop', (e) => {
+    if (!editMode) return;
+    e.preventDefault();
+    signatureDrop.classList.remove('dragover');
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        selectedSignature = e.dataTransfer.files[0];
+        document.getElementById('student-signature').src = URL.createObjectURL(selectedSignature);
+    }
+    });
+    const notyf = new Notyf({
+        position: { x: 'right', y: 'top' },
+        duration: 3000, 
+        ripple: true,   
+        dismissible: true 
+    });
+    document.getElementById('saveBtn').addEventListener('click', function () {
+    const formData = new FormData();
+    formData.append('student_id', studentId);
+    const photo = document.getElementById('student-photo');
+    const signature = document.getElementById('student-signature');
+    formData.append('photo_position', JSON.stringify({
+        left: photo.offsetLeft,
+        top: photo.offsetTop,
+        width: photo.offsetWidth,
+        height: photo.offsetHeight
+    }));
+    formData.append('signature_position', JSON.stringify({
+        left: signature.offsetLeft,
+        top: signature.offsetTop,
+        width: signature.offsetWidth,
+        height: signature.offsetHeight
+    }));
+    if (selectedImage) formData.append('image', selectedImage);
+    if (selectedSignature) formData.append('signature', selectedSignature);
+    fetch(`http://backend.test/api/save-generated-id`, {
+        method: "POST",
+        headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token"),
+        "Accept": "application/json"
+        },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(res => {
+        notyf.success("Generated ID saved successfully!");
+        editMode = false; 
+    })
+    .catch(err => {
+        console.error("Save error:", err);
+        notyf.error("Failed to save Generated ID.");
+    });
+    });
+    </script>
 
