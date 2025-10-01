@@ -216,8 +216,8 @@
                             ⋮
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">👁 View</a></li>
-                            <li><a class="dropdown-item" href="#">✏ Edit</a></li>
+                            <li><a class="dropdown-item text-primary btn-view" href="vieweditgenerateid.php?id=${student.id}">👁️View</a></li>
+                            <li><a class="dropdown-item text-warning btn-edit" href="viewupdategenerateid.php?id=${student.id}">✏ Edit</a></li>
                             <li><a class="dropdown-item text-danger btn-delete" data-id="${student.id}" href="#">🗑 Delete</a></li>
                         </ul>
                     </div>
@@ -229,7 +229,7 @@
                 <td>${student.emergency_contact ?? "-"}</td>
                 <td>
                     ${student.image 
-                        ? `<img src="${student.image}" alt="Student Photo" width="50" height="50" style="object-fit:cover;border-radius:5px;">`
+                    ? `<img src="${student.image}" alt="Student Photo" width="50" height="50" style="object-fit:cover; border-radius:50%;">`
                         : "-"
                     }
                 </td>
