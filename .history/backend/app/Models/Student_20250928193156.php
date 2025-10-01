@@ -24,8 +24,7 @@ class Student extends Model
         'year_level',
         'section_id',
         'strand_id',
-        'qr_token',
-        'qr_path'
+        'qr_token'
     ];
 
     public function section() {

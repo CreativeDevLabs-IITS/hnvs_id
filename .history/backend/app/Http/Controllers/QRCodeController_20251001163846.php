@@ -73,8 +73,7 @@ class QRCodeController extends Controller
 
     public function studentQRValidation($token) {
         try {
-            $student = Student::with('strand')
-            ->where('qr_token', $token)->first();
+            $student = Student::where('qr_token', $token)->first();
 
             if(!$student) {
                 return response()->json([

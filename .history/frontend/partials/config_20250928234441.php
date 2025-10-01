@@ -1,5 +1,5 @@
 <?php 
 
-    define('APP_URL', 'http://hnvs_backend.test');
+    define('APP_URL', 'http://porta.hnvs.edu.ph');
     define('FRONTEND_URL', 'http://hnvs.frontend.test')
 ?>

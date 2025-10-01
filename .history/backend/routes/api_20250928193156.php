@@ -99,12 +99,11 @@ Route::middleware(['preventAccess'])->group(function() {
     Route::post('mobile/logout', [UserController::class, 'mobileLogout']);
 
     Route::post('subject/qr-attendance', [QRCodeController::class, 'validateQr']);
-    
+
     Route::post('/mobile/subjects-list', [SubjectController::class, 'subjectListByDay']);
     Route::post('/today/subject-list', [SubjectController::class, 'subjectListToday']);
     Route::post('/current-class', [SubjectController::class, 'currentClass']);
     Route::post('/update/attendance', [SubjectController::class, 'editAttendace']);
 });
 
-Route::get('qr_code/verify/{token}', [QRCodeController::class, 'studentQRValidation']);
 

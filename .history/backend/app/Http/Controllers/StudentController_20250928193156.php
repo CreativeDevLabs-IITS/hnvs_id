@@ -101,7 +101,7 @@ class StudentController extends Controller
             $student = Student::create($validate);
 
             $hashedQr = sha1(uniqid((string)$student->id, true));
-            $qrData = env('FRONTEND_URL') . 'student/verify/' . $hashedQr;
+            $qrData = env('FRONTEND_URL') . $hashedQr;
 
             $qrcode = QrCode::create($qrData);
             $writer = new PngWriter();
@@ -109,9 +109,8 @@ class StudentController extends Controller
             $fileName = 'qr_code/' . uniqid() . '.png';
             Storage::disk('public')->put($fileName, $result->getString());
             $qr_path = env('APP_URL') . $fileName;
-            $student->qr_path = $qr_path;
+            $student->qr_code = $qr_path;
             $student->qr_token = $hashedQr;
-            $student->qr_code = $qrData;
             $student->save();
 
             return response()->json([
@@ -121,7 +120,7 @@ class StudentController extends Controller
 
         }catch(ValidationException $e) {
             return response()->json([
-                'error' => $e->getMessage(),
+                'error' => $e->getMessage()
             ], 422);
         }
     }

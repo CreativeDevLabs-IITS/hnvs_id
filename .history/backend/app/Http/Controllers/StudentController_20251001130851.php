@@ -101,7 +101,7 @@ class StudentController extends Controller
             $student = Student::create($validate);
 
             $hashedQr = sha1(uniqid((string)$student->id, true));
-            $qrData = env('FRONTEND_URL') . 'student/verify/' . $hashedQr;
+            $qrData = env('FRONTEND_URL') . $hashedQr;
 
             $qrcode = QrCode::create($qrData);
             $writer = new PngWriter();
@@ -111,7 +111,7 @@ class StudentController extends Controller
             $qr_path = env('APP_URL') . $fileName;
             $student->qr_path = $qr_path;
             $student->qr_token = $hashedQr;
-            $student->qr_code = $qrData;
+            $student->qr_code = $request;
             $student->save();
 
             return response()->json([

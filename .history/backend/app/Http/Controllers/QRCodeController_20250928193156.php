@@ -69,26 +69,4 @@ class QRCodeController extends Controller
             ], 400);
         }
     }
-
-
-    public function studentQRValidation($token) {
-        try {
-            $student = Student::with('strand')
-            ->where('qr_token', $token)->first();
-
-            if(!$student) {
-                return response()->json([
-                    'error' => 'Student does not exist in the record.'
-                ], 404);
-            }
-
-            return response()->json([
-                'data' => $student
-            ], 200);
-        }catch(Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
 }

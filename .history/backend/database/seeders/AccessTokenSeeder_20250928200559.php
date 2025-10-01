@@ -15,7 +15,7 @@ class AccessTokenSeeder extends Seeder
      */
     public function run(): void
     {   
-        $token = Str::random(60);
+        $token: Str::random(60);
 
         AccessToken::create([
             'token' => $token,
