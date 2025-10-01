@@ -909,15 +909,12 @@ document.getElementById('saveBtn').addEventListener('click', function () {
   const photo = document.getElementById('student-photo');
   const signature = document.getElementById('student-signature');
 
-  // --- Save photo position & size ---
   formData.append('photo_position', JSON.stringify({
     left: photo.offsetLeft,
     top: photo.offsetTop,
     width: photo.offsetWidth,
     height: photo.offsetHeight
   }));
-
-  // --- Save signature position & size ---
   formData.append('signature_position', JSON.stringify({
     left: signature.offsetLeft,
     top: signature.offsetTop,
@@ -925,7 +922,6 @@ document.getElementById('saveBtn').addEventListener('click', function () {
     height: signature.offsetHeight
   }));
 
-  // Append image & signature files if selected
   if (selectedImage) {
     formData.append('image', selectedImage);
   }
