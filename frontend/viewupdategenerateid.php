@@ -104,13 +104,13 @@
             justify-content: center;
             z-index: 0;
             margin-top:35px;
-            margin-left:5px;
+            margin-left:2px;
             }
 
             .lrn-label {
             position: absolute;
             top: 10px;
-            right: 5px;
+            right: 6px;
             font-weight: bold;
             font-size: 10px;
             color: #ffffffff;
@@ -257,6 +257,7 @@
             justify-content: center;
             text-align: center;
             font-size: 6px;
+            margin-top:-1px;
             }
 
             .doorway {
@@ -264,6 +265,7 @@
             justify-content: center;
             text-align: center;
             font-size: 8px;
+            margin-top:-1px;
             }
 
             /* baack css */
@@ -517,6 +519,62 @@
         cursor: pointer;
     }
 </style>
+<style>
+    @media print {
+        html, body {
+            padding: 0;
+            margin: 0;
+        }
+        body * {
+            visibility: hidden;
+        }
+        #idFront, #idBack, 
+        #idFront *, #idBack * {
+            visibility: visible;
+        }
+        #idFront.id-card {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2.13in;  
+            height: 3.38in; 
+            background: #B8D3E6 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        #idBack.id.back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2.13in;
+            height: 3.38in;
+            background: white !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        #idBack .id-card-back.back-top {
+            background: white !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .year-cell, .semester-cell,
+        .rotated-text {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .first-cell .rotated-text,
+        .second-cell .rotated-text {
+            background-color: white !important;
+            color: black !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        @page {
+            margin: 0;
+            size: 2.13in 3.38in; 
+        }
+    }
+</style>
     <div style="height: auto; background-color: #f1f1f1; " class="dashboard">
         <div style="position: sticky; top: 0; z-index: 5">
             <?php include 'partials/_navbar.php' ?>
@@ -540,7 +598,9 @@
                         <button id="showBack" class="switch-btn">Back</button>
                         <button id="editBtn" class="switch-btn">Edit</button>
                         <button id="saveBtn" class="switch-btn">Update</button>
-                        <button id="printBtn" class="switch-btn">Print</button>
+                        <button class="switch-btn print-button" onclick="printVisibleID()">
+                            Print
+                        </button>
                     </div>
                     <div style="display: flex; gap: 20px; margin-bottom: 10px;">
                             <div id="fontSizeControls" style="display:none;">
@@ -719,6 +779,20 @@
             frontBtn.classList.remove('active');
             });
         });
+        function printVisibleID() {
+            const idFront = document.getElementById('idFront');
+            const idBack = document.getElementById('idBack');
+            const isFrontVisible = idFront.style.display !== 'none';
+            const isBackVisible = idBack.style.display !== 'none';
+            if (isFrontVisible && !isBackVisible) {
+                idBack.style.display = 'none';
+            } else if (!isFrontVisible && isBackVisible) {
+                idFront.style.display = 'none';
+            }
+            setTimeout(() => {
+                window.print();
+            }, 100);
+        }
     </script>
     <script>
     const params = new URLSearchParams(window.location.search);

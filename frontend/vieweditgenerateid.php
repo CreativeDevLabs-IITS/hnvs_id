@@ -103,13 +103,13 @@
             justify-content: center;
             z-index: 0;
             margin-top:35px;
-            margin-left:5px;
+            margin-left:2px;
             }
 
             .lrn-label {
             position: absolute;
             top: 10px;
-            right: 5px;
+            right: 6px;
             font-weight: bold;
             font-size: 10px;
             color: #ffffffff;
@@ -256,6 +256,7 @@
             justify-content: center;
             text-align: center;
             font-size: 6px;
+            margin-top:-1px;
             }
 
             .doorway {
@@ -263,6 +264,7 @@
             justify-content: center;
             text-align: center;
             font-size: 8px;
+            margin-top:-1px;
             }
 
             /* baack css */
@@ -502,7 +504,62 @@
             transform: translateY(-2px) scale(1.04);
         }
 </style>
-
+<style>
+    @media print {
+        html, body {
+            padding: 0;
+            margin: 0;
+        }
+        body * {
+            visibility: hidden;
+        }
+        #idFront, #idBack, 
+        #idFront *, #idBack * {
+            visibility: visible;
+        }
+        #idFront.id-card {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2.13in;  
+            height: 3.38in; 
+            background: #B8D3E6 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        #idBack.id.back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2.13in;
+            height: 3.38in;
+            background: white !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        #idBack .id-card-back.back-top {
+            background: white !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .year-cell, .semester-cell,
+        .rotated-text {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .first-cell .rotated-text,
+        .second-cell .rotated-text {
+            background-color: white !important;
+            color: black !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        @page {
+            margin: 0;
+            size: 2.13in 3.38in; 
+        }
+    }
+</style>
     <div style="height: auto; background-color: #f1f1f1; " class="dashboard">
         <div style="position: sticky; top: 0; z-index: 5">
             <?php include 'partials/_navbar.php' ?>
@@ -510,15 +567,27 @@
         <div style="display: grid; grid-template-columns: 250px 1fr">
             <?php include 'partials/_sidebar.php' ?>
             <div class="py-3 pe-3 ps-5">
-                <div style="width:100%; display:flex; flex-direction:column; align-items:center; margin-top:20px;">
-                    <div style="margin-bottom: 20px;">
+                <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="mt-3 breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item" style="font-size: 14px;">Preview ID</li>
+                        <li class="breadcrumb-item" style="font-size: 14px;"><a href="teachers.php" class="text-decoration-none text-dark">Page</a></li>
+                    </ol>
+                </nav>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="fs-4 mt-2">Preview ID</div>
+                </div>
+
+                <div style="width:100%; display:flex; align-items:center; justify-content:space-between; margin-top:30px;">
+                    <div style="display:flex; gap:10px; margin:0 auto 20px auto;">
                         <button id="showBoth" class="switch-btn">Both</button>
                         <button id="showFront" class="switch-btn">Front</button>
                         <button id="showBack" class="switch-btn">Back</button>
-                        <button id="printBtn" class="switch-btn">Print</button>
+                        <button class="switch-btn print-button" onclick="printVisibleID()">
+                            Print
+                        </button>
                     </div>
                 </div>
-                <div style="display: flex; justify-content: center; gap: 20px; margin-top: 5px;">
+                <div style="display: flex; justify-content: center; gap: 20px; margin-top: 10px;">
                     <div class="id-card" id="idFront" style="display: block;">
                         <div class="watermark-logo">
                             <img src="gear.png" alt="Background Logo" />
@@ -643,22 +712,17 @@
                     </div>
                 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-
 <?php include 'partials/_logout.php' ?>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const idFront = document.getElementById('idFront');
-    const idBack = document.getElementById('idBack');
     const frontBtn = document.getElementById('showFront');
     const backBtn = document.getElementById('showBack');
-    const bothBtn = document.getElementById('showBoth'); 
-
-    // Default: pareho visible, Both button active
+    const bothBtn = document.getElementById('showBoth');
+    const idFront = document.getElementById('idFront'); 
+    const idBack = document.getElementById('idBack');  
     idFront.style.display = 'block';
     idBack.style.display = 'block';
     bothBtn.classList.add('active');
-
-    // Show Front (hide Back)
     frontBtn.addEventListener('click', () => {
         idFront.style.display = 'block';
         idBack.style.display = 'none';
@@ -666,8 +730,6 @@ document.addEventListener('DOMContentLoaded', () => {
         backBtn.classList.remove('active');
         bothBtn.classList.remove('active');
     });
-
-    // Show Back (hide Front)
     backBtn.addEventListener('click', () => {
         idFront.style.display = 'none';
         idBack.style.display = 'block';
@@ -675,8 +737,6 @@ document.addEventListener('DOMContentLoaded', () => {
         frontBtn.classList.remove('active');
         bothBtn.classList.remove('active');
     });
-
-    // Show Both
     bothBtn.addEventListener('click', () => {
         idFront.style.display = 'block';
         idBack.style.display = 'block';
@@ -685,60 +745,73 @@ document.addEventListener('DOMContentLoaded', () => {
         backBtn.classList.remove('active');
     });
 });
+function printVisibleID() {
+    const idFront = document.getElementById('idFront');
+    const idBack = document.getElementById('idBack');
+    const isFrontVisible = idFront.style.display !== 'none';
+    const isBackVisible = idBack.style.display !== 'none';
+    if (isFrontVisible && !isBackVisible) {
+        idBack.style.display = 'none';
+    } else if (!isFrontVisible && isBackVisible) {
+        idFront.style.display = 'none';
+    }
+    setTimeout(() => {
+        window.print();
+    }, 100);
+}
 </script>
 
 <script>
-    const params = new URLSearchParams(window.location.search);
-    const studentId = params.get('id') || 1;
-
-    fetch(`http://backend.test/api/showstudentid/${studentId}`, {
-    method: 'GET',
-    headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
-    }
-    })
-    .then(res => res.json())
-    .then(data => {
-    document.getElementById('lrn-bar').textContent = data.lrn;
-    document.getElementById('last-name').textContent  = data.lastname;
-    document.getElementById('first-name').firstChild.textContent = data.firstname + ' ';
-    document.getElementById('middle-name').textContent = data.middlename ? data.middlename.charAt(0) + '.' : '';
-    document.getElementById('dob-num').textContent   = data.birthdate;
-    document.getElementById('cnumber').textContent   = data.emergency_contact;
-    document.getElementById('brgy-address').textContent = `${data.barangay}, ${data.municipality}`;
-    document.getElementById('student-photo').src = data.image || "bakla.png";
-    document.getElementById('student-signature').src = data.signature || "signatura.png";
-    if (data.qr_path) {
-        document.getElementById('student-qr').src = data.qr_path;
-    }
-    if (data.photo_position) {
-        try {
-        const pos = JSON.parse(data.photo_position);
-        const photo = document.getElementById('student-photo');
-        photo.style.position = 'absolute';
-        photo.style.left = pos.left + 'px';
-        photo.style.top = pos.top + 'px';
-        photo.style.width = pos.width + 'px';
-        photo.style.height = pos.height + 'px';
-        } catch (e) {
-        console.error('Invalid photo_position JSON:', e);
+        const params = new URLSearchParams(window.location.search);
+        const studentId = params.get('id') || 1;
+        fetch(`http://backend.test/api/showstudentid/${studentId}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
-    }
-    // --- Restore signature position & size ---
-    if (data.signature_position) {
-        try {
-        const pos = JSON.parse(data.signature_position);
-        const signature = document.getElementById('student-signature');
-        signature.style.position = 'absolute';
-        signature.style.left = pos.left + 'px';
-        signature.style.top = pos.top + 'px';
-        signature.style.width = pos.width + 'px';
-        signature.style.height = pos.height + 'px';
-        } catch (e) {
-        console.error('Invalid signature_position JSON:', e);
+        })
+        .then(res => res.json())
+        .then(data => {
+        document.getElementById('lrn-bar').textContent = data.lrn;
+        document.getElementById('last-name').textContent  = data.lastname;
+        document.getElementById('first-name').firstChild.textContent = data.firstname + ' ';
+        document.getElementById('middle-name').textContent = data.middlename ? data.middlename.charAt(0) + '.' : '';
+        document.getElementById('dob-num').textContent   = data.birthdate;
+        document.getElementById('cnumber').textContent   = data.emergency_contact;
+        document.getElementById('brgy-address').textContent = `${data.barangay}, ${data.municipality}`;
+        document.getElementById('student-photo').src = data.image || "bakla.png";
+        document.getElementById('student-signature').src = data.signature || "signatura.png";
+        if (data.qr_path) {
+            document.getElementById('student-qr').src = data.qr_path;
         }
-    }
-});
+        if (data.photo_position) {
+            try {
+            const pos = JSON.parse(data.photo_position);
+            const photo = document.getElementById('student-photo');
+            photo.style.position = 'absolute';
+            photo.style.left = pos.left + 'px';
+            photo.style.top = pos.top + 'px';
+            photo.style.width = pos.width + 'px';
+            photo.style.height = pos.height + 'px';
+            } catch (e) {
+            console.error('Invalid photo_position JSON:', e);
+            }
+        }
+        if (data.signature_position) {
+            try {
+            const pos = JSON.parse(data.signature_position);
+            const signature = document.getElementById('student-signature');
+            signature.style.position = 'absolute';
+            signature.style.left = pos.left + 'px';
+            signature.style.top = pos.top + 'px';
+            signature.style.width = pos.width + 'px';
+            signature.style.height = pos.height + 'px';
+            } catch (e) {
+            console.error('Invalid signature_position JSON:', e);
+            }
+        }
+    });
 </script>
+
 
