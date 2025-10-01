@@ -501,6 +501,20 @@
             transform: translateY(-2px) scale(1.04);
         }
 </style>
+<style>
+  .editable-photo:hover {
+    border: 3px dashed #007bff;
+    border-radius: 8px;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+  .editable-signature:hover {
+    border: 3px dashed #28a745;
+    border-radius: 8px;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+</style>
     <div style="height: auto; background-color: #f1f1f1; " class="dashboard">
         <div style="position: sticky; top: 0; z-index: 5">
             <?php include 'partials/_navbar.php' ?>
@@ -539,7 +553,6 @@
             </div>
           </div>
         </div>
-
 <!-- Id Cards Side by Side -->
 <div style="display: flex; justify-content: center; gap: 20px; margin-top: 5px;">
 
@@ -716,7 +729,7 @@
 const params = new URLSearchParams(window.location.search);
 const studentId = params.get('id') || 1;
 
-// --- fetch student info ---
+// fetch student info
 fetch(`http://backend.test/api/showstudentid/${studentId}`, {
   method: 'GET',
   headers: {
@@ -733,40 +746,125 @@ fetch(`http://backend.test/api/showstudentid/${studentId}`, {
   document.getElementById('dob-num').textContent   = data.birthdate;
   document.getElementById('cnumber').textContent   = data.emergency_contact;
   document.getElementById('brgy-address').textContent = `${data.barangay}, ${data.municipality}`;
-
-  // student photo
   document.getElementById('student-photo').src = data.image || "bakla.png";
-
-  // signature
   document.getElementById('student-signature').src = data.signature || "signatura.png";
-
-  // qr
   if (data.qr_code) {
     document.getElementById('student-qr').src = data.qr_code;
+  }
+
+  // --- Restore photo position & size ---
+  if (data.photo_position) {
+    try {
+      const pos = JSON.parse(data.photo_position);
+      const photo = document.getElementById('student-photo');
+      photo.style.position = 'absolute';
+      photo.style.left = pos.left + 'px';
+      photo.style.top = pos.top + 'px';
+      photo.style.width = pos.width + 'px';
+      photo.style.height = pos.height + 'px';
+    } catch (e) {
+      console.error('Invalid photo_position JSON:', e);
+    }
+  }
+
+  // --- Restore signature position & size ---
+  if (data.signature_position) {
+    try {
+      const pos = JSON.parse(data.signature_position);
+      const signature = document.getElementById('student-signature');
+      signature.style.position = 'absolute';
+      signature.style.left = pos.left + 'px';
+      signature.style.top = pos.top + 'px';
+      signature.style.width = pos.width + 'px';
+      signature.style.height = pos.height + 'px';
+    } catch (e) {
+      console.error('Invalid signature_position JSON:', e);
+    }
+  }
+});
+
+// --- Rest of your existing code remains the same ---
+let editMode = false;
+let selectedImage = null;
+let selectedSignature = null;
+
+function makeDraggable(el) {
+  let isDragging = false;
+  let offsetX, offsetY;
+  let sizeW = el.offsetWidth;
+  let sizeH = el.offsetHeight;
+
+  el.ondragstart = () => false;
+
+  el.addEventListener("mousedown", (e) => {
+    if (!editMode) return;
+    isDragging = true;
+    offsetX = e.clientX - el.offsetLeft;
+    offsetY = e.clientY - el.offsetTop;
+    el.style.position = "absolute";
+    el.style.zIndex = 1000;
+    el.style.cursor = "move";
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+    el.style.left = (e.clientX - offsetX) + "px";
+    el.style.top = (e.clientY - offsetY) + "px";
+  });
+
+  document.addEventListener("mouseup", () => {
+    isDragging = false;
+    if (editMode) el.style.cursor = "pointer";
+  });
+
+  el.addEventListener("wheel", (e) => {
+    if (!editMode) return;
+    e.preventDefault();
+    if (e.deltaY < 0) { sizeW += 10; sizeH += 10; } 
+    else { sizeW -= 10; sizeH -= 10; }
+    if (sizeW < 30) sizeW = 30;
+    if (sizeH < 30) sizeH = 30;
+    el.style.width = sizeW + "px";
+    el.style.height = sizeH + "px";
+  });
+}
+
+document.getElementById('editBtn').addEventListener('click', () => {
+  editMode = true;
+
+  const photo = document.getElementById('student-photo');
+  const signature = document.getElementById('student-signature');
+
+  if (photo) {
+    photo.classList.add("editable-photo");
+    makeDraggable(photo);
+  }
+
+  if (signature) {
+    signature.classList.add("editable-signature");
+    makeDraggable(signature);
   }
 });
 
 // ================= PHOTO =================
-let selectedImage = null;
-
-document.getElementById('student-photo').addEventListener('click', () => {
-  document.getElementById('photoInput').click();
-});
-
 document.getElementById('photoInput').addEventListener('change', function() {
-  if (this.files && this.files[0]) {
+  if (editMode && this.files && this.files[0]) {
     selectedImage = this.files[0];
     document.getElementById('student-photo').src = URL.createObjectURL(this.files[0]);
   }
 });
-
 const photoDrop = document.getElementById('photoDrop');
 photoDrop.addEventListener('dragover', (e) => {
+  if (!editMode) return;
   e.preventDefault();
   photoDrop.classList.add('dragover');
 });
-photoDrop.addEventListener('dragleave', () => photoDrop.classList.remove('dragover'));
+photoDrop.addEventListener('dragleave', () => {
+  if (!editMode) return;
+  photoDrop.classList.remove('dragover');
+});
 photoDrop.addEventListener('drop', (e) => {
+  if (!editMode) return;
   e.preventDefault();
   photoDrop.classList.remove('dragover');
   if (e.dataTransfer.files && e.dataTransfer.files[0]) {
@@ -776,14 +874,8 @@ photoDrop.addEventListener('drop', (e) => {
 });
 
 // ================= SIGNATURE =================
-let selectedSignature = null;
-
-document.getElementById('student-signature').addEventListener('click', () => {
-  document.getElementById('signatureInput').click();
-});
-
 document.getElementById('signatureInput').addEventListener('change', function() {
-  if (this.files && this.files[0]) {
+  if (editMode && this.files && this.files[0]) {
     selectedSignature = this.files[0];
     document.getElementById('student-signature').src = URL.createObjectURL(this.files[0]);
   }
@@ -791,11 +883,16 @@ document.getElementById('signatureInput').addEventListener('change', function() 
 
 const signatureDrop = document.getElementById('signatureDrop');
 signatureDrop.addEventListener('dragover', (e) => {
+  if (!editMode) return;
   e.preventDefault();
   signatureDrop.classList.add('dragover');
 });
-signatureDrop.addEventListener('dragleave', () => signatureDrop.classList.remove('dragover'));
+signatureDrop.addEventListener('dragleave', () => {
+  if (!editMode) return;
+  signatureDrop.classList.remove('dragover');
+});
 signatureDrop.addEventListener('drop', (e) => {
+  if (!editMode) return;
   e.preventDefault();
   signatureDrop.classList.remove('dragover');
   if (e.dataTransfer.files && e.dataTransfer.files[0]) {
@@ -809,6 +906,26 @@ document.getElementById('saveBtn').addEventListener('click', function () {
   const formData = new FormData();
   formData.append('student_id', studentId);
 
+  const photo = document.getElementById('student-photo');
+  const signature = document.getElementById('student-signature');
+
+  // --- Save photo position & size ---
+  formData.append('photo_position', JSON.stringify({
+    left: photo.offsetLeft,
+    top: photo.offsetTop,
+    width: photo.offsetWidth,
+    height: photo.offsetHeight
+  }));
+
+  // --- Save signature position & size ---
+  formData.append('signature_position', JSON.stringify({
+    left: signature.offsetLeft,
+    top: signature.offsetTop,
+    width: signature.offsetWidth,
+    height: signature.offsetHeight
+  }));
+
+  // Append image & signature files if selected
   if (selectedImage) {
     formData.append('image', selectedImage);
   }
@@ -828,7 +945,10 @@ document.getElementById('saveBtn').addEventListener('click', function () {
   .then(res => {
     console.log("Saved generated ID:", res);
     alert("Generated ID saved successfully!");
+    editMode = false; // disable edit mode after save
   })
   .catch(err => console.error("Save error:", err));
 });
+
 </script>
+
