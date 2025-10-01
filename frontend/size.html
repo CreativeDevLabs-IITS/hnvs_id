@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Draggable + Scroll Resize</title>
+  <style>
+    #box {
+      width: 150px;
+      height: 150px;
+      background: skyblue;
+      position: absolute;
+      top: 100px;
+      left: 100px;
+      cursor: grab;
+      user-select: none;
+      transition: width 0.1s, height 0.1s;
+    }
+  </style>
+</head>
+<body>
+  <h3>Drag the box, use mouse wheel to resize</h3>
+  <div id="box"></div>
+
+  <script>
+    const box = document.getElementById("box");
+    let isDragging = false;
+    let offsetX, offsetY;
+    let sizeW = 150;
+    let sizeH = 150;
+
+    // --- Dragging ---
+    box.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      offsetX = e.clientX - box.offsetLeft;
+      offsetY = e.clientY - box.offsetTop;
+      box.style.cursor = "grabbing";
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (isDragging) {
+        box.style.left = e.clientX - offsetX + "px";
+        box.style.top = e.clientY - offsetY + "px";
+      }
+    });
+
+    document.addEventListener("mouseup", () => {
+      isDragging = false;
+      box.style.cursor = "grab";
+    });
+
+    // --- Resize with mouse wheel ---
+    box.addEventListener("wheel", (e) => {
+      e.preventDefault(); // para di mag scroll ang page
+
+      if (e.deltaY < 0) {
+        sizeW += 10;
+        sizeH += 10;
+      } else {
+        sizeW -= 10;
+        sizeH -= 10;
+      }
+
+      if (sizeW < 50) sizeW = 50;
+      if (sizeH < 50) sizeH = 50;
+
+      box.style.width = sizeW + "px";
+      box.style.height = sizeH + "px";
+    });
+  </script>
+</body>
+</html>
