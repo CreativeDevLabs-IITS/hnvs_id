@@ -25,20 +25,17 @@ class GenerateidController extends Controller
                 'generate_ids.print_count'
             )
             ->get();
-
         return response()->json($students);
     }
     public function store(Request $request)
     {
         $request->validate([
             'student_id' => 'required|exists:students,id',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'signature' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // FILE na din
+            'signature' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'photo_position' => 'nullable|string',     
+            'signature_position' => 'nullable|string',
         ]);
-
-        // hanapin kung may existing generate record
         $generated = Generateid::where('student_id', $request->student_id)->first();
-
         if ($generated) {
             $generated->increment('print_count');
         } else {
@@ -47,29 +44,27 @@ class GenerateidController extends Controller
                 'print_count' => 1,
             ]);
         }
-
         $student = Student::findOrFail($request->student_id);
-
-        // Save uploaded image
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $filename = uniqid() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('images'), $filename);
-
             $student->image = env('APP_URL') . '/images/' . $filename;
         }
-
-        // Save uploaded signature
         if ($request->hasFile('signature')) {
             $file = $request->file('signature');
             $filename = uniqid() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('images'), $filename);
-
             $student->signature = env('APP_URL') . '/images/' . $filename;
         }
-
+          // --- Save positions ---
+        if ($request->has('photo_position')) {
+            $student->photo_position = $request->photo_position; 
+        }
+        if ($request->has('signature_position')) {
+            $student->signature_position = $request->signature_position; 
+        }
         $student->save();
-
         return response()->json([
             'message' => 'Generated ID saved successfully',
             'data' => $generated
