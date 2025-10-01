@@ -748,8 +748,10 @@ fetch(`http://backend.test/api/showstudentid/${studentId}`, {
   document.getElementById('brgy-address').textContent = `${data.barangay}, ${data.municipality}`;
   document.getElementById('student-photo').src = data.image || "bakla.png";
   document.getElementById('student-signature').src = data.signature || "signatura.png";
-  if (data.qr_code) {
-    document.getElementById('student-qr').src = data.qr_code;
+  if (data.qr_path) {
+      document.getElementById('student-qr').src = data.qr_path;
+  } else {
+      document.getElementById('student-qr').src = ''; 
   }
 
   // --- Restore photo position & size ---
@@ -870,7 +872,7 @@ photoDrop.addEventListener('drop', (e) => {
     document.getElementById('student-photo').src = URL.createObjectURL(selectedImage);
   }
 });
-
+  
 // ================= SIGNATURE =================
 document.getElementById('signatureInput').addEventListener('change', function() {
   if (editMode && this.files && this.files[0]) {

@@ -709,8 +709,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('brgy-address').textContent = `${data.barangay}, ${data.municipality}`;
     document.getElementById('student-photo').src = data.image || "bakla.png";
     document.getElementById('student-signature').src = data.signature || "signatura.png";
-    if (data.qr_code) {
-        document.getElementById('student-qr').src = data.qr_code;
+    if (data.qr_path) {
+        document.getElementById('student-qr').src = data.qr_path;
     }
     if (data.photo_position) {
         try {
