@@ -504,18 +504,18 @@
         }
 </style>
 <style>
-  .editable-photo:hover {
-    border: 3px dashed #007bff;
-    border-radius: 8px;
-    box-sizing: border-box;
-    cursor: pointer;
-  }
-  .editable-signature:hover {
-    border: 3px dashed #28a745;
-    border-radius: 8px;
-    box-sizing: border-box;
-    cursor: pointer;
-  }
+    .editable-photo:hover {
+        border: 3px dashed #007bff;
+        border-radius: 8px;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
+    .editable-signature:hover {
+        border: 3px dashed #28a745;
+        border-radius: 8px;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
 </style>
     <div style="height: auto; background-color: #f1f1f1; " class="dashboard">
         <div style="position: sticky; top: 0; z-index: 5">
@@ -536,28 +536,27 @@
                 </div>
                 <div style="width:100%; display:flex; flex-direction:column; align-items:center; margin-top:20px;">
                     <div style="margin-bottom: 20px;">
-                      <button id="showFront" class="switch-btn active">Front</button>
-                      <button id="showBack" class="switch-btn">Back</button>
-                      <button id="editBtn" class="switch-btn">Edit</button>
-                      <button id="saveBtn" class="switch-btn">Save</button>
-                      <button id="printBtn" class="switch-btn">Print</button>
+                        <button id="showFront" class="switch-btn active">Front</button>
+                        <button id="showBack" class="switch-btn">Back</button>
+                        <button id="editBtn" class="switch-btn">Edit</button>
+                        <button id="saveBtn" class="switch-btn">Update</button>
+                        <button id="printBtn" class="switch-btn">Print</button>
                     </div>
                     <div style="display: flex; gap: 20px; margin-bottom: 10px;">
-                          <div id="fontSizeControls" style="display:none;">
-                            <label for="nameFontSize" style="font-weight:bold;">Name Font Size:</label>
-                            <input type="range" id="nameFontSize" min="16" max="48" value="24" style="vertical-align:middle;">
-                            <span id="fontSizeValue">24</span>px
-                          </div>
-                          <div id="firstNameFontSizeControls" style="display:none;">
-                            <label for="firstNameFontSize" style="font-weight:bold;">First Name Font Size:</label>
-                            <input type="range" id="firstNameFontSize" min="10" max="30" value="13" style="vertical-align:middle;">
-                            <span id="firstNameFontSizeValue">13</span>px
-                          </div>
+                            <div id="fontSizeControls" style="display:none;">
+                                <label for="nameFontSize" style="font-weight:bold;">Name Font Size:</label>
+                                <input type="range" id="nameFontSize" min="16" max="48" value="24" style="vertical-align:middle;">
+                                <span id="fontSizeValue">24</span>px
+                            </div>
+                            <div id="firstNameFontSizeControls" style="display:none;">
+                                <label for="firstNameFontSize" style="font-weight:bold;">First Name Font Size:</label>
+                                <input type="range" id="firstNameFontSize" min="10" max="30" value="13" style="vertical-align:middle;">
+                                <span id="firstNameFontSizeValue">13</span>px
+                            </div>
                     </div>
-              </div>
+                </div>
 <!-- Id Cards Side by Side -->
 <div style="display: flex; justify-content: center; gap: 20px; margin-top: 5px;">
-
   <!-- ID FRONT -->
   <div class="id-card" id="idFront" style="display: block;">
     <div class="watermark-logo">
@@ -946,6 +945,5 @@ document.getElementById('saveBtn').addEventListener('click', function () {
     notyf.error("Failed to save Generated ID.");
   });
 });
-
 </script>
 

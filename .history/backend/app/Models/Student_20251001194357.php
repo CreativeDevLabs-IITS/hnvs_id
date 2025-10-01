@@ -25,7 +25,8 @@ class Student extends Model
         'section_id',
         'strand_id',
         'qr_token',
-        'qr_path',
+        'qr_path'
+        'qr_token',
         'photo_position',
         'signature_position',
     ];
@@ -45,6 +46,11 @@ class Student extends Model
     public function attendances() {
         return $this->belongsToMany(Subject::class, 'subject_attendance')->withTimestamps()->withPivot(['status', 'minutes_late']);
     } 
+
+    public function generatedIds()
+    {
+        return $this->hasMany(Generateid::class, 'student_id');
+    }
 
     public function generatedIds()
     {

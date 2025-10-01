@@ -51,4 +51,9 @@ class Student extends Model
         return $this->hasMany(Generateid::class, 'student_id');
     }
 
+    public function generatedIds()
+    {
+        return $this->hasMany(Generateid::class, 'student_id');
+    }
+
 }

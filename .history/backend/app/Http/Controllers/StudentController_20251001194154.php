@@ -104,6 +104,9 @@ class StudentController extends Controller
 
             $hashedQr = sha1(uniqid((string)$student->id, true));
             $qrData = env('FRONTEND_URL') . 'student/verify/' . $hashedQr;
+
+            $qrcode = QrCode::create($qrData);
+            $qrData = env('FRONTEND_URL') . $hashedQr;
             $qrcode = QrCode::create($qrData)
                 ->setSize(300)
                 ->setMargin(10);
