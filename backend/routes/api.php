@@ -107,4 +107,3 @@ Route::middleware(['preventAccess'])->group(function() {
 });
 
 Route::get('qr_code/verify/{token}', [QRCodeController::class, 'studentQRValidation']);
-

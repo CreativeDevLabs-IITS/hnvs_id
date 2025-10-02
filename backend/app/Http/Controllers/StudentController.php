@@ -279,72 +279,66 @@ class StudentController extends Controller
     }
 
     public function import(Request $request) {
-        try {
+        try 
+        {
             $request->validate([
                 'file' => 'required|file|mimes:xlsx,csv'
             ]);
             $import = new StudentImport;
             Excel::import($import, $request->file('file'));
+            foreach ($import->rows as $row) {
+            // Hanapin ang section sa database
+            $section = Section::where('name', $row['section'])->first();
+            // Hanapin ang strand sa database
+            $strand = Strand::where('cluster', $row['strand'])->first();
 
-           foreach ($import->rows as $row) {
-    // Hanapin ang section sa database
-    $section = Section::where('name', $row['section'])->first();
-
-    // Hanapin ang strand sa database
-    $strand = Strand::where('cluster', $row['strand'])->first();
-
-    // I-check kung may section at strand
-    if (!$section || !$strand) {
-        $skipped[] = $row['firstname'] . ' ' . $row['lastname'];
-        continue;
-    }
-
-    // I-create ang student
-    $student = Student::create([
-        'firstname' => $row['firstname'],
-        'middlename' => $row['middlename'],
-        'lastname' => $row['lastname'],
-        'suffix' => $row['suffix'] ?? null,
-        'barangay' => $row['barangay'],
-        'municipality' => $row['municipality'],
-        'age' => $row['age'],
-        'contact' => $row['contact'],
-        'lrn' => $row['lrn'],
-        'emergency_contact' => $row['emergency_contact'],
-        'birthdate' => $row['birthdate'],
-        'year_level' => $row['year_level'],
-        'section_id' => $section->id,
-        'strand_id' => $strand->id
-    ]);
-
-    // Generate QR code
-    $hashedQr = sha1(uniqid((string)$student->id, true));
-    $qrData = env('FRONTEND_URL') . $hashedQr;
-
-    $qrcode = QrCode::create($qrData);
-    $writer = new PngWriter();
-    $result = $writer->write($qrcode);
-    $fileName = 'qr_code/' . uniqid() . '.png';
-    Storage::disk('public')->put($fileName, $result->getString());
-    $path = env('APP_URL') . $fileName;
-    $student->qr_code = $path;
-    $student->qr_token = $hashedQr;
-    $student->save();
-}
-
-            return response()->json([
-                'message' => 'Students imported successfully',
-                'skipped' => isset($skipped) && count($skipped) > 0
-                             ? 'Section or Strand is not found for student/s: ' . implode(', ', $skipped)
-                             : ''
+            // I-check kung may section at strand
+            if (!$section || !$strand) {
+                $skipped[] = $row['firstname'] . ' ' . $row['lastname'];
+                continue;
+            }
+            // I-create ang student
+            $student = Student::create([
+                'firstname' => $row['firstname'],
+                'middlename' => $row['middlename'],
+                'lastname' => $row['lastname'],
+                'suffix' => $row['suffix'] ?? null,
+                'barangay' => $row['barangay'],
+                'municipality' => $row['municipality'],
+                'age' => $row['age'],
+                'contact' => $row['contact'],
+                'lrn' => $row['lrn'],
+                'emergency_contact' => $row['emergency_contact'],
+                'birthdate' => $row['birthdate'],
+                'year_level' => $row['year_level'],
+                'section_id' => $section->id,
+                'strand_id' => $strand->id
             ]);
-
-        }catch(Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ]);
+                // Generate QR code
+                $hashedQr = sha1(uniqid((string)$student->id, true));
+                $qrData = env('FRONTEND_URL') . $hashedQr;
+                $qrcode = QrCode::create($qrData);
+                $writer = new PngWriter();
+                $result = $writer->write($qrcode);
+                $fileName = 'qr_code/' . uniqid() . '.png';
+                Storage::disk('public')->put($fileName, $result->getString());
+                $path = env('APP_URL') . $fileName;
+                $student->qr_code = $path;
+                $student->qr_token = $hashedQr;
+                $student->save();
+            }
+                return response()->json([
+                    'message' => 'Students imported successfully',
+                    'skipped' => isset($skipped) && count($skipped) > 0
+                                ? 'Section or Strand is not found for student/s: ' . implode(', ', $skipped)
+                                : ''
+                ]);
+            }catch(Exception $e) {
+                return response()->json([
+                    'error' => $e->getMessage()
+                ]);
+            }
         }
-    }
 
     public function count() {
         return response()->json([
