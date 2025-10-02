@@ -110,6 +110,7 @@
     border-bottom: 1px solid #e2e8f0;
     }
 </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?php include 'partials/_head.php' ?>
     <div style="height: auto; background-color: #f1f1f1; " class="dashboard">
@@ -130,6 +131,7 @@
                     <div class="fs-4 mt-2">Generated ID</div>
                     </div>
                     <div class="table-container mt-2">
+                        <!-- Search box -->
                         <div class="table-header">
                             <div class="search-box">
                                 <input type="text" id="searchInput" placeholder="Search student...">
@@ -150,7 +152,6 @@
                             </thead>
                             <tbody id="studentTableBody"></tbody>
                         </table>
-
                         <!-- Pagination wrapper -->
                         <div class="pagination-wrapper">
                             <div id="paginationInfo" class="pagination-info"></div>
@@ -161,7 +162,6 @@
             </div>
         </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-
     <?php include 'partials/_logout.php' ?>
     <?php include 'partials/config.php' ?>
     <script>
@@ -186,27 +186,28 @@
     const rowsPerPage = 5; 
     let currentPage = 1;
     let students = [];
-
+    let filteredStudents = []; 
     function renderTablePage(page = 1) {
         const tbody = document.getElementById("studentTableBody");
         tbody.innerHTML = "";
-        if (students.length === 0) {
+        const dataToRender = filteredStudents.length > 0 || document.getElementById("searchInput").value
+            ? filteredStudents
+            : students;
+        if (dataToRender.length === 0) {
             const tr = document.createElement("tr");
             tr.innerHTML = `
-                <td colspan="6" class="text-center text-muted py-4">
+                <td colspan="7" class="text-center text-muted py-4">
                     No students found.
                 </td>
             `;
             tbody.appendChild(tr);
-
             document.getElementById("paginationControls").innerHTML = "";
             document.getElementById("paginationInfo").textContent = "";
             return;
         }
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
-        const paginatedStudents = students.slice(start, end);
-
+        const paginatedStudents = dataToRender.slice(start, end);
         paginatedStudents.forEach(student => {
             const tr = document.createElement("tr");
             tr.innerHTML = `
@@ -216,9 +217,21 @@
                             ⋮
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item text-primary btn-view" href="vieweditgenerateid.php?id=${student.id}">👁️View</a></li>
-                            <li><a class="dropdown-item text-warning btn-edit" href="viewupdategenerateid.php?id=${student.id}">✏ Edit</a></li>
-                            <li><a class="dropdown-item text-danger btn-delete" data-id="${student.id}" href="#">🗑 Delete</a></li>
+                            <li>
+                                <a class="dropdown-item text-primary btn-view" href="vieweditgenerateid.php?id=${student.id}">
+                                    <i class="bi bi-eye"></i> View
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-warning btn-edit" href="viewupdategenerateid.php?id=${student.id}">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger btn-delete" data-id="${student.id}" href="#">
+                                    <i class="bi bi-trash"></i> Delete
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </td>
@@ -229,20 +242,17 @@
                 <td>${student.emergency_contact ?? "-"}</td>
                 <td>
                     ${student.image 
-                    ? `<img src="${student.image}" alt="Student Photo" width="50" height="50" style="object-fit:cover; border-radius:50%;">`
+                        ? `<img src="${student.image}" alt="Student Photo" width="50" height="50" style="object-fit:cover; border-radius:50%;">`
                         : "-"
                     }
                 </td>
             `;
             tbody.appendChild(tr);
         });
-
-        // Attach delete events
         document.querySelectorAll(".btn-delete").forEach(btn => {
             btn.addEventListener("click", (e) => {
                 e.preventDefault();
                 const id = btn.getAttribute("data-id");
-
                 Swal.fire({
                     title: "Are you sure?",
                     text: "This record will be permanently deleted!",
@@ -264,6 +274,7 @@
                         .then(resp => {
                             Swal.fire("Deleted!", resp.message, "success");
                             students = students.filter(s => s.id != id);
+                            filteredStudents = filteredStudents.filter(s => s.id != id);
                             renderTablePage(currentPage);
                         })
                         .catch(err => {
@@ -274,16 +285,13 @@
                 });
             });
         });
-
-        renderPaginationControls();
-        renderPaginationInfo(start, end, students.length);
+        renderPaginationControls(dataToRender);
+        renderPaginationInfo(start, end, dataToRender.length);
     }
-
-    function renderPaginationControls() {
-        const totalPages = Math.ceil(students.length / rowsPerPage);
+    function renderPaginationControls(dataArray) {
+        const totalPages = Math.ceil(dataArray.length / rowsPerPage);
         const paginationDiv = document.getElementById("paginationControls");
         paginationDiv.innerHTML = "";
-
         for (let i = 1; i <= totalPages; i++) {
             const btn = document.createElement("button");
             btn.textContent = i;
@@ -295,14 +303,13 @@
             paginationDiv.appendChild(btn);
         }
     }
-
     function renderPaginationInfo(start, end, total) {
         const infoDiv = document.getElementById("paginationInfo");
         const showingStart = total === 0 ? 0 : start + 1;
         const showingEnd = Math.min(end, total);
         infoDiv.textContent = `Showing ${showingStart} to ${showingEnd} of ${total} students`;
     }
-
+    // Fetch students from API
     fetch("http://backend.test/api/showgeneratedids", {
         headers: {
             "Accept": "application/json",
@@ -315,4 +322,15 @@
         renderTablePage(currentPage);
     })
     .catch(err => console.error(err));
+    // Search input listener
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+        const query = e.target.value.trim().toLowerCase();
+        filteredStudents = students.filter(student => 
+            student.firstname.toLowerCase().includes(query) ||
+            (student.middlename && student.middlename.toLowerCase().includes(query)) ||
+            student.lastname.toLowerCase().includes(query)
+        );
+        currentPage = 1;
+        renderTablePage(currentPage);
+    });
 </script>
