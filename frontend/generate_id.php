@@ -46,27 +46,25 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-
     <?php include 'partials/_logout.php' ?>
     <?php include 'partials/config.php' ?>
-
-<script>
-    const APP_URL = "<?= APP_URL ?>";
-    const FRONTEND_URL = "<?= FRONTEND_URL ?>"
-    document.addEventListener('DOMContentLoaded', () => {
-        const token = localStorage.getItem('token');
-        if(!token) {
-            location.replace(`${FRONTEND_URL}`);
-        }else {
-            if (window.history && window.history.pushState) {
-                window.history.pushState(null, null, location.href);
-                window.onpopstate = function () {
-                    window.history.pushState(null, null, location.href); 
-                };
+    <script>
+        const APP_URL = "<?= APP_URL ?>";
+        const FRONTEND_URL = "<?= FRONTEND_URL ?>"
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if(!token) {
+                location.replace(`${FRONTEND_URL}`);
+            }else {
+                if (window.history && window.history.pushState) {
+                    window.history.pushState(null, null, location.href);
+                    window.onpopstate = function () {
+                        window.history.pushState(null, null, location.href); 
+                    };
+                }
             }
-        }
-    });
-</script>
+        });
+    </script>
 <script>
     document.addEventListener("DOMContentLoaded", async () => {
     const form = document.querySelector(".generate_search");
@@ -75,29 +73,58 @@
     const loader = document.querySelector("#searchLoader");
     const searchIcon = document.querySelector("#searchIcon");
     const infoDiv = document.querySelector("#studentInfo"); 
-
     let students = []; 
-
     function showStudentInfo(student) {
-    infoDiv.innerHTML = `
-        <div style="border:1px solid #ddd; padding:15px; border-radius:5px; margin-top:15px; background:#fafafa;">
-            <h5>${student.firstname ?? ""} ${student.middlename ?? ""} ${student.lastname ?? ""}</h5>
-            <p><strong>Year Level:</strong> ${student.year_level ?? "-"}</p>
-            <p><strong>Section:</strong> ${student.section?.name ?? "-"}</p>
-            <div style="margin-top:15px; text-align:right;">
-                <button onclick="window.location.href='edit-generate_id.php?id=${student.id}'" 
-                    style="
-                        padding:8px 15px; 
-                        border:none; 
-                        border-radius:5px; 
-                        background:#007bff; 
-                        color:#fff; 
-                        cursor:pointer;">
-                    Edit
-                </button>
-            </div>
+  infoDiv.innerHTML = `
+    <div style="
+        border:1px solid #e0e0e0; 
+        padding:20px; 
+        border-radius:10px; 
+        margin-top:20px; 
+        background:#ffffff; 
+        box-shadow:0 2px 8px rgba(0,0,0,0.08); 
+        font-family:Arial, sans-serif;
+    ">
+        <h4 style="margin:0; font-size:20px; font-weight:600; color:#333;">
+            ${student.firstname ?? ""} ${student.middlename ?? ""} ${student.lastname ?? ""}
+        </h4>
+        <hr style="border:0; border-top:1px solid #eee; margin:12px 0;">
+        <p style="margin:5px 0; font-size:15px; color:#555;">
+            <strong style="color:#222;">Year Level:</strong> ${student.year_level ?? "-"}
+        </p>
+        <p style="margin:5px 0; font-size:15px; color:#555;">
+            <strong style="color:#222;">LRN:</strong> ${student.lrn ?? "-"}
+        <p style="margin:5px 0; font-size:15px; color:#555;">
+            <strong style="color:#222;">Address:</strong> 
+            ${(student.barangay ?? "-")}${student.municipality ? ", " + student.municipality : ""}
+        </p>
+        <p style="margin:5px 0; font-size:15px; color:#555;">
+            <strong style="color:#222;">Section:</strong> ${student.section?.name ?? "-"}
+        </p>
+        
+        <div style="margin-top:20px; text-align:right;">
+            <button onclick="window.location.href='edit-generate_id.php?id=${student.id}'" 
+                style="
+                    padding:10px 18px; 
+                    border:none; 
+                    border-radius:6px; 
+                    background:linear-gradient(135deg,#007bff,#0056b3); 
+                    color:#fff; 
+                    font-size:14px; 
+                    font-weight:600;
+                    cursor:pointer; 
+                    box-shadow:0 3px 6px rgba(0,0,0,0.1);
+                    transition:0.3s;
+                "
+                onmouseover="this.style.background='linear-gradient(135deg,#0056b3,#004099)';"
+                onmouseout="this.style.background='linear-gradient(135deg,#007bff,#0056b3)';"
+            >
+                Edit
+            </button>
         </div>
-    `;
+    </div>
+`;
+
 }
 
     function renderStudents(list) {
