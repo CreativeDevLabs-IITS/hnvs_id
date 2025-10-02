@@ -10,7 +10,6 @@ use Intervention\Image\Facades\Image;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Logo\Logo;
-use Illuminate\Support\Facades\Log;
 use Exception;
 use App\Models\Student;
 use App\Models\Section;
@@ -108,11 +107,11 @@ class StudentController extends Controller
             $hashedQr = sha1(uniqid((string)$student->id, true));
             $qrData = env('FRONTEND_URL') . 'student/verify/' . $hashedQr;
             $qrcode = QrCode::create($qrData)
-                ->setSize(400)
+                ->setSize(300)
                 ->setMargin(10);
 
             $logo = Logo::create(public_path('storage/gallery/hnvslogoqr.png'))
-                ->setResizeToWidth(70)
+                ->setResizeToWidth(60)
                 ->setPunchoutBackground(true);
 
             $writer = new PngWriter();
@@ -179,13 +178,19 @@ class StudentController extends Controller
             }
 
             if($request->hasFile('image')) {
+                $file = $request->file('image');
+                $path = $file->store('images', 'public');
+                $validate['image'] = $path;
+            }
+
+            if($request->hasFile('image')) {
                 if($student->image && Storage::disk('public')->exists($student->image)) {
                     Storage::disk('public')->delete($student->image);
                 }
 
                 $file = $request->file('image');
                 $path = $file->store('images', 'public');
-                $validate['image'] = env('APP_URL') . $path;
+                $validate['image'] = $path;
             }
 
             if($request->hasFile('signature')) {
@@ -195,7 +200,7 @@ class StudentController extends Controller
 
                 $signFile = $request->file('signature');
                 $signPath = $signFile->store('images', 'public');
-                $validate['signature'] = env('APP_URL') . $signPath;
+                $validate['signature'] = $signPath;
             }
 
             $student->update($validate);
@@ -238,7 +243,7 @@ class StudentController extends Controller
             }
 
             return response()->json([
-                'students' => $students->paginate(50)
+                'students' => $students->paginate(10)
             ]);
         }catch(Exception $e) {
             return response()->json([
@@ -276,46 +281,20 @@ class StudentController extends Controller
     }
 
     public function import(Request $request) {
-        try 
-        {
+        try {
             $request->validate([
                 'file' => 'required|file|mimes:xlsx,csv'
             ]);
             $import = new StudentImport;
             Excel::import($import, $request->file('file'));
-            foreach ($import->rows as $row) {
-            // Hanapin ang section sa database
-            $section = Section::where('name', $row['section'])->first();
-            // Hanapin ang strand sa database
-            $strand = Strand::where('cluster', $row['strand'])->first();
 
-            // I-check kung may section at strand
-            if (!$section || !$strand) {
-                $skipped[] = $row['firstname'] . ' ' . $row['lastname'];
-                continue;
-            }
-            // I-create ang student
-            $student = Student::create([
-                'firstname' => $row['firstname'],
-                'middlename' => $row['middlename'],
-                'lastname' => $row['lastname'],
-                'suffix' => $row['suffix'] ?? null,
-                'barangay' => $row['barangay'],
-                'municipality' => $row['municipality'],
-                'age' => $row['age'],
-                'contact' => $row['contact'],
-                'lrn' => $row['lrn'],
-                'emergency_contact' => $row['emergency_contact'],
-                'birthdate' => $row['birthdate'],
-                'year_level' => $row['year_level'],
-                'section_id' => $section->id,
-                'strand_id' => $strand->id
-              
            foreach ($import->rows as $row) {
-                if(!empty($row['cluster'])) {
+                
+                if($row['section'] || $row['cluster']) {
+                    $section = Section::where('name', $row['section'])->first();
                     $strand = Strand::where('cluster', $row['cluster'])->first();
-                    
-                    if (!$strand) {
+    
+                    if (!$section || !$strand) {
                         $strand = Strand::create([
                             'cluster' => $row['cluster'],
                             'track' => $row['track'],
@@ -323,22 +302,15 @@ class StudentController extends Controller
                         ]);
                     }
                 }
-                
-                $section = Section::where('name', $row['section'])->first();
-                
-                if (empty($row['first_name'])) {
-                    \Log::warning('Skipping row with missing firstname', $row->toArray());
-                    continue;
-                }
 
                 $student = Student::create([
-                    'firstname' => $row['first_name'],
-                    'middlename' => $row['middle_name'],
-                    'lastname' => $row['last_name'],
+                    'firstname' => $row['first name'],
+                    'middlename' => $row['middle name'],
+                    'lastname' => $row['last name'],
                     'suffix' => $row['suffix'] ?? null,
                     'barangay' => $row['barangay'],
                     'municipality' => $row['town'],
-                    'contact' => $row['contact_number'],
+                    'contact' => $row['contact number'],
                     'lrn' => $row['lrn'],
                     'birthdate' => is_numeric($row['birthday'])
                         ? Carbon::instance(ExcelDate::excelToDateTimeObject($row['birthday']))->format('Y-m-d')
@@ -375,7 +347,7 @@ class StudentController extends Controller
             return response()->json([
                 'message' => 'Students imported successfully',
                 'skipped' => isset($skipped) && count($skipped) > 0
-                             ? 'Some information are missing for student/s: ' . implode(', ', $skipped)
+                             ? 'Section or Strand is not found for student/s: ' . implode(', ', $skipped)
                              : ''
             ]);
 
@@ -383,31 +355,8 @@ class StudentController extends Controller
             return response()->json([
                 'error' => $e->getMessage()
             ]);
-                // Generate QR code
-                $hashedQr = sha1(uniqid((string)$student->id, true));
-                $qrData = env('FRONTEND_URL') . $hashedQr;
-                $qrcode = QrCode::create($qrData);
-                $writer = new PngWriter();
-                $result = $writer->write($qrcode);
-                $fileName = 'qr_code/' . uniqid() . '.png';
-                Storage::disk('public')->put($fileName, $result->getString());
-                $path = env('APP_URL') . $fileName;
-                $student->qr_code = $path;
-                $student->qr_token = $hashedQr;
-                $student->save();
-            }
-                return response()->json([
-                    'message' => 'Students imported successfully',
-                    'skipped' => isset($skipped) && count($skipped) > 0
-                                ? 'Section or Strand is not found for student/s: ' . implode(', ', $skipped)
-                                : ''
-                ]);
-            }catch(Exception $e) {
-                return response()->json([
-                    'error' => $e->getMessage()
-                ]);
-            }
         }
+    }
 
     public function count() {
         return response()->json([
