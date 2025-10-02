@@ -108,11 +108,11 @@ class StudentController extends Controller
             $hashedQr = sha1(uniqid((string)$student->id, true));
             $qrData = env('FRONTEND_URL') . 'student/verify/' . $hashedQr;
             $qrcode = QrCode::create($qrData)
-                ->setSize(400)
+                ->setSize(300)
                 ->setMargin(10);
 
             $logo = Logo::create(public_path('storage/gallery/hnvslogoqr.png'))
-                ->setResizeToWidth(70)
+                ->setResizeToWidth(60)
                 ->setPunchoutBackground(true);
 
             $writer = new PngWriter();
@@ -179,13 +179,19 @@ class StudentController extends Controller
             }
 
             if($request->hasFile('image')) {
+                $file = $request->file('image');
+                $path = $file->store('images', 'public');
+                $validate['image'] = env('APP_URL') . $path;
+            }
+
+            if($request->hasFile('image')) {
                 if($student->image && Storage::disk('public')->exists($student->image)) {
                     Storage::disk('public')->delete($student->image);
                 }
 
                 $file = $request->file('image');
                 $path = $file->store('images', 'public');
-                $validate['image'] = env('APP_URL') . $path;
+                $validate['image'] = $path;
             }
 
             if($request->hasFile('signature')) {

@@ -108,11 +108,11 @@ class StudentController extends Controller
             $hashedQr = sha1(uniqid((string)$student->id, true));
             $qrData = env('FRONTEND_URL') . 'student/verify/' . $hashedQr;
             $qrcode = QrCode::create($qrData)
-                ->setSize(400)
+                ->setSize(300)
                 ->setMargin(10);
 
             $logo = Logo::create(public_path('storage/gallery/hnvslogoqr.png'))
-                ->setResizeToWidth(70)
+                ->setResizeToWidth(60)
                 ->setPunchoutBackground(true);
 
             $writer = new PngWriter();

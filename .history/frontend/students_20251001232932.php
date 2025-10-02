@@ -220,6 +220,7 @@
                         let strandOption = document.createElement('option');
                         strandOption.value = strand.cluster;
                         strandOption.textContent = strand.cluster;
+
                         strandSelect.appendChild(strandOption);
                     }
                 })
@@ -245,6 +246,7 @@
                     let sectionOption = document.createElement('option');
                     sectionOption.value = section.name;
                     sectionOption.textContent = section.name;
+
                     sectionSelect.appendChild(sectionOption);
                 })
             });
@@ -395,6 +397,7 @@
                 </td>
                 <td>${student.lrn}</td>
                 `;
+
                 tableBody.appendChild(row);
             })
         }
