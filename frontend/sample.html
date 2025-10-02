@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<button id="printBtn" class="switch-btn">Print</button>
+
+<div id="idFront">
+  <h2>Front of ID</h2>
+</div>
+
+<div id="idBack">
+  <h2>Back of ID</h2>
+</div>
+
+<button id="showBoth" class="switch-btn">Both</button>
+<button id="showFront" class="switch-btn">Front</button>
+<button id="showBack" class="switch-btn">Back</button>
+
+<script>
+  const front = document.getElementById('idFront');
+  const back = document.getElementById('idBack');
+  let currentView = 'both'; // default
+
+  // Toggle views
+  document.getElementById('showBoth').addEventListener('click', () => {
+    front.style.display = 'block';
+    back.style.display = 'block';
+    currentView = 'both';
+  });
+
+  document.getElementById('showFront').addEventListener('click', () => {
+    front.style.display = 'block';
+    back.style.display = 'none';
+    currentView = 'front';
+  });
+
+  document.getElementById('showBack').addEventListener('click', () => {
+    front.style.display = 'none';
+    back.style.display = 'block';
+    currentView = 'back';
+  });
+
+  // Print
+  document.getElementById('printBtn').addEventListener('click', () => {
+    let printContents = '';
+    if(currentView === 'front') printContents = front.innerHTML;
+    else if(currentView === 'back') printContents = back.innerHTML;
+    else printContents = front.innerHTML + back.innerHTML;
+
+    const originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+  });
+</script>
+
+
+
+</body>
+</html>

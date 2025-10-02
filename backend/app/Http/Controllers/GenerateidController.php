@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Student;
 use App\Models\Generateid;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Http\Request;
 
 class GenerateidController extends Controller
@@ -18,6 +19,7 @@ class GenerateidController extends Controller
                 'students.age',
                 'students.barangay',
                 'students.lrn',
+                'students.qr_path',
                 'students.municipality',
                 'students.emergency_contact',
                 'students.image',

@@ -220,7 +220,6 @@
                         let strandOption = document.createElement('option');
                         strandOption.value = strand.cluster;
                         strandOption.textContent = strand.cluster;
-
                         strandSelect.appendChild(strandOption);
                     }
                 })
@@ -246,7 +245,6 @@
                     let sectionOption = document.createElement('option');
                     sectionOption.value = section.name;
                     sectionOption.textContent = section.name;
-
                     sectionSelect.appendChild(sectionOption);
                 })
             });
@@ -388,16 +386,24 @@
                 <td>${student.section ? student.section.name : '—'}</td>
                 <td>
                 ${student.strand 
+<<<<<<< HEAD
                 ? (student.strand.cluster === 'Industrial Arts (IA)' 
                     ? `(IA) ${student.strand.specialization}`
                     : student.strand.cluster === 'Family and Consumer Science (FCS)' 
                     ? `(FCS) ${student.strand.specialization}`
                     : student.strand.cluster)
                 : '—'}
+=======
+                    ? (student.strand.cluster === 'Industrial Arts (IA)' 
+                        ? `(IA) ${student.strand.specialization}`
+                        : student.strand.cluster === 'Family and Consumer Science (FCS)' 
+                        ? `(FCS) ${student.strand.specialization}`
+                        : student.strand.cluster)
+                    : '—'}
+>>>>>>> master
                 </td>
                 <td>${student.lrn}</td>
                 `;
-
                 tableBody.appendChild(row);
             })
         }
