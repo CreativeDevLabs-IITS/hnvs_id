@@ -607,10 +607,9 @@
                         title: response.message,
                         showConfirmButton: false,
                         timer: 1000,
+                    }).then(() => {
+                        location.reload();
                     })
-                    // .then(() => {
-                    //     location.reload();
-                    // })
                 }else {
                     Swal.fire({
                         position: "top-end",

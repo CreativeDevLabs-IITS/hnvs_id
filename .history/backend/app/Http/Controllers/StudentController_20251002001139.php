@@ -10,7 +10,6 @@ use Intervention\Image\Facades\Image;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Logo\Logo;
-use Illuminate\Support\Facades\Log;
 use Exception;
 use App\Models\Student;
 use App\Models\Section;
@@ -179,13 +178,19 @@ class StudentController extends Controller
             }
 
             if($request->hasFile('image')) {
+                $file = $request->file('image');
+                $path = $file->store('images', 'public');
+                $validate['image'] = $path;
+            }
+
+            if($request->hasFile('image')) {
                 if($student->image && Storage::disk('public')->exists($student->image)) {
                     Storage::disk('public')->delete($student->image);
                 }
 
                 $file = $request->file('image');
                 $path = $file->store('images', 'public');
-                $validate['image'] = env('APP_URL') . $path;
+                $validate['image'] = $path;
             }
 
             if($request->hasFile('signature')) {
@@ -195,7 +200,7 @@ class StudentController extends Controller
 
                 $signFile = $request->file('signature');
                 $signPath = $signFile->store('images', 'public');
-                $validate['signature'] = env('APP_URL') . $signPath;
+                $validate['signature'] = $signPath;
             }
 
             $student->update($validate);
@@ -238,7 +243,7 @@ class StudentController extends Controller
             }
 
             return response()->json([
-                'students' => $students->paginate(50)
+                'students' => $students->paginate(10)
             ]);
         }catch(Exception $e) {
             return response()->json([
@@ -284,10 +289,12 @@ class StudentController extends Controller
             Excel::import($import, $request->file('file'));
 
            foreach ($import->rows as $row) {
-                if(!empty($row['cluster'])) {
+                
+                if($row['section'] || $row['cluster']) {
+                    $section = Section::where('name', $row['section'])->first();
                     $strand = Strand::where('cluster', $row['cluster'])->first();
-                    
-                    if (!$strand) {
+    
+                    if (!$section || !$strand) {
                         $strand = Strand::create([
                             'cluster' => $row['cluster'],
                             'track' => $row['track'],
@@ -295,22 +302,15 @@ class StudentController extends Controller
                         ]);
                     }
                 }
-                
-                $section = Section::where('name', $row['section'])->first();
-                
-                if (empty($row['first_name'])) {
-                    \Log::warning('Skipping row with missing firstname', $row->toArray());
-                    continue;
-                }
 
                 $student = Student::create([
-                    'firstname' => $row['first_name'],
-                    'middlename' => $row['middle_name'],
-                    'lastname' => $row['last_name'],
+                    'firstname' => $row['first name'],
+                    'middlename' => $row['middle name'],
+                    'lastname' => $row['last name'],
                     'suffix' => $row['suffix'] ?? null,
                     'barangay' => $row['barangay'],
                     'municipality' => $row['town'],
-                    'contact' => $row['contact_number'],
+                    'contact' => $row['contact number'],
                     'lrn' => $row['lrn'],
                     'birthdate' => is_numeric($row['birthday'])
                         ? Carbon::instance(ExcelDate::excelToDateTimeObject($row['birthday']))->format('Y-m-d')
@@ -347,7 +347,7 @@ class StudentController extends Controller
             return response()->json([
                 'message' => 'Students imported successfully',
                 'skipped' => isset($skipped) && count($skipped) > 0
-                             ? 'Some information are missing for student/s: ' . implode(', ', $skipped)
+                             ? 'Section or Strand is not found for student/s: ' . implode(', ', $skipped)
                              : ''
             ]);
 

@@ -386,16 +386,16 @@
                 <td>${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${student.image}" />` : 'No Image'}</td>
                 <td>${student.lastname + ', ' + student.firstname + ' ' + (student.suffix != null ? student.suffix : '') + ' ' + (student.middlename != null ? student.middlename.charAt(0) : '') + '.'}</td>
                 <td>${student.section ? student.section.name : '—'}</td>
-                <td>
-                ${student.strand 
-                ? (student.strand.cluster === 'Industrial Arts (IA)' 
-                    ? `(IA) ${student.strand.specialization}`
-                    : student.strand.cluster === 'Family and Consumer Science (FCS)' 
-                    ? `(FCS) ${student.strand.specialization}`
-                    : student.strand.cluster)
-                : '—'}
-                </td>
-                <td>${student.lrn}</td>
+<td>
+  ${student.strand 
+    ? (student.strand.cluster === 'Industrial Arts (IA)' 
+        ? `(IA) ${student.strand.specialization}`
+        : student.strand.cluster === 'Family and Consumer Science (FCS)' 
+          ? `(FCS) ${student.strand.specialization}`
+          : student.strand.cluster)
+    : '—'}
+</td>
+
                 `;
 
                 tableBody.appendChild(row);
@@ -607,10 +607,9 @@
                         title: response.message,
                         showConfirmButton: false,
                         timer: 1000,
+                    }).then(() => {
+                        location.reload();
                     })
-                    // .then(() => {
-                    //     location.reload();
-                    // })
                 }else {
                     Swal.fire({
                         position: "top-end",

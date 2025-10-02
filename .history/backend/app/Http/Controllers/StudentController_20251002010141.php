@@ -179,13 +179,19 @@ class StudentController extends Controller
             }
 
             if($request->hasFile('image')) {
+                $file = $request->file('image');
+                $path = $file->store('images', 'public');
+                $validate['image'] = env('APP_URL') . $path;
+            }
+
+            if($request->hasFile('image')) {
                 if($student->image && Storage::disk('public')->exists($student->image)) {
                     Storage::disk('public')->delete($student->image);
                 }
 
                 $file = $request->file('image');
                 $path = $file->store('images', 'public');
-                $validate['image'] = env('APP_URL') . $path;
+                $validate['image'] = $path;
             }
 
             if($request->hasFile('signature')) {

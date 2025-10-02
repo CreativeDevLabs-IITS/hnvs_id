@@ -179,13 +179,19 @@ class StudentController extends Controller
             }
 
             if($request->hasFile('image')) {
+                $file = $request->file('image');
+                $path = $file->store('images', 'public');
+                $validate['image'] = env('APP_URL') . $path;
+            }
+
+            if($request->hasFile('image')) {
                 if($student->image && Storage::disk('public')->exists($student->image)) {
                     Storage::disk('public')->delete($student->image);
                 }
 
                 $file = $request->file('image');
                 $path = $file->store('images', 'public');
-                $validate['image'] = env('APP_URL') . $path;
+                $validate['image'] = $path;
             }
 
             if($request->hasFile('signature')) {
@@ -195,7 +201,7 @@ class StudentController extends Controller
 
                 $signFile = $request->file('signature');
                 $signPath = $signFile->store('images', 'public');
-                $validate['signature'] = env('APP_URL') . $signPath;
+                $validate['signature'] = $signPath;
             }
 
             $student->update($validate);
@@ -284,20 +290,16 @@ class StudentController extends Controller
             Excel::import($import, $request->file('file'));
 
            foreach ($import->rows as $row) {
-                if(!empty($row['cluster'])) {
-                    $strand = Strand::where('cluster', $row['cluster'])->first();
-                    
-                    if (!$strand) {
-                        $strand = Strand::create([
-                            'cluster' => $row['cluster'],
-                            'track' => $row['track'],
-                            'specialization' => $row['specialization'] ?? null
-                        ]);
-                    }
-                }
-                
                 $section = Section::where('name', $row['section'])->first();
-                
+                $strand = Strand::where('cluster', $row['cluster'])->first();
+
+                if (!$section || !$strand) {
+                    $strand = Strand::create([
+                        'cluster' => $row['cluster'],
+                        'track' => $row['track'],
+                        'specialization' => $row['specialization'] ?? null
+                    ]);
+                }
                 if (empty($row['first_name'])) {
                     \Log::warning('Skipping row with missing firstname', $row->toArray());
                     continue;

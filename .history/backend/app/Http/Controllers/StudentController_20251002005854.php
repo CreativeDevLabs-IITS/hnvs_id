@@ -179,13 +179,19 @@ class StudentController extends Controller
             }
 
             if($request->hasFile('image')) {
+                $file = $request->file('image');
+                $path = $file->store('images', 'public');
+                $validate['image'] = env('APP_URL') . $path;
+            }
+
+            if($request->hasFile('image')) {
                 if($student->image && Storage::disk('public')->exists($student->image)) {
                     Storage::disk('public')->delete($student->image);
                 }
 
                 $file = $request->file('image');
                 $path = $file->store('images', 'public');
-                $validate['image'] = env('APP_URL') . $path;
+                $validate['image'] = $path;
             }
 
             if($request->hasFile('signature')) {
@@ -285,9 +291,10 @@ class StudentController extends Controller
 
            foreach ($import->rows as $row) {
                 if(!empty($row['cluster'])) {
+                    $section = Section::where('name', $row['section'])->first();
                     $strand = Strand::where('cluster', $row['cluster'])->first();
-                    
-                    if (!$strand) {
+    
+                    if (!$section || !$strand) {
                         $strand = Strand::create([
                             'cluster' => $row['cluster'],
                             'track' => $row['track'],
@@ -295,9 +302,6 @@ class StudentController extends Controller
                         ]);
                     }
                 }
-                
-                $section = Section::where('name', $row['section'])->first();
-                
                 if (empty($row['first_name'])) {
                     \Log::warning('Skipping row with missing firstname', $row->toArray());
                     continue;
