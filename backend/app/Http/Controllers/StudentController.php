@@ -398,23 +398,32 @@ class StudentController extends Controller
                     'section_id' => $section->id ?? null,
                     'strand_id' => $strand->id ?? null,
                 ]);
-                $hashedQr = sha1(uniqid((string)$student->id, true));
-                $qrData = env('FRONTEND_URL') . 'student/verify/' . $hashedQr;
-                $qrcode = QrCode::create($qrData)
-                    ->setSize(300)
-                    ->setMargin(10);
-                $logo = Logo::create(public_path('storage/gallery/hnvslogoqr.png'))
-                    ->setResizeToWidth(60)
-                    ->setPunchoutBackground(true);
-                $writer = new PngWriter();
-                $result = $writer->write($qrcode, $logo);
-                $fileName = 'qr_code/' . uniqid() . '.png';
-                Storage::disk('public')->put($fileName, $result->getString());
-                $qr_path = env('APP_URL') . $fileName;
-                $student->qr_path = $qr_path;
-                $student->qr_token = $hashedQr;
-                $student->qr_code = $qrData;
-                $student->save();
+               $hashedQr = sha1(uniqid((string)$student->id, true));
+                    $qrData = env('FRONTEND_URL') . 'student/verify/' . $hashedQr;
+                    
+                    $qrcode = QrCode::create($qrData)
+                        ->setSize(300)
+                        ->setMargin(10);
+                    
+                    // Commented out logo creation to remove it from QR
+                    // $logo = Logo::create(public_path('storage/gallery/hnvslogoqr.png'))
+                    //     ->setResizeToWidth(60)
+                    //     ->setPunchoutBackground(true);
+                    
+                    $writer = new PngWriter();
+                    // Removed $logo so QR will be plain
+                    $result = $writer->write($qrcode); // , $logo);
+                    
+                    $fileName = 'qr_code/' . uniqid() . '.png';
+                    Storage::disk('public')->put($fileName, $result->getString());
+                    
+                    $qr_path = env('APP_URL') . $fileName;
+                    
+                    $student->qr_path = $qr_path;
+                    $student->qr_token = $hashedQr;
+                    $student->qr_code = $qrData;
+                    $student->save();
+
             }
             return response()->json([
                 'message' => 'Students imported successfully',
