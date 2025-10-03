@@ -821,7 +821,7 @@ const studentId = params.get('id') || 1;
 let editMode = false;
 let selectedImage = null;
 let selectedSignature = null;
-fetch(`http://hnvs_backend.test/api/showstudentid/${studentId}`, {
+fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
     method: 'GET',
     headers: {
         'Accept': 'application/json',
@@ -1074,7 +1074,7 @@ document.getElementById('saveBtn').addEventListener('click', function () {
     }));
     if(selectedImage) formData.append('image', selectedImage);
     if(selectedSignature) formData.append('signature', selectedSignature);
-    fetch(`http://hnvs_backend.test/api/save-generated-id`, {
+    fetch(`https://hnvs-id-be.creativedevlabs.com/api/save-generated-id`, {
         method:"POST",
         headers: {
             "Authorization":"Bearer "+localStorage.getItem("token"),
