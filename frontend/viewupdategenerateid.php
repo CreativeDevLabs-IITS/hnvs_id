@@ -607,29 +607,48 @@
                             Print
                         </button>
                     </div>
-                    <div id="signatureModal" style="
-                        display:none; 
-                        position:fixed; 
-                        top:0; left:0; 
-                        width:100vw; height:100vh; 
-                        background:rgba(0,0,0,0.9); 
-                        z-index:9999; 
-                        justify-content:center; 
-                        align-items:center; 
-                        flex-direction:column;
-                    ">
-                        <canvas id="signatureCanvas" style="
-                            border:3px solid #fff; 
-                            background:#fff; 
-                            width:90vw; 
-                            height:70vh;
-                        "></canvas>
-                        <div style="margin-top:15px;">
-                            <button id="clearSignature" style="padding:12px 25px; font-weight:bold;">Clear</button>
-                            <button id="saveSignature" style="padding:12px 25px; font-weight:bold;">Save</button>
-                            <button id="closeSignature" style="padding:12px 25px; font-weight:bold;">Cancel</button>
-                        </div>
-                    </div>
+<!-- Signature Pad Modal -->
+<div id="signatureModal" style="
+    display:none; 
+    position:fixed; 
+    top:0; left:0; 
+    width:100vw; height:100vh; 
+    background:rgba(0,0,0,0.9); 
+    z-index:9999; 
+    justify-content:center; 
+    align-items:center; 
+    flex-direction:column;
+">
+  <canvas id="signatureCanvas" style="
+      border:3px solid #fff; 
+      background:#fff; 
+      width:70vw; 
+      height:70vh;
+  "></canvas>
+
+  <!-- Stroke thickness -->
+  <div style="margin-top:15px;">
+    <label for="strokeWeight" style="color:white; font-weight:bold;">Stroke:</label>
+    <select id="strokeWeight">
+      <option value="1">Thin</option>
+      <option value="2">Light</option>
+      <option value="3" selected>Normal</option>
+      <option value="5">Bold</option>
+      <option value="7">Extra Bold</option>
+      <option value="10">Heavy</option>
+    </select>
+  </div>
+
+  <!-- Buttons -->
+  <div style="margin-top:15px;">
+    <button id="clearSignature" style="padding:12px 25px; font-weight:bold;">Clear</button>
+    <button id="saveSignature" style="padding:12px 25px; font-weight:bold;">Save</button>
+    <button id="closeSignature" style="padding:12px 25px; font-weight:bold;">Cancel</button>
+  </div>
+</div>
+
+<!-- Signature Pad Library -->
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
                     <div style="display: flex; gap: 20px; margin-bottom: 10px;">
                             <div id="fontSizeControls" style="display:none;">
                                 <label for="nameFontSize" style="font-weight:bold;">Name Font Size:</label>
@@ -943,117 +962,102 @@ signatureDrop.addEventListener('drop', e => {
     }
 });
 const signatureModal = document.getElementById('signatureModal');
-const editSignatureBtn = document.getElementById('editSignatureBtn');
-// ...existing code...
-editSignatureBtn.addEventListener('click', () => {
-    signatureModal.style.display = 'flex';
-    const canvas = document.getElementById('signatureCanvas');
-    const scale = window.devicePixelRatio || 25;
-    canvas.width = window.innerWidth * 0.9 * scale;
-    canvas.height = window.innerHeight * 0.7 * scale;
-    canvas.style.width = (window.innerWidth * 0.9) + "px";
-    canvas.style.height = (window.innerHeight * 0.7) + "px";
-    const ctx = canvas.getContext('2d');
-    ctx.setTransform(scale, 0, 0, scale, 0, 0);
-    ctx.strokeStyle = "#000";
-    ctx.lineWidth = 22;
-    ctx.imageSmoothingEnabled = true;
-     ctx.imageSmoothingQuality = "high";
-    ctx.lineCap = "round"; 
-    ctx.lineJoin = "round"; 
+const canvas = document.getElementById('signatureCanvas');
+const clearBtn = document.getElementById('clearSignature');
+const saveBtn = document.getElementById('saveSignature');
+const closeBtn = document.getElementById('closeSignature');
+const strokeSelect = document.getElementById('strokeWeight');
 
-    let drawing = false;
-    let lastPos = null;
+let signaturePad;
 
-    function getPos(e) {
-        let rect = canvas.getBoundingClientRect();
-        let x, y;
-        if (e.touches) {
-            x = (e.touches[0].clientX - rect.left) * scale;
-            y = (e.touches[0].clientY - rect.top) * scale;
-        } else {
-            x = (e.clientX - rect.left) * scale;
-            y = (e.clientY - rect.top) * scale;
-        }
-        return { x, y };
-    }
+// Proper canvas scaling for all devices 📱💻
+function resizeCanvas() {
+  const ratio = Math.max(window.devicePixelRatio || 1, 1);
+  const displayWidth = canvas.offsetWidth;
+  const displayHeight = canvas.offsetHeight;
 
-    // Mouse events
-    canvas.onmousedown = e => {
-        drawing = true;
-        lastPos = getPos(e);
-        ctx.beginPath();
-        ctx.moveTo(lastPos.x, lastPos.y);
-    };
-    canvas.onmousemove = e => {
-        if (!drawing) return;
-        const pos = getPos(e);
-        ctx.lineTo(pos.x, pos.y);
-        ctx.stroke();
-        lastPos = pos;
-    };
-    canvas.onmouseup = e => {
-        if (drawing && lastPos) {
-            // If mouseup without mousemove (just a dot)
-            const pos = getPos(e);
-            if (Math.abs(pos.x - lastPos.x) < 2 && Math.abs(pos.y - lastPos.y) < 2) {
-                ctx.beginPath();
-                ctx.arc(pos.x, pos.y, ctx.lineWidth / 2, 0, 2 * Math.PI);
-                ctx.fillStyle = ctx.strokeStyle;
-                ctx.fill();
-            }
-        }
-        drawing = false;
-        lastPos = null;
-    };
-    canvas.onmouseleave = () => { drawing = false; lastPos = null; };
+  canvas.width = displayWidth * ratio;
+  canvas.height = displayHeight * ratio;
 
-    // Touch events
-    canvas.ontouchstart = e => {
-        drawing = true;
-        lastPos = getPos(e);
-        ctx.beginPath();
-        ctx.moveTo(lastPos.x, lastPos.y);
-        e.preventDefault();
-    };
-    canvas.ontouchmove = e => {
-        if (!drawing) return;
-        const pos = getPos(e);
-        ctx.lineTo(pos.x, pos.y);
-        ctx.stroke();
-        lastPos = pos;
-        e.preventDefault();
-    };
-    canvas.ontouchend = e => {
-        if (drawing && lastPos) {
-            // If touchend without move (just a dot)
-            if (e.changedTouches && e.changedTouches.length) {
-                const pos = getPos({ touches: e.changedTouches });
-                if (Math.abs(pos.x - lastPos.x) < 2 && Math.abs(pos.y - lastPos.y) < 2) {
-                    ctx.beginPath();
-                    ctx.arc(pos.x, pos.y, ctx.lineWidth / 2, 0, 2 * Math.PI);
-                    ctx.fillStyle = ctx.strokeStyle;
-                    ctx.fill();
-                }
-            }
-        }
-        drawing = false;
-        lastPos = null;
-        e.preventDefault();
-    };
+  const ctx = canvas.getContext('2d');
+  ctx.scale(ratio, ratio);
+}
 
-    document.getElementById('clearSignature').onclick = () => ctx.clearRect(0,0,canvas.width,canvas.height);
-    document.getElementById('closeSignature').onclick = () => signatureModal.style.display = 'none';
-    document.getElementById('saveSignature').onclick = () => {
-        canvas.toBlob(blob => {
-            selectedSignature = new File([blob], "signature.png", {type:"image/png"});
-            document.getElementById('student-signature').src = URL.createObjectURL(selectedSignature);
-            signatureModal.style.display = 'none';
-        });
-    }
+// Initialize signature pad when modal opens
+function initSignaturePad() {
+  resizeCanvas();
+  signaturePad = new SignaturePad(canvas, {
+    penColor: "black",
+    minWidth: parseInt(strokeSelect.value),
+    maxWidth: parseInt(strokeSelect.value),
+  });
+}
+
+// Stroke thickness change handler
+strokeSelect.addEventListener('change', () => {
+  if (signaturePad) {
+    const thickness = parseInt(strokeSelect.value);
+    signaturePad.minWidth = thickness;
+    signaturePad.maxWidth = thickness;
+  }
 });
-// ...existing code...
-// ..
+
+// Open modal
+editSignatureBtn.addEventListener('click', () => {
+  signatureModal.style.display = 'flex';
+  setTimeout(() => {
+    initSignaturePad();
+  }, 50);
+});
+
+// Clear signature
+clearBtn.addEventListener('click', () => {
+  signaturePad.clear();
+});
+
+// Close modal
+closeBtn.addEventListener('click', () => {
+  signatureModal.style.display = 'none';
+});
+
+// Save signature 🧠 same naming & logic as before
+saveBtn.addEventListener('click', () => {
+  if (!signaturePad.isEmpty()) {
+    // Get cleaned image
+    const canvasEl = signaturePad.canvas;
+    const ctx = canvasEl.getContext("2d");
+    const imageData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
+    const data = imageData.data;
+
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+      if (r > 240 && g > 240 && b > 240) {
+        data[i + 3] = 0; // transparent background
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+
+    // Convert to blob → File (same as original)
+    canvasEl.toBlob(blob => {
+      selectedSignature = new File([blob], "signature.png", { type: "image/png" });
+      document.getElementById('student-signature').src = URL.createObjectURL(selectedSignature);
+      signatureModal.style.display = 'none';
+    });
+  } else {
+    alert("Please draw your signature first ✍️");
+  } 
+});
+
+// Resize canvas on window resize too (responsive)
+window.addEventListener('resize', () => {
+  if (signaturePad) {
+    resizeCanvas();
+    signaturePad.clear();
+  }
+});
 const notyf = new Notyf({ position:{x:'right',y:'top'}, duration:3000, ripple:true, dismissible:true });
 document.getElementById('saveBtn').addEventListener('click', function () {
     const formData = new FormData();
