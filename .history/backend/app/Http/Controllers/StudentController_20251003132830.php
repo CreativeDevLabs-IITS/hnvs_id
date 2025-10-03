@@ -118,7 +118,6 @@ class StudentController extends Controller
             $writer = new PngWriter();
             $result = $writer->write($qrcode, $logo);
 
-            Storage::disk('public')->makeDirectory('qr_code');
             $fileName = 'qr_code/' . uniqid() . '.png';
             Storage::disk('public')->put($fileName, $result->getString());
 
