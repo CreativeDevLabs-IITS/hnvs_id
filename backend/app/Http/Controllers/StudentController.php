@@ -247,6 +247,46 @@ class StudentController extends Controller
         }
     }
 
+    public function searchSpecificStudent(Request $request) {
+        try {
+            if($request->filled('lrn')) {
+                $student = Student::with(['section', 'strand', 'subjects'])
+                ->where('lrn', $request->lrn)->first();
+            }elseif($request->filled('firstname') || $request->filled('lastname')) {
+                $query = Student::query()->with(['section', 'strand', 'subjects']);
+    
+                if($request->filled('firstname')) {
+                    $query->where('firstname', 'LIKE', "%$request->firstname%");
+                }
+    
+                if($request->filled('lastname')) {
+                    $query->where('lastname', 'LIKE', "%$request->lastname%");
+                }
+    
+                $student = $query->first();
+            }else {
+                return response()->json([
+                    'error' => 'No search input provided'
+                ], 400);
+            }
+    
+            if(!$student) {
+                return response()->json([
+                    'error' => 'Student not found.'
+                ], 404);
+            }
+    
+            return response()->json([
+                'data' => $student,
+                'strands' => Strand::all()
+            ], 200);
+        }catch(Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function delete(Request $request) {
         try {
             $student = Student::find($request->id);
@@ -275,6 +315,37 @@ class StudentController extends Controller
         }
     }
 
+    public function saveStudentInfo(Request $request) {
+        try {
+            $student = Student::find($request->studentID);
+
+            if(!$student) {
+                return response()->json([
+                    'error' => 'Failed to save. Student not found.'
+                ], 404);
+            }
+
+            $validate = $request->validate([
+                'barangay' => 'required',
+                'municipality' => 'required',
+                'emergency_contact' => 'required',
+                'contact' => 'required',
+                'doorway' => 'required',
+                'strand_id' => 'required'
+            ]);
+
+            $student->update($validate);
+
+            return response()->json([
+                'message' => 'Saved Successfully!'
+            ], 200);
+        }catch(ValidationException $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function import(Request $request) {
         try {
             $request->validate([
@@ -282,7 +353,6 @@ class StudentController extends Controller
             ]);
             $import = new StudentImport;
             Excel::import($import, $request->file('file'));
-
             foreach ($import->rows as $row) {
                 if(!empty($row['cluster'])) {
                     $strand = Strand::where('cluster', $row['cluster'])->first();
@@ -310,7 +380,7 @@ class StudentController extends Controller
                     'suffix' => $row['suffix'] ?? null,
                     'barangay' => $row['barangay'],
                     'municipality' => $row['town'],
-                    'contact' => $row['contact_number'],
+                    'emergency_contact' => $row['emergency_contact'],
                     'lrn' => $row['lrn'],
                     'birthdate' => is_numeric($row['birthday'])
                         ? Carbon::instance(ExcelDate::excelToDateTimeObject($row['birthday']))->format('Y-m-d')

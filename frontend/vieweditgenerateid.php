@@ -144,9 +144,14 @@
             }
 
 
-            .signature img {
+   .signature img {
+                object-fit:contain;
             height: 100%;
+            width:100%
+            display:block;
+            
             }
+
 
             .bottom-container {
             position: absolute;
@@ -764,7 +769,7 @@ function printVisibleID() {
 <script>
         const params = new URLSearchParams(window.location.search);
         const studentId = params.get('id') || 1;
-        fetch(`http://backend.test/api/showstudentid/${studentId}`, {
+        fetch(`http://hnvs_backend.test/api/showstudentid/${studentId}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',

@@ -146,7 +146,11 @@
 
 
             .signature img {
+                object-fit:contain;
             height: 100%;
+            width:100%
+            display:block;
+            
             }
 
             .bottom-container {
@@ -817,7 +821,7 @@ const studentId = params.get('id') || 1;
 let editMode = false;
 let selectedImage = null;
 let selectedSignature = null;
-fetch(`http://backend.test/api/showstudentid/${studentId}`, {
+fetch(`http://hnvs_backend.test/api/showstudentid/${studentId}`, {
     method: 'GET',
     headers: {
         'Accept': 'application/json',
@@ -940,19 +944,104 @@ signatureDrop.addEventListener('drop', e => {
 });
 const signatureModal = document.getElementById('signatureModal');
 const editSignatureBtn = document.getElementById('editSignatureBtn');
+// ...existing code...
 editSignatureBtn.addEventListener('click', () => {
     signatureModal.style.display = 'flex';
     const canvas = document.getElementById('signatureCanvas');
-    canvas.width = window.innerWidth * 0.9;
-    canvas.height = window.innerHeight * 0.7;
+    const scale = window.devicePixelRatio || 25;
+    canvas.width = window.innerWidth * 0.9 * scale;
+    canvas.height = window.innerHeight * 0.7 * scale;
+    canvas.style.width = (window.innerWidth * 0.9) + "px";
+    canvas.style.height = (window.innerHeight * 0.7) + "px";
     const ctx = canvas.getContext('2d');
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
     ctx.strokeStyle = "#000";
-    ctx.lineWidth = 9; 
+    ctx.lineWidth = 22;
+    ctx.imageSmoothingEnabled = true;
+     ctx.imageSmoothingQuality = "high";
+    ctx.lineCap = "round"; 
+    ctx.lineJoin = "round"; 
+
     let drawing = false;
-    canvas.onmousedown = e => { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); }
-    canvas.onmousemove = e => { if(drawing) { ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } }
-    canvas.onmouseup = () => { drawing = false; }
-    canvas.onmouseleave = () => { drawing = false; }
+    let lastPos = null;
+
+    function getPos(e) {
+        let rect = canvas.getBoundingClientRect();
+        let x, y;
+        if (e.touches) {
+            x = (e.touches[0].clientX - rect.left) * scale;
+            y = (e.touches[0].clientY - rect.top) * scale;
+        } else {
+            x = (e.clientX - rect.left) * scale;
+            y = (e.clientY - rect.top) * scale;
+        }
+        return { x, y };
+    }
+
+    // Mouse events
+    canvas.onmousedown = e => {
+        drawing = true;
+        lastPos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(lastPos.x, lastPos.y);
+    };
+    canvas.onmousemove = e => {
+        if (!drawing) return;
+        const pos = getPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        lastPos = pos;
+    };
+    canvas.onmouseup = e => {
+        if (drawing && lastPos) {
+            // If mouseup without mousemove (just a dot)
+            const pos = getPos(e);
+            if (Math.abs(pos.x - lastPos.x) < 2 && Math.abs(pos.y - lastPos.y) < 2) {
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, ctx.lineWidth / 2, 0, 2 * Math.PI);
+                ctx.fillStyle = ctx.strokeStyle;
+                ctx.fill();
+            }
+        }
+        drawing = false;
+        lastPos = null;
+    };
+    canvas.onmouseleave = () => { drawing = false; lastPos = null; };
+
+    // Touch events
+    canvas.ontouchstart = e => {
+        drawing = true;
+        lastPos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(lastPos.x, lastPos.y);
+        e.preventDefault();
+    };
+    canvas.ontouchmove = e => {
+        if (!drawing) return;
+        const pos = getPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        lastPos = pos;
+        e.preventDefault();
+    };
+    canvas.ontouchend = e => {
+        if (drawing && lastPos) {
+            // If touchend without move (just a dot)
+            if (e.changedTouches && e.changedTouches.length) {
+                const pos = getPos({ touches: e.changedTouches });
+                if (Math.abs(pos.x - lastPos.x) < 2 && Math.abs(pos.y - lastPos.y) < 2) {
+                    ctx.beginPath();
+                    ctx.arc(pos.x, pos.y, ctx.lineWidth / 2, 0, 2 * Math.PI);
+                    ctx.fillStyle = ctx.strokeStyle;
+                    ctx.fill();
+                }
+            }
+        }
+        drawing = false;
+        lastPos = null;
+        e.preventDefault();
+    };
+
     document.getElementById('clearSignature').onclick = () => ctx.clearRect(0,0,canvas.width,canvas.height);
     document.getElementById('closeSignature').onclick = () => signatureModal.style.display = 'none';
     document.getElementById('saveSignature').onclick = () => {
@@ -963,6 +1052,8 @@ editSignatureBtn.addEventListener('click', () => {
         });
     }
 });
+// ...existing code...
+// ..
 const notyf = new Notyf({ position:{x:'right',y:'top'}, duration:3000, ripple:true, dismissible:true });
 document.getElementById('saveBtn').addEventListener('click', function () {
     const formData = new FormData();
@@ -983,7 +1074,7 @@ document.getElementById('saveBtn').addEventListener('click', function () {
     }));
     if(selectedImage) formData.append('image', selectedImage);
     if(selectedSignature) formData.append('signature', selectedSignature);
-    fetch(`http://backend.test/api/save-generated-id`, {
+    fetch(`http://hnvs_backend.test/api/save-generated-id`, {
         method:"POST",
         headers: {
             "Authorization":"Bearer "+localStorage.getItem("token"),

@@ -29,6 +29,7 @@ class Student extends Model
         'school_year',
         'photo_position',
         'signature_position',
+        'doorway'
     ];
 
     public function section() {
