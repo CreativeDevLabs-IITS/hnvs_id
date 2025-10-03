@@ -310,7 +310,7 @@
         infoDiv.textContent = `Showing ${showingStart} to ${showingEnd} of ${total} students`;
     }
     // Fetch students from API
-    fetch("https://hnvs-id-be.creativedevlabs.com/api/showgeneratedids", {
+    fetch(`https://hnvs-id-be.creativedevlabs.com/api/showgeneratedids`, {
         headers: {
             "Accept": "application/json",
             "Authorization": "Bearer " + localStorage.getItem("token")
