@@ -5,6 +5,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 <style>
     body {
@@ -141,12 +142,18 @@
             left: 0px;
             height: 80px;
             z-index: 3;
+            
             }
 
 
-            .signature img {
+   .signature img {
+                object-fit:contain;
             height: 100%;
+            width:100%
+            display:block;
+            
             }
+
 
             .bottom-container {
             position: absolute;
@@ -614,7 +621,7 @@
                         <canvas id="signatureCanvas" style="
                             border:3px solid #fff; 
                             background:#fff; 
-                            width:90vw; 
+                            width:70vw; 
                             height:70vh;
                         "></canvas>
                         <div style="margin-top:15px;">
@@ -636,7 +643,8 @@
                           </div>
                     </div>
               </div>
-              <div style="display: flex; justify-content: center; gap: 20px; margin-top: 5px;">
+              <div style="display: flex; justify-content: center; gap: 20px; margin-top: 135px; scale: 180%;">
+    
                 <div class="id-card" id="idFront" style="display: block;">
                   <div class="watermark-logo">
                     <img src="gear.png" alt="Background Logo" />
@@ -724,7 +732,7 @@
                 </div>
                 <div class="back-signature">
                   <div class="signature-img-wrap">
-                    <img src="" alt="signature" class="back-signature-img">
+                    <img src="logoprincipal.png" alt="signature" class="back-signature-img">
                   </div>
                   <div class="signature-name">RICHARD A. GABISON PhD, DPA</div>
                   <div class="director">School Principal IV</div>
@@ -808,7 +816,7 @@ const studentId = params.get('id') || 1;
 let editMode = false;
 let selectedImage = null;
 let selectedSignature = null;
-fetch(`http://backend.test/api/showstudentid/${studentId}`, {
+fetch(`http://hnvs_backend.test/api/showstudentid/${studentId}`, {
     method: 'GET',
     headers: {
         'Accept': 'application/json',
@@ -931,19 +939,103 @@ signatureDrop.addEventListener('drop', e => {
 });
 const signatureModal = document.getElementById('signatureModal');
 const editSignatureBtn = document.getElementById('editSignatureBtn');
+// ...existing code...
 editSignatureBtn.addEventListener('click', () => {
     signatureModal.style.display = 'flex';
     const canvas = document.getElementById('signatureCanvas');
-    canvas.width = window.innerWidth * 0.9;
-    canvas.height = window.innerHeight * 0.7;
+    const scale = window.devicePixelRatio || 25;
+    canvas.width = window.innerWidth * 0.9 * scale;
+    canvas.height = window.innerHeight * 0.7 * scale;
+    canvas.style.width = (window.innerWidth * 0.9) + "px";
+    canvas.style.height = (window.innerHeight * 0.7) + "px";
     const ctx = canvas.getContext('2d');
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
     ctx.strokeStyle = "#000";
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 22;
+    ctx.imageSmoothingEnabled = true;
+     ctx.imageSmoothingQuality = "high";
+    ctx.lineCap = "round"; 
+    ctx.lineJoin = "round"; 
+
     let drawing = false;
-    canvas.onmousedown = e => { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); }
-    canvas.onmousemove = e => { if(drawing) { ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } }
-    canvas.onmouseup = () => { drawing = false; }
-    canvas.onmouseleave = () => { drawing = false; }
+    let lastPos = null;
+
+    function getPos(e) {
+        let rect = canvas.getBoundingClientRect();
+        let x, y;
+        if (e.touches) {
+            x = (e.touches[0].clientX - rect.left) * scale;
+            y = (e.touches[0].clientY - rect.top) * scale;
+        } else {
+            x = (e.clientX - rect.left) * scale;
+            y = (e.clientY - rect.top) * scale;
+        }
+        return { x, y };
+    }
+
+    // Mouse events
+    canvas.onmousedown = e => {
+        drawing = true;
+        lastPos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(lastPos.x, lastPos.y);
+    };
+    canvas.onmousemove = e => {
+        if (!drawing) return;
+        const pos = getPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        lastPos = pos;
+    };
+    canvas.onmouseup = e => {
+        if (drawing && lastPos) {
+            // If mouseup without mousemove (just a dot)
+            const pos = getPos(e);
+            if (Math.abs(pos.x - lastPos.x) < 2 && Math.abs(pos.y - lastPos.y) < 2) {
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, ctx.lineWidth / 2, 0, 2 * Math.PI);
+                ctx.fillStyle = ctx.strokeStyle;
+                ctx.fill();
+            }
+        }
+        drawing = false;
+        lastPos = null;
+    };
+    canvas.onmouseleave = () => { drawing = false; lastPos = null; };
+
+    // Touch events
+    canvas.ontouchstart = e => {
+        drawing = true;
+        lastPos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(lastPos.x, lastPos.y);
+        e.preventDefault();
+    };
+    canvas.ontouchmove = e => {
+        if (!drawing) return;
+        const pos = getPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        lastPos = pos;
+        e.preventDefault();
+    };
+    canvas.ontouchend = e => {
+        if (drawing && lastPos) {
+            // If touchend without move (just a dot)
+            if (e.changedTouches && e.changedTouches.length) {
+                const pos = getPos({ touches: e.changedTouches });
+                if (Math.abs(pos.x - lastPos.x) < 2 && Math.abs(pos.y - lastPos.y) < 2) {
+                    ctx.beginPath();
+                    ctx.arc(pos.x, pos.y, ctx.lineWidth / 2, 0, 2 * Math.PI);
+                    ctx.fillStyle = ctx.strokeStyle;
+                    ctx.fill();
+                }
+            }
+        }
+        drawing = false;
+        lastPos = null;
+        e.preventDefault();
+    };
 
     document.getElementById('clearSignature').onclick = () => ctx.clearRect(0,0,canvas.width,canvas.height);
     document.getElementById('closeSignature').onclick = () => signatureModal.style.display = 'none';
@@ -955,6 +1047,8 @@ editSignatureBtn.addEventListener('click', () => {
         });
     }
 });
+// ...existing code...
+// ..
 const notyf = new Notyf({ position:{x:'right',y:'top'}, duration:3000, ripple:true, dismissible:true });
 document.getElementById('saveBtn').addEventListener('click', function () {
     const formData = new FormData();
@@ -975,7 +1069,7 @@ document.getElementById('saveBtn').addEventListener('click', function () {
     }));
     if(selectedImage) formData.append('image', selectedImage);
     if(selectedSignature) formData.append('signature', selectedSignature);
-    fetch(`http://backend.test/api/save-generated-id`, {
+    fetch(`http://hnvs_backend.test/api/save-generated-id`, {
         method:"POST",
         headers: {
             "Authorization":"Bearer "+localStorage.getItem("token"),

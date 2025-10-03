@@ -78,27 +78,36 @@
 
     let students = []; 
 
-    function showStudentInfo(student) {
+// ...existing code...
+function showStudentInfo(student) {
     infoDiv.innerHTML = `
-        <div style="border:1px solid #ddd; padding:15px; border-radius:5px; margin-top:15px; background:#fafafa;">
-            <h5>${student.firstname ?? ""} ${student.middlename ?? ""} ${student.lastname ?? ""}</h5>
-            <p><strong>Year Level:</strong> ${student.year_level ?? "-"}</p>
-            <p><strong>Section:</strong> ${student.section?.name ?? "-"}</p>
-            <div style="margin-top:15px; text-align:right;">
-                <button onclick="window.location.href='edit-generate_id.php?id=${student.id}'" 
-                    style="
-                        padding:8px 15px; 
-                        border:none; 
-                        border-radius:5px; 
-                        background:#007bff; 
-                        color:#fff; 
-                        cursor:pointer;">
+        <div style="max-width:400px; margin:auto; background:#fff; border-radius:15px; box-shadow:0 2px 8px #0001; padding:25px; margin-top:20px;">
+            <div style="text-align:center; font-weight:600; font-size:1.2rem; margin-bottom:10px;">
+                ${student.firstname ?? ""} ${student.middlename ?? ""} ${student.lastname ?? ""}
+            </div>
+            <div style="margin-bottom:10px;">
+                <strong>LRN:</strong> ${student.lrn ?? "-"}
+            </div>
+            <div style="display:flex; gap:15px; align-items:flex-start;">
+                <div>
+                    <img src="${student.qr_path ?? ''}" alt="QR Code" style="border-radius:5px; width:80px; height:80px;">
+                </div>
+                <div style="flex:1;">
+                    <div><strong>Address:</strong> ${student.barangay ?? "-"}, ${student.municipality ?? "-"}</div>
+                    <div><strong>Birthdate:</strong> ${student.birthdate ?? "-"}</div>
+                    <div><strong>Section:</strong> ${student.section?. name ?? "-"}</div>
+                </div>
+            </div>
+            <div style="margin-top:20px;">
+                <button onclick="window.location.href='edit-generate_id.php?id=${student.id}'"
+                    style="width:100%; padding:10px; border:none; border-radius:8px; background:#2563eb; color:#fff; font-weight:500; font-size:1rem; cursor:pointer;">
                     Edit
                 </button>
             </div>
         </div>
     `;
 }
+// ...existing code...
 
     function renderStudents(list) {
         resultsDiv.innerHTML = "";

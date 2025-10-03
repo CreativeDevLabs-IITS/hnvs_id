@@ -1,0 +1,1192 @@
+<?php include 'partials/_head.php' ?>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<!-- Notyf CSS & JS (kung wala pa) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+<style>
+    body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            }
+
+            .id-card {
+            width: 204px;
+            height: 324px;
+            background: #B8D3E6;
+            position: relative;
+            color: white;
+            overflow: hidden;
+            }
+
+            .watermark-logo {
+            position: absolute;
+            top: 39%;
+            left: 84%;
+            transform: translate(-50%, -50%);
+            opacity: 0.5;
+            z-index: 0;
+            width: 250px;
+            height: auto;
+            }
+
+            .watermark-logo img {
+            width: 100%;
+            height: auto;
+            }
+
+            .header {
+            position: absolute;
+            top: 8px;
+            left: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+            }
+
+            .header img {
+            height: 43px;
+            width: auto;
+            margin-bottom: 2px;
+            }
+
+            .school-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.2;
+            text-align: center;
+            color: black;
+            margin-left: 2px;
+            }
+
+            .school-name {
+            font-size: 6px;
+            font-weight: 700;
+            margin-bottom:2px;
+            }
+
+            .school-level {
+            font-size: 7.5px;
+            font-weight: bold;
+            margin-bottom:2px;
+            line-height: 1;
+            }
+
+            .school-id {
+            font-weight: bold;
+            font-size: 6px;
+            }
+
+            .lrn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 28px;
+            height: 70%;
+            background: #012b60;
+            }
+
+            .lrn-bar {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            text-align: center;
+            font-weight: bold;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 0;
+            margin-top:35px;
+            margin-left:5px;
+            }
+
+            .lrn-label {
+            position: absolute;
+            top: 10px;
+            right: 5px;
+            font-weight: bold;
+            font-size: 10px;
+            color: #ffffffff;
+            z-index: 3;
+            }
+
+            .photo {
+            position: absolute;
+            
+            left: 63%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 190px;
+            border-radius: 5px;
+            /* z-index: ; para sure nasa ibabaw */
+            }
+
+            .photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 5px;
+            }
+
+
+.signature {
+  position: absolute;
+  top: 100px;
+  left: 0px;
+  height: 80px;
+  width: 180px; /* <-- dagdag width */
+  z-index: 3;
+}
+.signature img {
+  height: 100%;
+  width: 100%; /* <-- dagdag width */
+  object-fit: contain; /* para hindi ma-distort */
+  display: block;
+}
+
+            .bottom-container {
+            position: absolute;
+            bottom: 50px;
+            left: 0;
+            width: 100%;
+            height: 90px;
+            background: #012b60;
+            display: flex;
+            align-items: flex-start;
+            padding: 10px;
+            box-sizing: border-box;
+            z-index: 1;
+            }
+
+            .left-box {
+            display: flex;
+            flex-direction: column;
+            color: white;
+            gap:8px;
+            }
+
+            .name {
+            font-weight: 700;
+            line-height: 1;
+            }
+
+            .last-name {
+            font-size: 14px;
+            }
+
+            .first-name {
+            font-size: 11px;
+            }
+
+            .name h2 {
+            font-size: 11px;
+            font-weight: 400;
+            line-height: 1.3;
+            }
+
+            .info {
+            line-height: 1;
+            color: white;
+            margin-top: 0px;
+            font-weight: bold;
+            }
+
+            .dob {
+            font-size: 7px;
+            }
+
+            .dob-num {
+            font-size: 10px;
+            }
+
+            .address {
+            margin-top:5px;
+            font-size: 7px;
+            }
+
+            .brgy-address {
+            font-size: 10px;
+            }
+
+            .qr-code {
+            position: absolute;
+            right: 10px;
+            bottom: 60px;
+            width: 70px;
+            height: 70px;
+            z-index: 2;
+            background-color: #fff; /* ✅ White background */
+            padding: 2px; /* space sa loob */
+        
+            box-shadow: 0 0 3px rgba(0,0,0,0.2); /* optional, para lumutang ng konti */
+            }
+
+            .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* para sure sakto yung QR */
+            }
+
+            .track {
+            position: absolute;
+            bottom: 0px;
+            width: 100%;
+            background: white;
+            z-index: 2;
+            padding: 2px 6px;
+            height: 50px;
+            font-weight: bold;
+            color: black;
+            }
+
+            .strand {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            font-size: 8px;
+            
+            }
+
+            .doorway-word {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            font-size: 6px;
+            }
+
+            .doorway {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            font-size: 8px;
+            }
+
+            /* baack css */
+
+            .id.back {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            background: none;
+            box-shadow: none;
+            border-radius: 0;
+            padding: 0;
+            height: 324px;
+            width: 204px;
+        }
+        .id-card-back {
+            height: 300px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            display: flex;
+            font-size: 9px;
+            position: relative;
+            overflow: hidden;
+        }
+        .left-bar {
+            width: 38px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            font-weight: bold;
+            font-size: 7px;
+        }
+        .back-top {
+            padding: 12px 8px 5px 8px;
+            gap: 5px;
+        }
+        .left-content { width: 25%; }
+        .right-content {
+            width: 75%;
+            flex: 1;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8px;
+        }
+        .top-text {
+            text-align: center;
+            font-size: 7px;
+        }
+        .top-text b {
+            font-size: 7px;
+        }
+        .back-signature {
+            position: relative;
+            text-align: center;
+            margin: 18px 0 4px 0;
+            font-size: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            min-height: 0px;
+        }
+        .signature-img-wrap {
+            position: absolute;
+            top: -11px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 28px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            margin: 0;
+            z-index: 2;
+        }
+        .back-signature-img {
+            width: 85px;
+            height: 45px;
+            object-fit: contain;
+            display: block;
+        }
+        .signature-name {
+            font-weight: bold;
+            font-size: 7px;
+        }
+        .director {
+            font-size: 7px;
+            margin-top: -5px;
+        }
+        .reminders {
+            text-align: center;
+            font-size: 7px;
+            line-height: 1.2;
+        }
+        .reminders b { font-size: 6px; }
+        .contact 
+        { 
+            text-align: center; 
+            font-size: 7px; 
+            margin-top: 6px; 
+            line-height: 1.2;
+        }
+        .contact_1 {
+            text-align: center;
+            font-size: 6px;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+        .contact_1 b {
+            font-size: 7px;
+        }
+        .contact-name {
+            font-weight: bold;
+            font-size: 10px;
+            margin-top: 2px;
+        }
+        .contact-number {
+            font-size: 9px;
+            font-weight:bold;
+            margin-bottom: 4px;
+        }
+        .qr-box {
+            background: black;
+            color: white;
+            font-size: 7px;
+            text-align: center;
+            padding: 4px 2px;
+            margin-top: 1px;
+            font-weight: bold;
+        }
+        .facebook-footer {
+            background: #000000;
+            color: #fff;
+            font-size: 7px;
+            text-align: center;
+            padding: 5px 0 5px 0;
+            letter-spacing: 0.5px;
+            width: 204px;
+            font-family: inherit;
+        }
+        .year-strip { width: auto; background-color: white; font-family: "Montserrat", sans-serif; }
+        .year-strip table { border-collapse: collapse; table-layout: fixed; }
+        td { text-align: center; vertical-align: middle; padding: 0; }
+        .rotated-text {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            text-orientation: mixed;
+            display: inline-block;
+            font-size: 7px;
+            line-height: 1;
+        }
+        .year-cell, .semester-cell {
+            background-color: #000;
+            color: white;
+            border: 1px solid #333;
+            width: 20px;
+            height: 94px;
+        }
+        .word-school-year {
+            background-color: #000;
+            color: white;
+            border: 1px solid #333;
+            width: 20px;
+            height: 90px;
+        }
+        .first-cell, .second-cell {
+            background-color: white;
+            color: black;
+            border: 1px solid #333;
+            width: 20px;
+            height: 90px;
+        }
+        .empty-cell {
+            background-color: white;
+            border: 1px solid #333;
+            width: 15px;
+            height: 90px;
+        }
+        @media print {
+            html, body {
+                zoom: 1.03;
+                padding: 0;
+                margin: 0;
+            }
+
+            body * {
+                visibility: hidden;
+            }
+
+            .id.back, .id.back * {
+                visibility: visible;
+            }
+
+            .id.back {
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: white;
+            }
+
+            @page {
+                margin: 0;
+                size: auto;
+            }
+
+            .year-cell, .semester-cell,
+            .rotated-text {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .first-cell .rotated-text,
+            .second-cell .rotated-text {
+                background-color: white !important;
+                color: black !important;
+            }
+            }
+            .switch-btn {
+        background: linear-gradient(90deg, #5420B5 60%, #7B3FF2 100%);
+        color: #fff;
+        border: none;
+        outline: none;
+        padding: 10px 28px;
+        margin: 0 8px;
+        border-radius: 24px;
+        font-size: 15px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(84,32,181,0.08);
+        transition: background 0.2s, transform 0.2s;
+        }
+
+        .switch-btn:hover, .switch-btn.active {
+            background: linear-gradient(90deg, #2b2a2c 60%, #212122 100%);
+            transform: translateY(-2px) scale(1.04);
+        }
+
+           .hidden {
+            display: none;
+        }
+        .hidden-content {
+  display: none !important;
+}
+</style>
+<style>
+  .editable-photo:hover {
+    border: 3px dashed #007bff;
+    border-radius: 8px;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+  .editable-signature:hover {
+    border: 3px dashed #28a745;
+    border-radius: 8px;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+</style>
+<div id="mainContent">
+  <div style="height: auto; background-color: #f1f1f1;" class="dashboard">
+    <div style="position: sticky; top: 0; z-index: 5">
+      <?php include 'partials/_navbar.php' ?>
+    </div>
+    <div style="display: grid; grid-template-columns: 250px 1fr">
+      <?php include 'partials/_sidebar.php' ?>
+      <div class="py-3 pe-3 ps-5">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="mt-3 breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item" style="font-size: 14px;">Edit Generate ID</li>
+            <li class="breadcrumb-item" style="font-size: 14px;">
+              <a href="teachers.php" class="text-decoration-none text-dark">Editor</a>
+            </li>
+          </ol>
+        </nav>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="fs-4 mt-2">Edit Generate ID</div>
+        </div>
+
+        <!-- Buttons -->
+        <div style="width:100%; display:flex; flex-direction:column; align-items:center; margin-top:20px;">
+          <div style="margin-bottom: 20px;">
+            <button id="showFront" class="switch-btn active">Front</button>
+            <button id="showBack" class="switch-btn">Back</button>
+            <button id="editBtn" class="switch-btn">Edit</button>
+            <button id="saveBtn" class="switch-btn">Save</button>
+            <button id="printBtn" class="switch-btn">Print</button>
+            <button id="openSignaturePadModal" class="switch-btn">Open Pad</button>
+          </div>
+        </div>
+
+        <!-- ID Cards Side by Side -->
+        <div style="display: flex; justify-content: center; gap: 20px; margin-top: 5px;">
+          <!-- ID FRONT -->
+              <div class="id-card" id="idFront" style="display: block;">
+                  <div class="watermark-logo">
+                    <img src="gear.png" alt="Background Logo" />
+                  </div>
+
+                  <div class="logo-school"></div>
+
+                  <div class="header">
+                    <img src="logo.png" alt="Logo" />
+                    <div class="school-info">
+                      <div class="school-name">HILONGOS NATIONAL <br /><span>VOCATIONAL SCHOOL</span></div>
+                      <div class="school-level">SENIOR HIGH <br> SCHOOL DEPARTMENT</div>
+                      <div class="school-id">SCHOOL ID: 303374</div>
+                    </div>
+                  </div>
+
+                <!-- imong HTML code nimo diri -->
+                  <div class="lrn">
+                    <div class="lrn-label">LRN</div>
+                    <div class="lrn-bar" id="lrn-bar"></div>
+                  </div>
+
+                  <div class="photo" id="photoDrop">
+                    <img id="student-photo" src="bakla.png" alt="Photo" />
+                    <input type="file" id="photoInput" accept="image/*" style="display:none;" />
+                  </div>
+
+                  <div class="signature" id="signatureDrop">
+                    <img id="student-signature" src="signatura.png" alt="Signature" />
+                    <input type="file" id="signatureInput" accept="image/*" style="display:none;" />
+                  </div>
+
+                  <div class="bottom-container">
+                    <div class="left-box">
+                      <div class="name">
+                        <div class="last-name" id="last-name"></div>
+                        <div class="first-name" id="first-name">
+                          <span class="middle-name" id="middle-name"></span>
+                        </div>
+                      </div>
+                      <div class="info">
+                        <div class="dob">Date of Birth:</div>
+                        <div class="dob-num" id="dob-num"></div>
+                        <div class="address">Address:</div>
+                        <div class="brgy-address" id="brgy-address"></div>
+                      </div>
+                    </div>
+                  </div>
+                <div class="qr-code">
+                  <img id="student-qr" src="" alt="QR" />
+                </div>
+                  <div class="track">
+                    <div class="strand">
+                      SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
+                    </div>
+                    <div class="doorway-word">Doorway:</div>
+                    <div class="doorway">DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
+                  </div>
+                </div>
+
+
+          <!-- ID BACK -->
+          <div class="id back" id="idBack" style="display: none;">
+              <div class="id-card-back back-top">
+                <div class="left-content">
+                  <div class="left-bar year-strip">
+                    <table id="schoolYearTable">
+                      <tr>
+                        <td class="word-school-year"></td>
+                        <td class="year-cell"><div class="rotated-text">2024-2025</div></td>
+                        <td class="empty-cell"></td>
+                        <td class="empty-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="word-school-year"><div class="rotated-text">SCHOOL YEAR</div></td>
+                        <td class="year-cell"><div class="rotated-text">2023-2024</div></td>
+                        <td class="empty-cell"></td>
+                        <td class="empty-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="word-school-year"></td>
+                        <td class="semester-cell"><div class="rotated-text">Semester</div></td>
+                        <td class="first-cell"><div class="rotated-text">First</div></td>
+                        <td class="second-cell"><div class="rotated-text">Second</div></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="right-content">
+                  <div class="top-text">
+                    This is to certify that the person whose<br>
+                    picture and signature appear herein<br>
+                    is a bonafide student of <b>Hilongos<br>
+                    National Vocaational School.</b>
+                  </div>
+
+                  <div class="back-signature">
+                    <div class="signature-img-wrap">
+                      <img src="" alt="signature" class="back-signature-img">
+                    </div>
+                    <div class="signature-name">RICHARD A. GABISON PhD, DPA</div>
+                    <div class="director">School Principal IV</div>
+                  </div>
+
+                  <div class="reminders">
+                    <b>IMPORTANT REMINDERS</b><br>
+                    Always wear this ID while inside<br>
+                    the school campus.<br>
+                    <b>Do not forget your<br>STUDENT LRN NUMBER.</b>
+                  </div>
+
+                  <div class="contact_1">
+                    If lost and found, please surrender<br>
+                    this ID to the<br><b>
+                    HNVS SHS OFFICE,</b><br>
+                    Hilongos National Vocational School <br>RV Fulache St. Hilongos, Leyte
+                  </div>
+
+                  <div class="contact">
+                    <b>In case of emergency,<br>please contact</b>
+                    <div class="contact-name" id="ename">EFREN IBAÑEZ</div>
+                    <div class="contact-number" id="cnumber">0935-121-9395</div>
+                  </div>
+
+                  <div class="qr-box">
+                    PLEASE SCAN THE QR<br>
+                    CODE AT THE FRONT<br>
+                    FOR MORE VALIDATION &<br>
+                    CONTACT INFORMATION.
+                  </div>
+                </div>
+              </div>
+
+              <div class="facebook-footer back-bottom">
+                https://www.hnvs.edu.ph.com/
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Signature Pad Modal -->
+<div id="signaturePadModal" class="fixed inset-0 z-50 bg-black bg-opacity-70 hidden flex items-center justify-center">
+  <div class="bg-white w-full h-full flex flex-col justify-center items-center relative font-medium">
+    <!-- Top-right close button -->
+    <div class="absolute top-4 right-4">
+      <button id="closeSignaturePadModal" class="text-gray-600 hover:text-red-600 text-3xl font-bold">
+        &times;
+      </button>
+    </div>
+    <h2 class="text-xl font-semibold mb-4 mt-6">Draw Your Signature</h2>
+
+    <!-- Stroke Thickness Selector -->
+    <div class="mb-4">
+      <label for="signatureStrokeWeight" class="block text-sm font-medium text-gray-700 mb-1">Stroke Thickness:</label>
+      <select id="signatureStrokeWeight" class="border rounded px-3 py-1">
+        <option value="1">Thin</option>
+        <option value="2">Light</option>
+        <option value="3" selected>Normal</option>
+        <option value="5">Bold</option>
+        <option value="7">Extra Bold</option>
+        <option value="10">Heavy</option>
+      </select>
+    </div>
+
+    <!-- Canvas -->
+    <div class="border border-gray-400 bg-gray-100 rounded p-2 shadow">
+      <canvas id="signaturePadCanvasBox" style="width: 900px; height: 500px;" class="bg-white rounded shadow"></canvas>
+    </div>
+    <input type="hidden" id="signatureBase64" name="signature">
+
+    <!-- Buttons -->
+    <div id="signatureBtnWrapper" class="mt-4 flex gap-4 font-normal mb-6">
+      <button id="clearSignaturePadBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Clear</button>
+      <button id="doneSignaturePadModal" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">Done</button>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+<?php include 'partials/_logout.php' ?>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const idFront = document.getElementById('idFront');
+    const idBack = document.getElementById('idBack');
+    const frontBtn = document.getElementById('showFront');
+    const backBtn = document.getElementById('showBack');
+
+    // Show Front
+    frontBtn.addEventListener('click', () => {
+      idFront.style.display = 'block';
+      idBack.style.display = 'none';
+      frontBtn.classList.add('active');
+      backBtn.classList.remove('active');
+    });
+
+    // Show Back
+    backBtn.addEventListener('click', () => {
+      idFront.style.display = 'none';
+      idBack.style.display = 'block';
+      backBtn.classList.add('active');
+      frontBtn.classList.remove('active');
+    });
+  });
+</script>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const studentId = params.get('id') || 1;
+
+// fetch student info
+fetch(`http://hnvs_backend.test/api/showstudentid/${studentId}`, {
+  method: 'GET',
+  headers: {
+    'Accept': 'application/json',
+    'Authorization': 'Bearer ' + localStorage.getItem('token')
+  }
+})
+.then(res => res.json())
+.then(data => {
+  document.getElementById('lrn-bar').textContent = data.lrn;
+  document.getElementById('last-name').textContent  = data.lastname;
+  document.getElementById('first-name').firstChild.textContent = data.firstname + ' ';
+  document.getElementById('middle-name').textContent = data.middlename ? data.middlename.charAt(0) + '.' : '';
+  document.getElementById('dob-num').textContent   = data.birthdate;
+  document.getElementById('cnumber').textContent   = data.emergency_contact;
+  document.getElementById('brgy-address').textContent = `${data.barangay}, ${data.municipality}`;
+  document.getElementById('student-photo').src = data.image || "bakla.png";
+
+  if (data.signature) {
+    document.getElementById('student-signature').src = `http://hnvs_backend.test/storage/${data.signature}`;
+  } else {
+    document.getElementById('student-signature').src = "signatura.png";
+  }
+
+ 
+  if (data.qr_path) {
+      document.getElementById('student-qr').src = data.qr_path;
+  } else {
+      document.getElementById('student-qr').src = ''; 
+  }
+
+  // --- Restore photo position & size ---
+  if (data.photo_position) {
+    try {
+      const pos = JSON.parse(data.photo_position);
+      const photo = document.getElementById('student-photo');
+      photo.style.position = 'absolute';
+      photo.style.left = pos.left + 'px';
+      photo.style.top = pos.top + 'px';
+      photo.style.width = pos.width + 'px';
+      photo.style.height = pos.height + 'px';
+    } catch (e) {
+      console.error('Invalid photo_position JSON:', e);
+    }
+  }
+
+  // --- Restore signature position & size ---
+  if (data.signature_position) {
+    try {
+      const pos = JSON.parse(data.signature_position);
+      const signature = document.getElementById('student-signature');
+      signature.style.position = 'absolute';
+      signature.style.left = pos.left + 'px';
+      signature.style.top = pos.top + 'px';
+      signature.style.width = pos.width + 'px';
+      signature.style.height = pos.height + 'px';
+    } catch (e) {
+      console.error('Invalid signature_position JSON:', e);
+    }
+  }
+});
+let editMode = false;
+let selectedImage = null;
+let selectedSignature = null;
+
+function makeDraggable(el) {
+  let isDragging = false;
+  let offsetX, offsetY;
+  let sizeW = el.offsetWidth;
+  let sizeH = el.offsetHeight;
+
+  el.ondragstart = () => false;
+
+  el.addEventListener("mousedown", (e) => {
+    if (!editMode) return;
+    isDragging = true;
+    offsetX = e.clientX - el.offsetLeft;
+    offsetY = e.clientY - el.offsetTop;
+    el.style.position = "absolute";
+    el.style.zIndex = 1000;
+    el.style.cursor = "move";
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+    el.style.left = (e.clientX - offsetX) + "px";
+    el.style.top = (e.clientY - offsetY) + "px";
+  });
+
+  document.addEventListener("mouseup", () => {
+    isDragging = false;
+    if (editMode) el.style.cursor = "pointer";
+  });
+
+  el.addEventListener("wheel", (e) => {
+    if (!editMode) return;
+    e.preventDefault();
+    if (e.deltaY < 0) { sizeW += 10; sizeH += 10; } 
+    else { sizeW -= 10; sizeH -= 10; }
+    if (sizeW < 30) sizeW = 30;
+    if (sizeH < 30) sizeH = 30;
+    el.style.width = sizeW + "px";
+    el.style.height = sizeH + "px";
+  });
+}
+
+document.getElementById('editBtn').addEventListener('click', () => {
+  editMode = true;
+
+  const photo = document.getElementById('student-photo');
+  const signature = document.getElementById('student-signature');
+
+  if (photo) {
+    photo.classList.add("editable-photo");
+    makeDraggable(photo);
+  }
+
+  if (signature) {
+    signature.classList.add("editable-signature");
+    makeDraggable(signature);
+  }
+});
+
+// ================= PHOTO =================
+document.getElementById('photoInput').addEventListener('change', function() {
+  if (editMode && this.files && this.files[0]) {
+    selectedImage = this.files[0];
+    document.getElementById('student-photo').src = URL.createObjectURL(this.files[0]);
+  }
+});
+const photoDrop = document.getElementById('photoDrop');
+photoDrop.addEventListener('dragover', (e) => {
+  if (!editMode) return;
+  e.preventDefault();
+  photoDrop.classList.add('dragover');
+});
+photoDrop.addEventListener('dragleave', () => {
+  if (!editMode) return;
+  photoDrop.classList.remove('dragover');
+});
+photoDrop.addEventListener('drop', (e) => {
+  if (!editMode) return;
+  e.preventDefault();
+  photoDrop.classList.remove('dragover');
+  if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+    selectedImage = e.dataTransfer.files[0];
+    document.getElementById('student-photo').src = URL.createObjectURL(selectedImage);
+  }
+});
+  
+// ================= SIGNATURE =================
+document.getElementById('signatureInput').addEventListener('change', function() {
+  if (editMode && this.files && this.files[0]) {
+    selectedSignature = this.files[0];
+    document.getElementById('student-signature').src = URL.createObjectURL(this.files[0]);
+  }
+});
+
+const signatureDrop = document.getElementById('signatureDrop');
+signatureDrop.addEventListener('dragover', (e) => {
+  if (!editMode) return;
+  e.preventDefault();
+  signatureDrop.classList.add('dragover');
+});
+signatureDrop.addEventListener('dragleave', () => {
+  if (!editMode) return;
+  signatureDrop.classList.remove('dragover');
+});
+signatureDrop.addEventListener('drop', (e) => {
+  if (!editMode) return;
+  e.preventDefault();
+  signatureDrop.classList.remove('dragover');
+  if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+    selectedSignature = e.dataTransfer.files[0];
+    document.getElementById('student-signature').src = URL.createObjectURL(selectedSignature);
+  }
+});
+const notyf = new Notyf({
+    position: { x: 'right', y: 'top' },
+    duration: 3000, 
+    ripple: true,   
+    dismissible: true 
+});
+
+document.getElementById('saveBtn').addEventListener('click', function () {
+  const formData = new FormData();
+  formData.append('student_id', studentId);
+
+  const photo = document.getElementById('student-photo');
+  const signature = document.getElementById('student-signature');
+
+  formData.append('photo_position', JSON.stringify({
+    left: photo.offsetLeft,
+    top: photo.offsetTop,
+    width: photo.offsetWidth,
+    height: photo.offsetHeight
+  }));
+  formData.append('signature_position', JSON.stringify({
+    left: signature.offsetLeft,
+    top: signature.offsetTop,
+    width: signature.offsetWidth,
+    height: signature.offsetHeight
+  }));
+
+  if (selectedImage) formData.append('image', selectedImage);
+  if (selectedSignature) formData.append('signature', selectedSignature);
+
+  fetch(`http://hnvs_backend.test/api/save-generated-id`, {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer " + localStorage.getItem("token"),
+      "Accept": "application/json"
+    },
+    body: formData
+  })
+  .then(res => res.json())
+  .then(res => {
+    notyf.success("Generated ID saved successfully!");
+    editMode = false; 
+  })
+  .catch(err => {
+    console.error("Save error:", err);
+    notyf.error("Failed to save Generated ID.");
+  });
+});
+
+</script>
+
+<!-- // ================= SignaturePad ================= -->
+ <script>
+ 
+ document.addEventListener("DOMContentLoaded", () => {
+    const signaturePadModal = document.getElementById("signaturePadModal");
+    const openSignatureBtn = document.getElementById("openSignaturePadModal");
+    const closeSignatureBtn = document.getElementById("closeSignaturePadModal");
+    const doneSignatureBtn = document.getElementById("doneSignaturePadModal");
+    const clearSignatureBtn = document.getElementById("clearSignaturePadBtn");
+    const signatureCanvas = document.getElementById("signaturePadCanvasBox");
+    const mainContent = document.getElementById("mainContent");
+    const signatureBase64Input = document.getElementById("signatureBase64");
+
+    // Resize canvas for Signature Pad
+    function resizeCanvas() {
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      const style = getComputedStyle(signatureCanvas);
+      const width = parseInt(style.width);
+      const height = parseInt(style.height);
+      signatureCanvas.width = width * ratio;
+      signatureCanvas.height = height * ratio;
+
+      const ctx = signatureCanvas.getContext("2d");
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(ratio, ratio);
+    }
+
+    // Initialize Signature Pad
+    const signaturePad = new SignaturePad(signatureCanvas, {
+      penColor: "black",
+      minWidth: 3,
+      maxWidth: 3,
+    });
+
+       // Clear Signature Pad
+    clearSignatureBtn.addEventListener("click", () => {
+      signaturePad.clear();
+    });
+
+    // Handle stroke thickness change
+    const strokeWeightSelect = document.getElementById("signatureStrokeWeight");
+    strokeWeightSelect.addEventListener("change", () => {
+      const thickness = parseInt(strokeWeightSelect.value);
+      signaturePad.minWidth = thickness;
+      signaturePad.maxWidth = thickness;
+    });
+
+    // Open Modal
+    openSignatureBtn.addEventListener("click", () => {
+      console.log("Opening Signature Pad Modal...");
+      signaturePadModal.classList.remove("hidden");
+      mainContent.classList.add("hidden-content");
+      setTimeout(() => {
+        resizeCanvas();
+        signaturePad.clear();
+        console.log("Canvas resized and cleared.");
+      }, 50);
+    });
+ 
+
+    // Close Modal
+  doneSignatureBtn.addEventListener("click", async () => {
+  signaturePadModal.classList.add("hidden");
+  mainContent.classList.remove("hidden-content");
+  if (!signaturePad.isEmpty()) {
+    const canvas = signaturePad.canvas;
+    const ctx = canvas.getContext("2d");
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+      if (r > 240 && g > 240 && b > 240) {
+        data[i + 3] = 0; 
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+    const cleanedDataUrl = canvas.toDataURL("image/png");
+    signatureBase64Input.value = cleanedDataUrl;
+
+    const token = localStorage.getItem("token");
+    const urlParams = new URLSearchParams(window.location.search);
+    const studentId = urlParams.get('id');
+    console.log("Signature base64:", cleanedDataUrl.replace(/^data:image\/png;base64,/, ''));
+    console.log("Student ID:", studentId);
+    try {
+      const response = await fetch(`http://hnvs_backend.test/api/update-signature-pad/${studentId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          signature: cleanedDataUrl.replace(/^data:image\/png;base64,/, '')
+        }),
+      });
+
+      const result = await response.json();
+      console.log("API response:", result);
+
+      if (response.ok) {
+        showSuccessAnimation("Signature updated successfully!");
+        setTimeout(() => {
+          window.location.href = `edit-generate_id.php?id=${studentId}`;
+        }, 1500);
+      } else {
+        notyf.error(result.message || "Failed to update signature.");
+        console.error(result);
+      }
+    } catch (error) {
+      console.error("Error saving signature:", error);
+      notyf.error("Something went wrong while saving.");
+    }
+
+  } else {
+    signatureBase64Input.value = "";
+    notyf.warning("No signature detected.");
+  }
+
+  toggleSignatureButton();
+});
+
+    // Resize canvas on window resize
+    window.addEventListener("resize", () => {
+      if (!signaturePadModal.classList.contains("hidden")) {
+        resizeCanvas();
+      }
+    });
+ 
+    function toggleSignatureButton() {
+    const signatureWrapper = document.getElementById("signatureBtnWrapper");
+    if (signatureBase64Input.value) {
+      signatureWrapper.classList.add("hidden");
+    } else {
+      signatureWrapper.classList.remove("hidden");
+    }
+  }
+  window.addEventListener("DOMContentLoaded", toggleSignatureButton);
+  closeSignatureBtn.addEventListener("click", () => {
+    toggleSignatureButton();
+  });
+  });
+ </script>
+
+ <script>
+  function goBack() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const studentId = urlParams.get('id');
+    if (studentId) {
+      window.location.href = `edit-generate_id.php?id=${studentId}`;
+    } else {
+      window.location.href = 'edit-generate_id.php';
+    }
+  }
+
+   function showSuccessAnimation(message) {
+        const toast = document.createElement('div');
+        toast.className = 'custom-toast-success';
+        toast.innerHTML = `
+            <svg class="success-svg" viewBox="0 0 52 52">
+                <circle class="success-circle" cx="26" cy="26" r="25" fill="none" stroke="#4CAF50" stroke-width="4"/>
+                <path class="success-check" fill="none" stroke="#4CAF50" stroke-width="4" d="M14 27l7 7 16-16"/>
+            </svg>
+            <div class="toast-message">${message}</div>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 5);
+        setTimeout(() => {
+            location.reload();
+        }, 1500);
+    }
+    
+</script>
+
+
