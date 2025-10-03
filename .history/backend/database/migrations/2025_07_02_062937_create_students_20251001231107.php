@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('barangay');
             $table->string('municipality');
             $table->integer('age')->nullable();
-            $table->string('contact')->nullable();
+            $table->string('contact');
             $table->string('lrn');
             $table->string('emergency_contact')->nullable();
             $table->date('birthdate');
@@ -28,8 +28,8 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('qr_code')->nullable();
             $table->string('year_level')->nullable();
-            $table->foreignId('section_id')->nullable();
-            $table->foreignId('strand_id')->nullable();
+            $table->foreignId('section_id');
+            $table->foreignId('strand_id');
             $table->string('qr_token')->nullable();
             $table->string('photo_position')->nullable(); 
             $table->string('signature_position')->nullable(); 

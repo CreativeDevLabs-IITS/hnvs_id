@@ -20,64 +20,68 @@
                 </div>
             </li>
 
-            <li class="px-2" id="generate_menu" style="display: none;">
-                <div class="mb-1">
-                    <!-- Dropdown Toggle -->
-                    <a href="#"
-                    class="nav_btns d-flex align-items-center justify-content-between py-2 px-3 <?= (strpos($currentPage, 'studentlist.php') !== false || strpos($currentPage, 'generate_id.php') !== false) ? 'active' : '' ?>"
-                    style="text-decoration: none; font-size: 15px;"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#generateSubMenu"
-                    aria-expanded="false"
-                    aria-controls="generateSubMenu"
-                    >
-                        <div class="d-flex align-items-center">
-                            <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-id">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z"/>
-                                <path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/>
-                                <path d="M15 8l2 0" />
-                                <path d="M15 12l2 0" />
-                                <path d="M7 16l10 0" />
+                <li class="px-2" id="generate_menu" style="display: none;">
+                    <div class="mb-1">
+                        <!-- Dropdown Toggle -->
+                        <a href="#"
+                        class="nav_btns d-flex align-items-center justify-content-between py-2 px-3 <?= (strpos($currentPage, 'studentlist.php') !== false || strpos($currentPage, 'generate_id.php') !== false) ? 'active' : '' ?>"
+                        style="text-decoration: none; font-size: 15px;"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#generateSubMenu"
+                        aria-expanded="false"
+                        aria-controls="generateSubMenu"
+                        >
+                            <div class="d-flex align-items-center">
+                                <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-id">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z"/>
+                                    <path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/>
+                                    <path d="M15 8l2 0" />
+                                    <path d="M15 12l2 0" />
+                                    <path d="M7 16l10 0" />
+                                </svg>
+                                Generate ID
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ms-2" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
                             </svg>
-                            Generate ID
-                        </div>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="ms-2" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                        </svg>
-                    </a>
+                        </a>
 
-                    <!-- Submenu -->
-                    <div class="collapse ps-4" id="generateSubMenu">
-                        <a href="studentgeneratedidlist.php"
-                        class="d-flex align-items-center py-1 px-3 <?= (strpos($currentPage, 'studentlist.php') !== false) ? 'fw-bold' : '' ?>"
-                        style="font-size: 14px; text-decoration: none; color: #566573;">
-                            <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list">
-                                <line x1="8" y1="6" x2="21" y2="6" />
-                                <line x1="8" y1="12" x2="21" y2="12" />
-                                <line x1="8" y1="18" x2="21" y2="18" />
-                                <line x1="3" y1="6" x2="3" y2="6" />
-                                <line x1="3" y1="12" x2="3" y2="12" />
-                                <line x1="3" y1="18" x2="3" y2="18" />
-                            </svg>
-                            Student List
-                        </a>
-                        <a href="generate_id.php"
-                        class="d-flex align-items-center py-1 px-3 <?= (strpos($currentPage, 'generate_id.php') !== false) ? 'fw-bold' : '' ?>"
-                        style="font-size: 14px; text-decoration: none; color: #566573;">
-                            <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer">
-                                <polyline points="6 9 6 2 18 2 18 9" />
-                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                                <rect x="6" y="14" width="12" height="8" />
-                            </svg>
-                            Generate ID
-                        </a>
+                        <!-- Submenu -->
+                        <div class="collapse ps-4" id="generateSubMenu">
+                            <a href="studentgeneratedidlist.php"
+                            class="d-flex align-items-center py-1 px-3 <?= (strpos($currentPage, 'studentlist.php') !== false) ? 'fw-bold' : '' ?>"
+                            style="font-size: 14px; text-decoration: none; color: #566573;">
+                                <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list">
+                                    <line x1="8" y1="6" x2="21" y2="6" />
+                                    <line x1="8" y1="12" x2="21" y2="12" />
+                                    <line x1="8" y1="18" x2="21" y2="18" />
+                                    <line x1="3" y1="6" x2="3" y2="6" />
+                                    <line x1="3" y1="12" x2="3" y2="12" />
+                                    <line x1="3" y1="18" x2="3" y2="18" />
+                                </svg>
+                                Student List
+                            </a>
+                            <a href="generate_id.php"
+                            class="d-flex align-items-center py-1 px-3 <?= (strpos($currentPage, 'generate_id.php') !== false) ? 'fw-bold' : '' ?>"
+                            style="font-size: 14px; text-decoration: none; color: #566573;">
+                                <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer">
+                                    <polyline points="6 9 6 2 18 2 18 9" />
+                                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                                    <rect x="6" y="14" width="12" height="8" />
+                                </svg>
+                                Generate ID
+                            </a>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+
+            
+
+            <li class="px-2" id="teachers_menu">
 
             <li class="px-2" id="generate_menu" style="display: none;">
                 <div class="mb-1">

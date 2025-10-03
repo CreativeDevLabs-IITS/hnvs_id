@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('strands', function (Blueprint $table) {
             $table->id();
             $table->string('description')->nullable();
-            $table->integer('track')->nullable();
+            $table->integer('track');
             $table->string('cluster')->nullable();
             $table->string('specialization')->nullable();
             $table->timestamps();

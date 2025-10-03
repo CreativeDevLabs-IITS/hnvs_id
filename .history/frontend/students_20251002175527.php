@@ -386,12 +386,21 @@
                 <td>${student.section ? student.section.name : '—'}</td>
                 <td>
                 ${student.strand 
+<<<<<<< HEAD
                 ? (student.strand.cluster === 'Industrial Arts (IA)' 
                     ? `(IA) ${student.strand.specialization}`
                     : student.strand.cluster === 'Family and Consumer Science (FCS)' 
                     ? `(FCS) ${student.strand.specialization}`
                     : student.strand.cluster)
                 : '—'}
+=======
+                    ? (student.strand.cluster === 'Industrial Arts (IA)' 
+                        ? `(IA) ${student.strand.specialization}`
+                        : student.strand.cluster === 'Family and Consumer Science (FCS)' 
+                        ? `(FCS) ${student.strand.specialization}`
+                        : student.strand.cluster)
+                    : '—'}
+>>>>>>> master
                 </td>
                 <td>${student.lrn}</td>
                 `;
