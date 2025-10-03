@@ -252,7 +252,7 @@ class StudentController extends Controller
             if($request->filled('lrn')) {
                 $student = Student::with(['section', 'strand', 'subjects'])
                 ->where('lrn', $request->lrn)->first();
-            }elseif($request->filled('firstname') || $request->filled('lastname')) {
+            }elseif($request->filled('firstname') && $request->filled('lastname')) {
                 $query = Student::query()->with(['section', 'strand', 'subjects']);
     
                 if($request->filled('firstname')) {

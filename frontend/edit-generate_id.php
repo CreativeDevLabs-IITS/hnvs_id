@@ -511,18 +511,18 @@
         }
 </style>
 <style>
-  .editable-photo:hover {
-    border: 3px dashed #007bff;
-    border-radius: 8px;
-    box-sizing: border-box;
-    cursor: pointer;
-  }
-  .editable-signature:hover {
-    border: 3px dashed #28a745;
-    border-radius: 8px;
-    box-sizing: border-box;
-    cursor: pointer;
-  }
+    .editable-photo:hover {
+        border: 3px dashed #007bff;
+        border-radius: 8px;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
+    .editable-signature:hover {
+        border: 3px dashed #28a745;
+        border-radius: 8px;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
 </style>
 <style>
     @media print {
@@ -598,14 +598,14 @@
                 </div>
                 <div style="width:100%; display:flex; flex-direction:column; align-items:center; margin-top:20px;">
                     <div style="margin-bottom: 20px;">
-                      <button id="showFront" class="switch-btn active">Front</button>
-                      <button id="showBack" class="switch-btn">Back</button>
-                      <button id="editBtn" class="switch-btn">Edit</button>
-                      <button id="saveBtn" class="switch-btn">Save</button>
-                      <button id="editSignatureBtn" class="switch-btn">Edit Signature</button>
-                      <button class="switch-btn print-button" onclick="printVisibleID()">
-                            Print
-                      </button>
+                        <button id="showFront" class="switch-btn active">Front</button>
+                        <button id="showBack" class="switch-btn">Back</button>
+                        <button id="editBtn" class="switch-btn">Edit</button>
+                        <button id="saveBtn" class="switch-btn">Save</button>
+                        <button id="editSignatureBtn" class="switch-btn">Edit Signature</button>
+                        <button class="switch-btn print-button" onclick="printVisibleID()">
+                                Print
+                        </button>
                     </div>
                     <div id="signatureModal" style="
                         display:none; 
@@ -631,170 +631,169 @@
                         </div>
                     </div>
                     <div style="display: flex; gap: 20px; margin-bottom: 10px;">
-                          <div id="fontSizeControls" style="display:none;">
-                            <label for="nameFontSize" style="font-weight:bold;">Name Font Size:</label>
-                            <input type="range" id="nameFontSize" min="16" max="48" value="24" style="vertical-align:middle;">
-                            <span id="fontSizeValue">24</span>px
-                          </div>
-                          <div id="firstNameFontSizeControls" style="display:none;">
-                            <label for="firstNameFontSize" style="font-weight:bold;">First Name Font Size:</label>
-                            <input type="range" id="firstNameFontSize" min="10" max="30" value="13" style="vertical-align:middle;">
-                            <span id="firstNameFontSizeValue">13</span>px
-                          </div>
+                            <div id="fontSizeControls" style="display:none;">
+                                <label for="nameFontSize" style="font-weight:bold;">Name Font Size:</label>
+                                <input type="range" id="nameFontSize" min="16" max="48" value="24" style="vertical-align:middle;">
+                                <span id="fontSizeValue">24</span>px
+                            </div>
+                            <div id="firstNameFontSizeControls" style="display:none;">
+                                <label for="firstNameFontSize" style="font-weight:bold;">First Name Font Size:</label>
+                                <input type="range" id="firstNameFontSize" min="10" max="30" value="13" style="vertical-align:middle;">
+                                <span id="firstNameFontSizeValue">13</span>px
+                            </div>
                     </div>
-              </div>
-              <div style="display: flex; justify-content: center; gap: 20px; margin-top: 135px; scale: 180%;">
-    
-                <div class="id-card" id="idFront" style="display: block;">
-                  <div class="watermark-logo">
-                    <img src="gear.png" alt="Background Logo" />
-                  </div>
-                  <div class="logo-school"></div>
-                  <div class="header">
-                    <img src="logo.png" alt="Logo" />
-                    <div class="school-info">
-                      <div class="school-name">HILONGOS NATIONAL <br /><span>VOCATIONAL SCHOOL</span></div>
-                      <div class="school-level">SENIOR HIGH <br> SCHOOL DEPARTMENT</div>
-                      <div class="school-id">SCHOOL ID: 303374</div>
+                </div>
+                <div style="display: flex; justify-content: center; gap: 20px; margin-top: 30px; scale: 110%;">
+                    <div class="id-card" id="idFront" style="display: block;">
+                    <div class="watermark-logo">
+                        <img src="gear.png" alt="Background Logo" />
                     </div>
-                  </div>
-                  <div class="lrn">
-                    <div class="lrn-label">LRN</div>
-                    <div class="lrn-bar" id="lrn-bar"></div>
-                  </div>
-                  <div class="photo" id="photoDrop">
-                    <img id="student-photo" src="bakla.png" alt="Photo" />
-                    <input type="file" id="photoInput" accept="image/*" style="display:none;" />
-                  </div>
-                  <div class="signature" id="signatureDrop">
-                    <img id="student-signature" src="signatura.png" alt="Signature" />
-                    <input type="file" id="signatureInput" accept="image/*" style="display:none;" />
-                  </div>
-                  <div class="bottom-container">
-                    <div class="left-box">
-                      <div class="name">
-                        <div class="last-name" id="last-name"></div>
-                        <div class="first-name" id="first-name">
-                          <span class="middle-name" id="middle-name"></span>
+                    <div class="logo-school"></div>
+                    <div class="header">
+                        <img src="logo.png" alt="Logo" />
+                        <div class="school-info">
+                        <div class="school-name">HILONGOS NATIONAL <br /><span>VOCATIONAL SCHOOL</span></div>
+                        <div class="school-level">SENIOR HIGH <br> SCHOOL DEPARTMENT</div>
+                        <div class="school-id">SCHOOL ID: 303374</div>
                         </div>
-                      </div>
-                      <div class="info">
-                        <div class="dob">Date of Birth:</div>
-                        <div class="dob-num" id="dob-num"></div>
-                        <div class="address">Address:</div>
-                        <div class="brgy-address" id="brgy-address"></div>
-                      </div>
-                  </div>
-              </div>
-          <div class="qr-code">
-            <img id="student-qr" src="" alt="QR" />
-          </div>
-            <div class="track">
-              <div class="strand">
-                SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
-              </div>
-              <div class="doorway-word">Doorway:</div>
-              <div class="doorway">DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
+                    </div>
+                    <div class="lrn">
+                        <div class="lrn-label">LRN</div>
+                        <div class="lrn-bar" id="lrn-bar"></div>
+                    </div>
+                    <div class="photo" id="photoDrop">
+                        <img id="student-photo" src="bakla.png" alt="Photo" />
+                        <input type="file" id="photoInput" accept="image/*" style="display:none;" />
+                    </div>
+                    <div class="signature" id="signatureDrop">
+                        <img id="student-signature" src="signatura.png" alt="Signature" />
+                        <input type="file" id="signatureInput" accept="image/*" style="display:none;" />
+                    </div>
+                    <div class="bottom-container">
+                        <div class="left-box">
+                        <div class="name">
+                            <div class="last-name" id="last-name"></div>
+                            <div class="first-name" id="first-name">
+                            <span class="middle-name" id="middle-name"></span>
+                            </div>
+                        </div>
+                        <div class="info">
+                            <div class="dob">Date of Birth:</div>
+                            <div class="dob-num" id="dob-num"></div>
+                            <div class="address">Address:</div>
+                            <div class="brgy-address" id="brgy-address"></div>
+                        </div>
+                    </div>
+                </div>
+            <div class="qr-code">
+                <img id="student-qr" src="" alt="QR" />
             </div>
-          </div>
-          <div class="id back" id="idBack" style="display: none;">
-            <div class="id-card-back back-top">
-              <div class="left-content">
-                <div class="left-bar year-strip">
-                  <table id="schoolYearTable">
-                    <tr>
-                      <td class="word-school-year"></td>
-                      <td class="year-cell"><div class="rotated-text">2026-2027</div></td>
-                      <td class="empty-cell"></td>
-                      <td class="empty-cell"></td>
-                    </tr>
-                    <tr>
-                      <td class="word-school-year"><div class="rotated-text">SCHOOL YEAR</div></td>
-                      <td class="year-cell"><div class="rotated-text">2025-2026</div></td>
-                      <td class="empty-cell"></td>
-                      <td class="empty-cell"></td>
-                    </tr>
-                    <tr>
-                      <td class="word-school-year"></td>
-                      <td class="semester-cell"><div class="rotated-text">Semester</div></td>
-                      <td class="first-cell"><div class="rotated-text">First</div></td>
-                      <td class="second-cell"><div class="rotated-text">Second</div></td>
-                    </tr>
-                  </table>
+                <div class="track">
+                <div class="strand">
+                    SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
                 </div>
-              </div>
-              <div class="right-content">
-                <div class="top-text">
-                  This is to certify that the person whose<br>
-                  picture and signature appear herein<br>
-                  is a bonafide student of <b>Hilongos<br>
-                  National Vocaational School.</b>
+                <div class="doorway-word">Doorway:</div>
+                <div class="doorway">DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
                 </div>
-                <div class="back-signature">
-                  <div class="signature-img-wrap">
-                    <img src="logoprincipal.png" alt="signature" class="back-signature-img">
-                  </div>
-                  <div class="signature-name">RICHARD A. GABISON PhD, DPA</div>
-                  <div class="director">School Principal IV</div>
-                </div>
-                <div class="reminders">
-                  <b>IMPORTANT REMINDERS</b><br>
-                  Always wear this ID while inside<br>
-                  the school campus.<br>
-                  <b>Do not forget your<br>STUDENT LRN NUMBER.</b>
-                </div>
-                <div class="contact_1">
-                  If lost and found, please surrender<br>
-                  this ID to the<br><b>
-                  HNVS SHS OFFICE,</b><br>
-                  Hilongos National Vocational School <br>RV Fulache St. Hilongos, Leyte
-                </div>
-                <div class="contact">
-                  <b>In case of emergency,<br>please contact</b>
-                  <div class="contact-name" id="ename">EFREN IBAÑEZ</div>
-                  <div class="contact-number" id="cnumber">0935-121-9395</div>
-                </div>
-                <div class="qr-box">
-                  PLEASE SCAN THE QR<br>
-                  CODE AT THE FRONT<br>
-                  FOR MORE VALIDATION &<br>
-                  CONTACT INFORMATION.
-                </div>
-              </div>
             </div>
-            <div class="facebook-footer back-bottom">
-              https://www.hnvs.edu.ph.com/
-            </div>
-      </div>
-  </div>
+            <div class="id back" id="idBack" style="display: none;">
+                <div class="id-card-back back-top">
+                <div class="left-content">
+                    <div class="left-bar year-strip">
+                    <table id="schoolYearTable">
+                        <tr>
+                        <td class="word-school-year"></td>
+                        <td class="year-cell"><div class="rotated-text">2024-2025</div></td>
+                        <td class="empty-cell"></td>
+                        <td class="empty-cell"></td>
+                        </tr>
+                        <tr>
+                        <td class="word-school-year"><div class="rotated-text">SCHOOL YEAR</div></td>
+                        <td class="year-cell"><div class="rotated-text">2023-2024</div></td>
+                        <td class="empty-cell"></td>
+                        <td class="empty-cell"></td>
+                        </tr>
+                        <tr>
+                        <td class="word-school-year"></td>
+                        <td class="semester-cell"><div class="rotated-text">Semester</div></td>
+                        <td class="first-cell"><div class="rotated-text">First</div></td>
+                        <td class="second-cell"><div class="rotated-text">Second</div></td>
+                        </tr>
+                    </table>
+                    </div>
+                </div>
+                <div class="right-content">
+                    <div class="top-text">
+                    This is to certify that the person whose<br>
+                    picture and signature appear herein<br>
+                    is a bonafide student of <b>Hilongos<br>
+                    National Vocaational School.</b>
+                    </div>
+                    <div class="back-signature">
+                    <div class="signature-img-wrap">
+                        <img src="logoprincipal.png" alt="signature" class="back-signature-img">
+                    </div>
+                    <div class="signature-name">RICHARD A. GABISON PhD, DPA</div>
+                    <div class="director">School Principal IV</div>
+                    </div>
+                    <div class="reminders">
+                    <b>IMPORTANT REMINDERS</b><br>
+                    Always wear this ID while inside<br>
+                    the school campus.<br>
+                    <b>Do not forget your<br>STUDENT LRN NUMBER.</b>
+                    </div>
+                    <div class="contact_1">
+                    If lost and found, please surrender<br>
+                    this ID to the<br><b>
+                    HNVS SHS OFFICE,</b><br>
+                    Hilongos National Vocational School <br>RV Fulache St. Hilongos, Leyte
+                    </div>
+                    <div class="contact">
+                    <b>In case of emergency,<br>please contact</b>
+                    <div class="contact-name" id="ename">EFREN IBAÑEZ</div>
+                    <div class="contact-number" id="cnumber">0935-121-9395</div>
+                    </div>
+                    <div class="qr-box">
+                    PLEASE SCAN THE QR<br>
+                    CODE AT THE FRONT<br>
+                    FOR MORE VALIDATION &<br>
+                    CONTACT INFORMATION.
+                    </div>
+                </div>
+                </div>
+                <div class="facebook-footer back-bottom">
+                https://www.hnvs.edu.ph.com/
+                </div>
+        </div>
+    </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
 <?php include 'partials/_logout.php' ?>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const idFront = document.getElementById('idFront');
-    const idBack = document.getElementById('idBack');
-    const frontBtn = document.getElementById('showFront');
-    const backBtn = document.getElementById('showBack');
+    document.addEventListener('DOMContentLoaded', () => {
+        const idFront = document.getElementById('idFront');
+        const idBack = document.getElementById('idBack');
+        const frontBtn = document.getElementById('showFront');
+        const backBtn = document.getElementById('showBack');
 
-    // Show Front
-    frontBtn.addEventListener('click', () => {
-      idFront.style.display = 'block';
-      idBack.style.display = 'none';
-      frontBtn.classList.add('active');
-      backBtn.classList.remove('active');
-    });
+        // Show Front
+        frontBtn.addEventListener('click', () => {
+        idFront.style.display = 'block';
+        idBack.style.display = 'none';
+        frontBtn.classList.add('active');
+        backBtn.classList.remove('active');
+        });
 
-    // Show Back
-    backBtn.addEventListener('click', () => {
-      idFront.style.display = 'none';
-      idBack.style.display = 'block';
-      backBtn.classList.add('active');
-      frontBtn.classList.remove('active');
+        // Show Back
+        backBtn.addEventListener('click', () => {
+        idFront.style.display = 'none';
+        idBack.style.display = 'block';
+        backBtn.classList.add('active');
+        frontBtn.classList.remove('active');
+        });
     });
-  });
     function printVisibleID() {
             const idFront = document.getElementById('idFront');
             const idBack = document.getElementById('idBack');
@@ -816,7 +815,7 @@ const studentId = params.get('id') || 1;
 let editMode = false;
 let selectedImage = null;
 let selectedSignature = null;
-fetch(`http://hnvs_backend.test/api/showstudentid/${studentId}`, {
+fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
     method: 'GET',
     headers: {
         'Accept': 'application/json',
@@ -953,7 +952,7 @@ editSignatureBtn.addEventListener('click', () => {
     ctx.strokeStyle = "#000";
     ctx.lineWidth = 22;
     ctx.imageSmoothingEnabled = true;
-     ctx.imageSmoothingQuality = "high";
+    ctx.imageSmoothingQuality = "high";
     ctx.lineCap = "round"; 
     ctx.lineJoin = "round"; 
 
@@ -1069,7 +1068,7 @@ document.getElementById('saveBtn').addEventListener('click', function () {
     }));
     if(selectedImage) formData.append('image', selectedImage);
     if(selectedSignature) formData.append('signature', selectedSignature);
-    fetch(`http://hnvs_backend.test/api/save-generated-id`, {
+    fetch(`https://hnvs-id-be.creativedevlabs.com/api/save-generated-id`, {
         method:"POST",
         headers: {
             "Authorization":"Bearer "+localStorage.getItem("token"),
