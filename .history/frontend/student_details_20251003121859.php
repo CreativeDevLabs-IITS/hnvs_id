@@ -260,13 +260,6 @@
                     document.getElementById('contentSpinner').style.display = 'flex';
                     document.getElementById('infoFormCon').style.display = 'flex';
 
-                    const radios = document.querySelectorAll('input[name="exampleRadios"]');
-                    radios.forEach(radio => {
-                        if (radio.value === response.data.doorway) {
-                            radio.checked = true;
-                        }
-                    });
-
                     setTimeout(() => {    
                         document.getElementById('contentSpinner').style.display = 'none';
                         setTimeout(() => {
