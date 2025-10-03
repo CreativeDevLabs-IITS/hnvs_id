@@ -187,13 +187,16 @@
     let currentPage = 1;
     let students = [];
     let filteredStudents = []; 
+
     function renderTablePage(page = 1) {
         const tbody = document.getElementById("studentTableBody");
         tbody.innerHTML = "";
+
         const dataToRender = filteredStudents.length > 0 || document.getElementById("searchInput").value
             ? filteredStudents
             : students;
-        if (dataToRender.length === 0) {
+
+        if (!Array.isArray(dataToRender) || dataToRender.length === 0) {
             const tr = document.createElement("tr");
             tr.innerHTML = `
                 <td colspan="7" class="text-center text-muted py-4">
@@ -205,9 +208,11 @@
             document.getElementById("paginationInfo").textContent = "";
             return;
         }
+
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
         const paginatedStudents = dataToRender.slice(start, end);
+
         paginatedStudents.forEach(student => {
             const tr = document.createElement("tr");
             tr.innerHTML = `
@@ -249,6 +254,7 @@
             `;
             tbody.appendChild(tr);
         });
+
         document.querySelectorAll(".btn-delete").forEach(btn => {
             btn.addEventListener("click", (e) => {
                 e.preventDefault();
@@ -285,9 +291,11 @@
                 });
             });
         });
+
         renderPaginationControls(dataToRender);
         renderPaginationInfo(start, end, dataToRender.length);
     }
+
     function renderPaginationControls(dataArray) {
         const totalPages = Math.ceil(dataArray.length / rowsPerPage);
         const paginationDiv = document.getElementById("paginationControls");
@@ -303,12 +311,14 @@
             paginationDiv.appendChild(btn);
         }
     }
+
     function renderPaginationInfo(start, end, total) {
         const infoDiv = document.getElementById("paginationInfo");
         const showingStart = total === 0 ? 0 : start + 1;
         const showingEnd = Math.min(end, total);
         infoDiv.textContent = `Showing ${showingStart} to ${showingEnd} of ${total} students`;
     }
+
     // Fetch students from API
     fetch(`https://hnvs-id-be.creativedevlabs.com/api/showgeneratedids`, {
         headers: {
@@ -318,10 +328,13 @@
     })
     .then(res => res.json())
     .then(data => {
-        students = data;
+        console.log("API Response:", data); // Debug check
+        // Kung array mismo ang balik, gamitin diretso. Kung naka-wrap sa "data", gamitin yun.
+        students = Array.isArray(data) ? data : (data.data || []);
         renderTablePage(currentPage);
     })
     .catch(err => console.error(err));
+
     // Search input listener
     document.getElementById("searchInput").addEventListener("input", (e) => {
         const query = e.target.value.trim().toLowerCase();
