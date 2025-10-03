@@ -349,7 +349,7 @@
                         await delay(1000)
                         const student = data.student;
                         console.log(student);
-                        const strandSelect = document.getElementById('strand');
+                        // const strandSelect = document.getElementById('strand');
                         document.getElementById('fName').value = student.firstname;
                         document.getElementById('mName').value = student.middlename;
                         document.getElementById('lName').value = student.lastname;

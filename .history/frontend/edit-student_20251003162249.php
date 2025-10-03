@@ -367,8 +367,8 @@
                             document.getElementById('suffix').value = student.suffix;
                         }
                 
-                        if(student.strand != null) {
-                            strandSelect.value = student.strand.id;
+                        if(student.strand) {
+                            strandSelect.value = student.strand.id ?? '';
                             if(student.strand.specialization != null) {
                                 await populateSpecialization.call(strandSelect);
             
@@ -378,6 +378,10 @@
                             }
                             document.getElementById('screenLoaderCon').style.display = 'none';
                             document.getElementById('content').style.display = 'block';
+                        }else {
+                            if (strandSelect) strandSelect.value = '';
+                            const specializationSelect = document.getElementById('specializationCon');
+                            if (specializationSelect) specializationSelect.style.display = 'none';
                         }
                               
 
