@@ -389,6 +389,9 @@
                     showConfirmButton: false,
                     timer: 900,
                 })
+                // .then (() => {
+                //     location.href = 'index.php';
+                // });
             }else {
                 Swal.fire({
                     position: "top-end",

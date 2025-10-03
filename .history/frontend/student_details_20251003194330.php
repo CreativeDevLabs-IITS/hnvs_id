@@ -361,7 +361,7 @@
             municipality: document.getElementById('town').value,
             emergency_contact: document.getElementById('person').value,
             contact: document.getElementById('contact').value,
-            strand_id: document.querySelector('input[name="studentStrand"]:checked')?.value,
+            strand_id: document.querySelector('input[name="studentStrand"]:checked').value,
             doorway: document.querySelector('input[name="exampleRadios"]:checked')?.value
         };
 
@@ -389,6 +389,9 @@
                     showConfirmButton: false,
                     timer: 900,
                 })
+                // .then (() => {
+                //     location.href = 'index.php';
+                // });
             }else {
                 Swal.fire({
                     position: "top-end",

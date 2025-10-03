@@ -367,17 +367,21 @@
                             document.getElementById('suffix').value = student.suffix;
                         }
                 
-                        if(student.strand != null) {
-                            strandSelect.value = student.strand.id;
-                            if(student.strand.specialization != null) {
+                        if (student.strand) {
+                            strandSelect.value = student.strand.id ?? '';
+                            
+                            if (student.strand.specialization) {
                                 await populateSpecialization.call(strandSelect);
-            
-                                let specializationSelect = document.getElementById('specializationCon');
+
+                                const specializationSelect = document.getElementById('specializationCon');
                                 specializationSelect.style.display = 'block';
-                                document.getElementById('specialization').value = student.strand.id;
+                                document.getElementById('specialization').value = student.strand.specialization ?? '';
                             }
-                            document.getElementById('screenLoaderCon').style.display = 'none';
-                            document.getElementById('content').style.display = 'block';
+                        } else {
+                            // If no strand, you can reset the dropdown or leave it empty
+                            if (strandSelect) strandSelect.value = '';
+                            const specializationSelect = document.getElementById('specializationCon');
+                            if (specializationSelect) specializationSelect.style.display = 'none';
                         }
                               
 
