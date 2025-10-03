@@ -363,7 +363,7 @@
             }
             
 
-            fetch(`${APP_URL}/api/student/create/`, {
+            fetch(`${APP_URL}/api/student/create`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'Applicatin/json',
