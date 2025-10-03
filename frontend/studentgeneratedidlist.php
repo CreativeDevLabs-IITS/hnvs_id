@@ -318,8 +318,6 @@
         const showingEnd = Math.min(end, total);
         infoDiv.textContent = `Showing ${showingStart} to ${showingEnd} of ${total} students`;
     }
-
-    // Fetch students from API
     fetch(`https://hnvs-id-be.creativedevlabs.com/api/showgeneratedids`, {
         headers: {
             "Accept": "application/json",
@@ -328,14 +326,11 @@
     })
     .then(res => res.json())
     .then(data => {
-        console.log("API Response:", data); // Debug check
-        // Kung array mismo ang balik, gamitin diretso. Kung naka-wrap sa "data", gamitin yun.
+        console.log("API Response:", data);
         students = Array.isArray(data) ? data : (data.data || []);
         renderTablePage(currentPage);
     })
     .catch(err => console.error(err));
-
-    // Search input listener
     document.getElementById("searchInput").addEventListener("input", (e) => {
         const query = e.target.value.trim().toLowerCase();
         filteredStudents = students.filter(student => 
