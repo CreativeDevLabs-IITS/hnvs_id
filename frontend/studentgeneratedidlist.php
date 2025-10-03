@@ -263,7 +263,7 @@
                     confirmButtonText: "Yes, delete it!"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        fetch(`http://backend.test/api/deletegenerate/${id}`, {
+                        fetch(`https://hnvs-id.creativedevlabs.com/api/deletegenerate/${id}`, {
                             method: "DELETE",
                             headers: {
                                 "Accept": "application/json",
@@ -310,7 +310,7 @@
         infoDiv.textContent = `Showing ${showingStart} to ${showingEnd} of ${total} students`;
     }
     // Fetch students from API
-    fetch("http://backend.test/api/showgeneratedids", {
+    fetch("https://hnvs-id.creativedevlabs.com/api/showgeneratedids", {
         headers: {
             "Accept": "application/json",
             "Authorization": "Bearer " + localStorage.getItem("token")
