@@ -696,13 +696,13 @@
                   <table id="schoolYearTable">
                     <tr>
                       <td class="word-school-year"></td>
-                      <td class="year-cell"><div class="rotated-text">2024-2025</div></td>
+                      <td class="year-cell"><div class="rotated-text">2026-2027</div></td>
                       <td class="empty-cell"></td>
                       <td class="empty-cell"></td>
                     </tr>
                     <tr>
                       <td class="word-school-year"><div class="rotated-text">SCHOOL YEAR</div></td>
-                      <td class="year-cell"><div class="rotated-text">2023-2024</div></td>
+                      <td class="year-cell"><div class="rotated-text">2025-2026</div></td>
                       <td class="empty-cell"></td>
                       <td class="empty-cell"></td>
                     </tr>

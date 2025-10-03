@@ -705,13 +705,13 @@
                     <table id="schoolYearTable">
                         <tr>
                         <td class="word-school-year"></td>
-                        <td class="year-cell"><div class="rotated-text">2024-2025</div></td>
+                        <td class="year-cell"><div class="rotated-text">2026-2027</div></td>
                         <td class="empty-cell"></td>
                         <td class="empty-cell"></td>
                         </tr>
                         <tr>
                         <td class="word-school-year"><div class="rotated-text">SCHOOL YEAR</div></td>
-                        <td class="year-cell"><div class="rotated-text">2023-2024</div></td>
+                        <td class="year-cell"><div class="rotated-text">2025-2026</div></td>
                         <td class="empty-cell"></td>
                         <td class="empty-cell"></td>
                         </tr>
@@ -947,7 +947,7 @@ editSignatureBtn.addEventListener('click', () => {
     canvas.height = window.innerHeight * 0.7;
     const ctx = canvas.getContext('2d');
     ctx.strokeStyle = "#000";
-    ctx.lineWidth = 5; 
+    ctx.lineWidth = 9; 
     let drawing = false;
     canvas.onmousedown = e => { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); }
     canvas.onmousemove = e => { if(drawing) { ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } }

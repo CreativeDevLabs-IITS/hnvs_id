@@ -26,6 +26,7 @@ class Student extends Model
         'strand_id',
         'qr_token',
         'qr_path',
+        'school_year',
         'photo_position',
         'signature_position',
     ];
