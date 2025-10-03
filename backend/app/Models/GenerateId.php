@@ -9,7 +9,7 @@ class Generateid extends Model
     protected $table = 'generate_ids';
     protected $fillable = [
         'student_id',
-        'print_count',  +
+        'print_count', 
     ];
     public function student()
     {
