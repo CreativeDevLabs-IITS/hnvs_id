@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Student;
-use App\Models\Generateid;
+use App\Models\GenerateId;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Http\Request;
 
@@ -10,7 +10,7 @@ class GenerateidController extends Controller
 {
     public function index()
     {
-        $students = Generateid::join('students', 'generate_ids.student_id', '=', 'students.id')
+        $students = GenerateId::join('students', 'generate_ids.student_id', '=', 'students.id')
             ->select(
                 'students.id',
                 'students.firstname',
@@ -38,11 +38,11 @@ class GenerateidController extends Controller
             'signature_position' => 'nullable|string',
             'school_year' => 'nullable|string|max:20', // ✅ idagdag
         ]);
-        $generated = Generateid::where('student_id', $request->student_id)->first();
+        $generated = GenerateId::where('student_id', $request->student_id)->first();
         if ($generated) {
             $generated->increment('print_count');
         } else {
-            $generated = Generateid::create([
+            $generated = GenerateId::create([
                 'student_id' => $request->student_id,
                 'print_count' => 1,
             ]);
@@ -78,7 +78,7 @@ class GenerateidController extends Controller
     }
     public function destroy($id)
     {
-        $generated = Generateid::where('student_id', $id)->first();
+        $generated = GenerateId::where('student_id', $id)->first();
         if (!$generated) {
             return response()->json([
                 'message' => 'Generated ID not found'
