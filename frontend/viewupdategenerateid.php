@@ -739,7 +739,7 @@
 
                     <div class="back-signature">
                     <div class="signature-img-wrap">
-                        <img src="" alt="signature" class="back-signature-img">
+                        <img src="logoprincipal.png" alt="signature" class="back-signature-img">
                     </div>
                     <div class="signature-name">RICHARD A. GABISON PhD, DPA</div>
                     <div class="director">School Principal IV</div>

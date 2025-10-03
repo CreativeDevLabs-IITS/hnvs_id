@@ -36,7 +36,7 @@ class GenerateidController extends Controller
             'signature' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'photo_position' => 'nullable|string',     
             'signature_position' => 'nullable|string',
-            'school_year' => 'nullable|string|max:20', // ✅ idagdag
+            'school_year' => 'nullable|string|max:20', 
         ]);
         $generated = GenerateId::where('student_id', $request->student_id)->first();
         if ($generated) {
