@@ -1,64 +1,278 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Signature Pad Example</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      margin: 18px;
+      background: #f6f7fb;
+      color: #222;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+      padding: 18px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1 { margin: 0 0 12px 0; font-size: 20px; }
+    p { margin: 0 0 10px 0; color: #555; }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    button {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      background: #fff;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button:active { transform: translateY(1px); }
+
+    #canvasWrapper {
+      border: 1px dashed #e3e6ee;
+      border-radius: 8px;
+      padding: 6px;
+      background: linear-gradient(180deg,#fff,#fbfdff);
+    }
+
+    canvas {
+      width: 100%;
+      height: 260px;
+      display: block;
+      border-radius: 6px;
+      touch-action: none; /* prevent scrolling while signing */
+      background: rgba(255,255,255,1);
+    }
+
+    .preview {
+      margin-top: 12px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .preview img {
+      border: 1px solid #eee;
+      border-radius: 6px;
+      max-width: 220px;
+      max-height: 120px;
+    }
+
+    .controls-right {
+      margin-left: auto;
+      display:flex;
+      gap: 8px;
+    }
+
+    input[type="range"] { width:160px; }
+    .muted { color:#666; font-size:13px; }
+  </style>
 </head>
 <body>
-<button id="printBtn" class="switch-btn">Print</button>
+  <div class="card">
+    <h1>Signature Pad (SignaturePad library)</h1>
+    <p class="muted">Gamit ang <strong>signature_pad</strong> library — mobile & desktop friendly. Pwede mong i-save ang signature bilang PNG base64.</p>
 
-<div id="idFront">
-  <h2>Front of ID</h2>
-</div>
+    <div class="toolbar">
+      <button id="undoBtn" type="button">Undo</button>
+      <button id="clearBtn" type="button">Clear</button>
+      <button id="saveBtn" type="button">Save</button>
+      <button id="downloadBtn" type="button">Download</button>
 
-<div id="idBack">
-  <h2>Back of ID</h2>
-</div>
+      <div class="controls-right">
+        <label class="muted" for="penWidth">Pen:</label>
+        <input id="penWidth" type="range" min="1" max="6" value="2" />
+      </div>
+    </div>
 
-<button id="showBoth" class="switch-btn">Both</button>
-<button id="showFront" class="switch-btn">Front</button>
-<button id="showBack" class="switch-btn">Back</button>
+    <div id="canvasWrapper">
+      <canvas id="sigCanvas"></canvas>
+    </div>
 
-<script>
-  const front = document.getElementById('idFront');
-  const back = document.getElementById('idBack');
-  let currentView = 'both'; // default
+    <div class="preview">
+      <div>
+        <div class="muted">Preview</div>
+        <img id="sigPreview" alt="Signature preview (saved)" src="" />
+      </div>
 
-  // Toggle views
-  document.getElementById('showBoth').addEventListener('click', () => {
-    front.style.display = 'block';
-    back.style.display = 'block';
-    currentView = 'both';
-  });
+      <div style="margin-left:auto;">
+        <div class="muted">Base64 (hidden input)</div>
+        <textarea id="signature_data" style="width:360px;height:80px;padding:8px;border-radius:6px;border:1px solid #eee;font-size:12px;" readonly></textarea>
+      </div>
+    </div>
 
-  document.getElementById('showFront').addEventListener('click', () => {
-    front.style.display = 'block';
-    back.style.display = 'none';
-    currentView = 'front';
-  });
+    <!-- Example: If you want to submit signature with a form, this hidden input contains the base64 PNG -->
+    <input type="hidden" id="signature_base64" name="signature_base64" value="" />
+    <p class="muted" style="margin-top:12px">Hint: use the value of <code>#signature_base64</code> to send via FormData to your Laravel backend.</p>
+  </div>
 
-  document.getElementById('showBack').addEventListener('click', () => {
-    front.style.display = 'none';
-    back.style.display = 'block';
-    currentView = 'back';
-  });
+  <!-- Signature Pad library -->
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.5/dist/signature_pad.umd.min.js"></script>
+  <script>
+    // Elements
+    const canvas = document.getElementById('sigCanvas');
+    const undoBtn = document.getElementById('undoBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const penWidth = document.getElementById('penWidth');
+    const sigPreview = document.getElementById('sigPreview');
+    const signature_base64 = document.getElementById('signature_base64');
+    const signature_data = document.getElementById('signature_data');
 
-  // Print
-  document.getElementById('printBtn').addEventListener('click', () => {
-    let printContents = '';
-    if(currentView === 'front') printContents = front.innerHTML;
-    else if(currentView === 'back') printContents = back.innerHTML;
-    else printContents = front.innerHTML + back.innerHTML;
+    // Init SignaturePad
+    const signaturePad = new SignaturePad(canvas, {
+      minWidth: 0.7,
+      maxWidth: 4,
+      penColor: "rgb(22,22,22)",
+      backgroundColor: "rgba(255,255,255,0)"
+    });
 
-    const originalContents = document.body.innerHTML;
-    document.body.innerHTML = printContents;
-    window.print();
-    document.body.innerHTML = originalContents;
-  });
-</script>
+    // Resize canvas for high-DPI devices
+    function resizeCanvas() {
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      // Save current content
+      const data = signaturePad.toData();
+      canvas.width = Math.floor(canvas.offsetWidth * ratio);
+      canvas.height = Math.floor(canvas.offsetHeight * ratio);
+      canvas.getContext('2d').scale(ratio, ratio);
+      signaturePad.clear(); // otherwise isEmpty() might be wrong
+      signaturePad.fromData(data);
+    }
 
+    window.addEventListener('resize', resizeCanvas);
+    // Initialize once DOM is ready and then resize
+    window.requestAnimationFrame(resizeCanvas);
 
+    // Change pen width live
+    penWidth.addEventListener('input', (e) => {
+      const w = parseFloat(e.target.value);
+      signaturePad.minWidth = Math.max(0.2, w * 0.25);
+      signaturePad.maxWidth = Math.max(1, w);
+    });
 
+    // Clear
+    clearBtn.addEventListener('click', () => {
+      signaturePad.clear();
+      sigPreview.src = '';
+      signature_base64.value = '';
+      signature_data.value = '';
+    });
+
+    // Undo (remove last stroke)
+    undoBtn.addEventListener('click', () => {
+      const data = signaturePad.toData();
+      if (data && data.length) {
+        data.pop(); // remove last stroke
+        signaturePad.fromData(data);
+      }
+    });
+
+    // Save to base64 and show preview + put into hidden input
+    saveBtn.addEventListener('click', () => {
+      if (signaturePad.isEmpty()) {
+        alert("Walang nasign — paki-sign muna.");
+        return;
+      }
+      // Export as PNG data URL (background white)
+      const dataURL = signaturePad.toDataURL('image/png', 1.0);
+      sigPreview.src = dataURL;
+      signature_base64.value = dataURL; // full data URL (use this)
+      // Also put short preview-friendly text (optional)
+      signature_data.value = dataURL.slice(0, 200) + (dataURL.length > 200 ? '... (truncated)' : '');
+      // If you want raw base64 without the data:mime prefix:
+      // const rawBase64 = dataURL.split(',')[1];
+    });
+
+    // Download PNG file
+    downloadBtn.addEventListener('click', () => {
+      if (signaturePad.isEmpty()) {
+        alert("Walang nasign — paki-sign muna.");
+        return;
+      }
+      const dataURL = signaturePad.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = dataURL;
+      a.download = 'signature.png';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    });
+
+    // Example: automatically save on touchend/mouseup (optional)
+    // canvas.addEventListener('mouseup', () => { /* maybe autosave */ });
+
+    // Example function to POST to backend using FormData (Laravel)
+    // Use this if you want to send to /api/save-signature
+    async function uploadSignatureToServer(url) {
+      if (signaturePad.isEmpty()) {
+        alert("Please sign before uploading.");
+        return;
+      }
+      const dataURL = signaturePad.toDataURL('image/png'); // includes data:image/png;base64,...
+      const blob = dataURLToBlob(dataURL);
+
+      const fd = new FormData();
+      fd.append('signature', blob, 'signature.png');
+      // fd.append('student_id', 123); // add other fields as needed
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          body: fd,
+          // if using Laravel Sanctum or cookies ensure credentials if needed:
+          // credentials: 'include'
+        });
+        const json = await res.json();
+        console.log('server response', json);
+        alert('Upload complete');
+      } catch (err) {
+        console.error(err);
+        alert('Upload failed: ' + err.message);
+      }
+    }
+
+    // Utility: convert dataURL -> Blob
+    function dataURLToBlob(dataURL) {
+      const parts = dataURL.split(',');
+      const mime = parts[0].match(/:(.*?);/)[1];
+      const bstr = atob(parts[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
+    }
+
+    // Optional: enable drawing smoothing for a nicer line (SignaturePad already does)
+    // signaturePad.velocityFilterWeight = 0.7;
+
+    // Optional: pre-load existing signature (if you have a data URL)
+    // const existing = ''; // put dataURL here
+    // if (existing) {
+    //   const img = new Image();
+    //   img.onload = () => {
+    //     const ctx = canvas.getContext('2d');
+    //     ctx.drawImage(img, 0, 0, canvas.width / (window.devicePixelRatio||1), canvas.height / (window.devicePixelRatio||1));
+    //     // Optionally keep signaturePad state in sync
+    //   };
+    //   img.src = existing;
+    // }
+  </script>
 </body>
 </html>

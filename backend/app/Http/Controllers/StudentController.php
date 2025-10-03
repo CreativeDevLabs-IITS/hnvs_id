@@ -353,8 +353,7 @@ class StudentController extends Controller
             ]);
             $import = new StudentImport;
             Excel::import($import, $request->file('file'));
-
-           foreach ($import->rows as $row) {
+            foreach ($import->rows as $row) {
                 if(!empty($row['cluster'])) {
                     $strand = Strand::where('cluster', $row['cluster'])->first();
                     
@@ -390,58 +389,47 @@ class StudentController extends Controller
                     'section_id' => $section->id ?? null,
                     'strand_id' => $strand->id ?? null,
                 ]);
-
-                // Generate QR code
                 $hashedQr = sha1(uniqid((string)$student->id, true));
                 $qrData = env('FRONTEND_URL') . 'student/verify/' . $hashedQr;
                 $qrcode = QrCode::create($qrData)
                     ->setSize(300)
                     ->setMargin(10);
-
                 $logo = Logo::create(public_path('storage/gallery/hnvslogoqr.png'))
                     ->setResizeToWidth(60)
                     ->setPunchoutBackground(true);
-
                 $writer = new PngWriter();
                 $result = $writer->write($qrcode, $logo);
-
                 $fileName = 'qr_code/' . uniqid() . '.png';
                 Storage::disk('public')->put($fileName, $result->getString());
-
                 $qr_path = env('APP_URL') . $fileName;
                 $student->qr_path = $qr_path;
                 $student->qr_token = $hashedQr;
                 $student->qr_code = $qrData;
                 $student->save();
             }
-
             return response()->json([
                 'message' => 'Students imported successfully',
                 'skipped' => isset($skipped) && count($skipped) > 0
-                             ? 'Some information are missing for student/s: ' . implode(', ', $skipped)
-                             : ''
+                            ? 'Some information are missing for student/s: ' . implode(', ', $skipped)
+                            : ''
             ]);
-
         }catch(Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()
             ]);
         }
     }
-
     public function count() {
         return response()->json([
             'students' => Student::count(),
         ]);
     }
-
     public function sectionStrandList() {
         return response()->json([
             'sections' => Section::all(),
             'strands' => Strand::all()
         ]);
     }
-
     public function subjectStudents(Request $request) {
         try {
             $student_ids = $request->ids;
