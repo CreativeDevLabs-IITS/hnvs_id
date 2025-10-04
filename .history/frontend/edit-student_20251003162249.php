@@ -348,8 +348,8 @@
                     try {
                         await delay(1000)
                         const student = data.student;
+                        console.log(student);
                         const strandSelect = document.getElementById('strand');
-                        
                         document.getElementById('fName').value = student.firstname;
                         document.getElementById('mName').value = student.middlename;
                         document.getElementById('lName').value = student.lastname;
@@ -367,8 +367,8 @@
                             document.getElementById('suffix').value = student.suffix;
                         }
                 
-                        if(student.strand != null) {
-                            strandSelect.value = student.strand.id;
+                        if(student.strand) {
+                            strandSelect.value = student.strand.id ?? '';
                             if(student.strand.specialization != null) {
                                 await populateSpecialization.call(strandSelect);
             
@@ -376,10 +376,14 @@
                                 specializationSelect.style.display = 'block';
                                 document.getElementById('specialization').value = student.strand.id;
                             }
+                            document.getElementById('screenLoaderCon').style.display = 'none';
+                            document.getElementById('content').style.display = 'block';
+                        }else {
+                            if (strandSelect) strandSelect.value = '';
+                            const specializationSelect = document.getElementById('specializationCon');
+                            if (specializationSelect) specializationSelect.style.display = 'none';
                         }
-                        
-                        document.getElementById('screenLoaderCon').style.display = 'none';
-                        document.getElementById('content').style.display = 'block';
+                              
 
                         let image = '';
                         let signature = '';

@@ -345,96 +345,80 @@
                 }
 
                 async function loadSpecialization() {
-                    try {
-                        await delay(1000)
-                        const student = data.student;
-                        const strandSelect = document.getElementById('strand');
-                        
-                        document.getElementById('fName').value = student.firstname;
-                        document.getElementById('mName').value = student.middlename;
-                        document.getElementById('lName').value = student.lastname;
-                        document.getElementById('contact').value = student.contact;
-                        document.getElementById('emergency').value = student.emergency_contact;
-                        document.getElementById('birth').value = student.birthdate;
-                        document.getElementById('age').value = student.age;
-                        document.getElementById('level').value = student.year_level;
-                        document.getElementById('section').value = student.section.id;
-                        document.getElementById('lrn').value = student.lrn;
-                        document.getElementById('brgy').value = student.barangay;
-                        document.getElementById('municipal').value = student.municipality;
-                        
-                        if(student.suffix != null) {
-                            document.getElementById('suffix').value = student.suffix;
-                        }
-                
-                        if(student.strand != null) {
-                            strandSelect.value = student.strand.id;
-                            if(student.strand.specialization != null) {
-                                await populateSpecialization.call(strandSelect);
+                    await delay(1000)
+                    const student = data.student;
+                    console.log(student);
+                    const strandSelect = document.getElementById('strand');
+                    document.getElementById('fName').value = student.firstname;
+                    document.getElementById('mName').value = student.middlename;
+                    document.getElementById('lName').value = student.lastname;
+                    document.getElementById('contact').value = student.contact;
+                    document.getElementById('emergency').value = student.emergency_contact;
+                    document.getElementById('birth').value = student.birthdate;
+                    document.getElementById('age').value = student.age;
+                    document.getElementById('level').value = student.year_level;
+                    document.getElementById('section').value = student.section.id;
+                    document.getElementById('lrn').value = student.lrn;
+                    document.getElementById('brgy').value = student.barangay;
+                    document.getElementById('municipal').value = student.municipality;
+                    
+                    if(student.suffix != null) {
+                        document.getElementById('suffix').value = student.suffix;
+                    }
             
-                                let specializationSelect = document.getElementById('specializationCon');
-                                specializationSelect.style.display = 'block';
-                                document.getElementById('specialization').value = student.strand.id;
-                            }
+                    strandSelect.value = student.strand.id;
+                    if(student.strand.specialization != null) {
+                        await populateSpecialization.call(strandSelect);
+    
+                        let specializationSelect = document.getElementById('specializationCon');
+                        specializationSelect.style.display = 'block';
+                        document.getElementById('specialization').value = student.strand.id;
+                    }
+                    document.getElementById('screenLoaderCon').style.display = 'none';
+                    document.getElementById('content').style.display = 'block';
+                            
+
+                    let image = '';
+                    let signature = '';
+
+                    if(student.image != null) {
+                        image = student.image;
+                    }else {
+                        image = `${APP_URL}/images/default.jpg`;
+                    }
+                    
+                    if(student.signature != null) {
+                        signature = student.signature;
+                    }else {
+                        signature = `${APP_URL}/images/default-signature.png`;
+                    }
+
+                    dropifyInput.attr('data-default-file', image);
+                    dropifySign.attr('data-default-file', signature);
+
+                    const drEvent = dropifyInput.data('dropify');
+                    if (drEvent) drEvent.destroy();
+                    
+                    const drSignature = dropifySign.data('dropify');
+                    if (drSignature) drSignature.destroy();
+
+                    dropifyInput.dropify({
+                        messages: {
+                            'default': 'Drag and drop a file here or click',
+                            'replace': 'Drag and drop or click to replace',
+                            'remove':  'Remove',
+                            'error':   'Ooops, something wrong happened.'
                         }
-                        
-                        document.getElementById('screenLoaderCon').style.display = 'none';
-                        document.getElementById('content').style.display = 'block';
+                    });
 
-                        let image = '';
-                        let signature = '';
-
-                        if(student.image != null) {
-                            image = student.image;
-                        }else {
-                            image = `${APP_URL}/images/default.jpg`;
+                    dropifySign.dropify({
+                        messages: {
+                            'default': 'Drag and drop a file here or click',
+                            'replace': 'Drag and drop or click to replace',
+                            'remove':  'Remove',
+                            'error':   'Ooops, something wrong happened.'
                         }
-                        
-                        if(student.signature != null) {
-                            signature = student.signature;
-                        }else {
-                            signature = `${APP_URL}/images/default-signature.jpg`;
-                        }
-
-                        dropifyInput.attr('data-default-file', image);
-                        dropifySign.attr('data-default-file', signature);
-
-                        const drEvent = dropifyInput.data('dropify');
-                        if (drEvent) drEvent.destroy();
-                        
-                        const drSignature = dropifySign.data('dropify');
-                        if (drSignature) drSignature.destroy();
-
-                        dropifyInput.dropify({
-                            messages: {
-                                'default': 'Drag and drop a file here or click',
-                                'replace': 'Drag and drop or click to replace',
-                                'remove':  'Remove',
-                                'error':   'Ooops, something wrong happened.'
-                            }
-                        });
-
-                        dropifySign.dropify({
-                            messages: {
-                                'default': 'Drag and drop a file here or click',
-                                'replace': 'Drag and drop or click to replace',
-                                'remove':  'Remove',
-                                'error':   'Ooops, something wrong happened.'
-                            }
-                        });
-                    }catch (error) {
-                        Swal.fire({
-                            position: "top-end",
-                            icon: "error",
-                            color: "#fff",
-                            width: 350,
-                            background:  "#cc0202",
-                            toast: true,
-                            title: 'Something went wrong while loading data. Please try again later.',
-                            showConfirmButton: false,
-                            timer: 5000,
-                        })
-                    } 
+                    }); 
                 }
                 
                 loadSpecialization(); 

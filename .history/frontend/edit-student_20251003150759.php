@@ -348,8 +348,8 @@
                     try {
                         await delay(1000)
                         const student = data.student;
+                        console.log(student);
                         const strandSelect = document.getElementById('strand');
-                        
                         document.getElementById('fName').value = student.firstname;
                         document.getElementById('mName').value = student.middlename;
                         document.getElementById('lName').value = student.lastname;
@@ -367,19 +367,17 @@
                             document.getElementById('suffix').value = student.suffix;
                         }
                 
-                        if(student.strand != null) {
-                            strandSelect.value = student.strand.id;
-                            if(student.strand.specialization != null) {
-                                await populateSpecialization.call(strandSelect);
-            
-                                let specializationSelect = document.getElementById('specializationCon');
-                                specializationSelect.style.display = 'block';
-                                document.getElementById('specialization').value = student.strand.id;
-                            }
+                        strandSelect.value = student.strand.id;
+                        if(student.strand.specialization != null) {
+                            await populateSpecialization.call(strandSelect);
+        
+                            let specializationSelect = document.getElementById('specializationCon');
+                            specializationSelect.style.display = 'block';
+                            document.getElementById('specialization').value = student.strand.id;
                         }
-                        
                         document.getElementById('screenLoaderCon').style.display = 'none';
                         document.getElementById('content').style.display = 'block';
+                              
 
                         let image = '';
                         let signature = '';
@@ -393,7 +391,7 @@
                         if(student.signature != null) {
                             signature = student.signature;
                         }else {
-                            signature = `${APP_URL}/images/default-signature.jpg`;
+                            signature = `${APP_URL}/images/default-signature.png`;
                         }
 
                         dropifyInput.attr('data-default-file', image);
