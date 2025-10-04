@@ -269,7 +269,7 @@
                     confirmButtonText: "Yes, delete it!"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        fetch(`https://hnvs-id-be.creativedevlabs.com/deletegenerate/${id}`, {
+                        fetch(`https://hnvs-id-be.creativedevlabs.com/api/deletegenerate/${id}`, {
                             method: "DELETE",
                             headers: {
                                 "Accept": "application/json",
