@@ -427,28 +427,28 @@
             background-color: #000;
             color: white;
             border: 1px solid #333;
-            width: 20px;
-            height: 94px;
+            width: -60px;
+            height: 56px;
         }
         .word-school-year {
             background-color: #000;
             color: white;
             border: 1px solid #333;
-            width: 20px;
-            height: 90px;
+            width: -60px;
+            height: 56px;
         }
         .first-cell, .second-cell {
             background-color: white;
             color: black;
             border: 1px solid #333;
-            width: 20px;
-            height: 90px;
+            width: -60px;
+            height: 56px;
         }
         .empty-cell {
             background-color: white;
             border: 1px solid #333;
-            width: 15px;
-            height: 90px;
+            width: -60px;
+            height: 56px;
         }
         @media print {
             html, body {
@@ -720,34 +720,46 @@
                 <div class="id-card-back back-top">
                 <div class="left-content">
                     <div class="left-bar year-strip">
-                    <table id="schoolYearTable">
-                        <tr>
-                        <td class="word-school-year"></td>
-                        <td class="year-cell"><div class="rotated-text">2024-2025</div></td>
-                        <td class="empty-cell"></td>
-                        <td class="empty-cell"></td>
-                        </tr>
-                        <tr>
-                        <td class="word-school-year"><div class="rotated-text">SCHOOL YEAR</div></td>
-                        <td class="year-cell"><div class="rotated-text">2023-2024</div></td>
-                        <td class="empty-cell"></td>
-                        <td class="empty-cell"></td>
-                        </tr>
-                        <tr>
-                        <td class="word-school-year"></td>
-                        <td class="semester-cell"><div class="rotated-text">Semester</div></td>
-                        <td class="first-cell"><div class="rotated-text">First</div></td>
-                        <td class="second-cell"><div class="rotated-text">Second</div></td>
-                        </tr>
-                    </table>
+                        <table id="schoolYearTable">
+                                    <tr>
+                                        <td class="word-school-year"></td>
+                                        <td class="year-cell"><div class="rotated-text">2028-2029</div></td>
+                                        <td class="empty-cell"></td>
+                                        <td class="empty-cell"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="word-school-year"></td>
+                                        <td class="year-cell"><div class="rotated-text">2027-2028</div></td>
+                                        <td class="empty-cell"></td>
+                                        <td class="empty-cell"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="word-school-year"><div class="rotated-text">SCHOOL YEAR</div></td>
+                                        <td class="year-cell"><div class="rotated-text">2026-2027</div></td>
+                                        <td class="empty-cell"></td>
+                                        <td class="empty-cell"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="word-school-year"></td>
+                                        <td class="year-cell"><div class="rotated-text">2025-2026</div></td>
+                                        <td class="empty-cell"></td>
+                                        <td class="empty-cell"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="word-school-year"></td>
+                                        <td class="semester-cell"><div class="rotated-text">Semester</div></td>
+                                        <td class="first-cell"><div class="rotated-text">First</div></td>
+                                        <td class="second-cell"><div class="rotated-text">Second</div></td>
+                                    </tr>
+                            </table>
                     </div>
                 </div>
                 <div class="right-content">
                     <div class="top-text">
                     This is to certify that the person whose<br>
-                    picture and signature appear herein<br>
-                    is a bonafide student of <b>Hilongos<br>
-                    National Vocaational School.</b>
+                    picture and signature appear <br>
+                    herein is a bonafide student of <b>Hilongos
+                    National Vocational School.</b>
                     </div>
                     <div class="back-signature">
                     <div class="signature-img-wrap">
@@ -760,7 +772,7 @@
                     <b>IMPORTANT REMINDERS</b><br>
                     Always wear this ID while inside<br>
                     the school campus.<br>
-                    <b>Do not forget your<br>STUDENT LRN NUMBER.</b>
+                    <b>Do not forget your<br>LRN NUMBER.</b>
                     </div>
                     <div class="contact_1">
                     If lost and found, please surrender<br>
@@ -770,7 +782,7 @@
                     </div>
                     <div class="contact">
                     <b>In case of emergency,<br>please contact</b>
-                    <div class="contact-name" id="ename">EFREN IBAÑEZ</div>
+                    <div class="contact-name" id="econtactname">EFREN IBAÑEZ</div>
                     <div class="contact-number" id="cnumber">0935-121-9395</div>
                     </div>
                     <div class="qr-box">
@@ -782,7 +794,7 @@
                 </div>
                 </div>
                 <div class="facebook-footer back-bottom">
-                https://www.hnvs.edu.ph.com/
+                https://hnvs.edu.ph/
                 </div>
         </div>
     </div>
@@ -849,7 +861,8 @@ fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
     document.getElementById('first-name').firstChild.textContent = data.firstname + ' ';
     document.getElementById('middle-name').textContent = data.middlename ? data.middlename.charAt(0) + '.' : '';
     document.getElementById('dob-num').textContent   = data.birthdate;
-    document.getElementById('cnumber').textContent   = data.emergency_contact;
+    document.getElementById('cnumber').textContent   = data.contact;
+    document.getElementById('econtactname').textContent   = data.emergency_contact;
     document.getElementById('brgy-address').textContent = `${data.barangay}, ${data.municipality}`;
     document.getElementById('student-photo').src = data.image || "bakla.png";
     document.getElementById('student-signature').src = data.signature || "signatura.png";

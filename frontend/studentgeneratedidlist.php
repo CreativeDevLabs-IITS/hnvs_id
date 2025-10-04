@@ -269,7 +269,7 @@
                     confirmButtonText: "Yes, delete it!"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        fetch(`https://hnvs-id-be.creativedevlabs.com/api/deletegenerate/${id}`, {
+                        fetch(`http://backend.test/api/deletegenerate/${id}`, {
                             method: "DELETE",
                             headers: {
                                 "Accept": "application/json",
@@ -318,7 +318,9 @@
         const showingEnd = Math.min(end, total);
         infoDiv.textContent = `Showing ${showingStart} to ${showingEnd} of ${total} students`;
     }
-    fetch(`https://hnvs-id-be.creativedevlabs.com/api/showgeneratedids`, {
+
+    // Fetch students from API
+    fetch(`http://backend.test/api/showgeneratedids`, {
         headers: {
             "Accept": "application/json",
             "Authorization": "Bearer " + localStorage.getItem("token")
@@ -326,11 +328,14 @@
     })
     .then(res => res.json())
     .then(data => {
-        console.log("API Response:", data);
+        console.log("API Response:", data); // Debug check
+        // Kung array mismo ang balik, gamitin diretso. Kung naka-wrap sa "data", gamitin yun.
         students = Array.isArray(data) ? data : (data.data || []);
         renderTablePage(currentPage);
     })
     .catch(err => console.error(err));
+
+    // Search input listener
     document.getElementById("searchInput").addEventListener("input", (e) => {
         const query = e.target.value.trim().toLowerCase();
         filteredStudents = students.filter(student => 
