@@ -181,6 +181,7 @@ class StudentController extends Controller
                     $validate['strand_id'] = $strand->id;
                 }
             }
+            
 
             if($request->hasFile('image')) {
                 if($student->image && Storage::disk('public')->exists($student->image)) {
