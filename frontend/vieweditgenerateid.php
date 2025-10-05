@@ -534,89 +534,91 @@
         }
 </style>
 <style>
-  
-   @media print {
-      html, body {
-        zoom: 1.03; 
-        padding: 0;
-        margin: 0;
-      }
-
-      body * {
-        visibility: hidden;
-      }
-
-      #idWrapper, #idWrapper * {
-        visibility: visible;
-      }
-
-      #idWrapper {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background: white;
-      }
-
-      #idFront, #idBack {
-        page-break-before: avoid;
-        page-break-after: avoid;
-      }
-
-      .front {
-        background-color: #b8d3e6 !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-
-      @page {
-        margin: 0;
-        size: auto;
-      }
     
-      .back {
-        background-color: white !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
+    @media print {
+        html, body {
+            zoom: 1.03; 
+            padding: 0;
+            margin: 0;
+        }
 
-      .id.back .back-top {
-        background-color: white !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
+        body * {
+            visibility: hidden;
+        }
+
+        #idWrapper, #idWrapper * {
+            visibility: visible;
+        }
+
+        #idWrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+        }
+
+        #idFront, #idBack {
+            page-break-before: avoid;
+            page-break-after: avoid;
+        }
+
+        .front {
+            background-color: #b8d3e6 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        @page {
+            margin: 0;
+            size: auto;
+        }
+        
+        .back {
+            background-color: white !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        .id.back .back-top {
+            background-color: white !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
 
 
-      .year-cell,
-      .semester-cell {
-        background-color: black !important;
-        color: white !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
+        .year-cell,
+        .semester-cell {
+            background-color: white !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
 
 
-      .rotated-text {
-        color: white !important;
-        background-color: black !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
+        .rotated-text {
+            background-color: white !important; 
+            color: black !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            }
 
 
-      .first-cell .rotated-text,
-      .second-cell .rotated-text {
-        background-color: white !important;
-        color: black !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-
-      /* Print setup */
-      @page {
-        margin: 0;
-        size: auto;
-      }
+        .first-cell .rotated-text,
+        .second-cell .rotated-text {
+            background-color: white !important;
+            color: black !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+         .facebook-footer {
+            padding: 1px 0 5px 0 !important;
+        }
+        /* Print setup */
+        @page {
+            margin: 0;
+            size: auto;
+        }
     }
 </style>
     <div style="height: auto; background-color: #f1f1f1; " class="dashboard">
