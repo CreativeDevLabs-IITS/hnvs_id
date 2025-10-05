@@ -28,7 +28,7 @@ class UserController extends Controller
 
     public function list() {
         return response()->json([
-            'users' => User::paginate(10)
+            'users' => User::paginate(10);
         ]);
     }
 
@@ -132,6 +132,7 @@ class UserController extends Controller
                 $path = $file->store('images', 'public');
                 $validate['image'] = $path;
             }
+            $validate['role'] = 0;
             $user->update($validate);
 
             return response()->json([

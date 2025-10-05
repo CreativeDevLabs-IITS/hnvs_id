@@ -28,22 +28,22 @@ class UserController extends Controller
 
     public function list() {
         return response()->json([
-            'users' => User::paginate(10)
+            'teachers' => User::where('role', '!=', '0')->get()
         ]);
     }
 
     public function search(Request $request) {
         try {
-            $user = User::query();
+            $teacher = User::query();
 
             if($request->has('search')) {
                 $search = $request->input('search');
-                $user->where('firstname', 'LIKE', "%{$search}%")
+                $teacher->where('firstname', 'LIKE', "%{$search}%")
                 ->orWhere('lastname', 'LIKE', "%{$search}%");
             }
 
             return response()->json([
-                'users' => $user->get()
+                'teachers' => $teacher->get()
             ]);
         }catch(Exception $e) {
             return response()->json([
@@ -71,15 +71,15 @@ class UserController extends Controller
                 $validate['image'] = $path;
             }
 
-            $user = User::create($validate);
+            $teacher = User::create($validate);
 
-            $user->email_token = Str::random(60);
-            $user->email_token_expires_at = now()->addHours(48);
-            $user->save();
-            $link = 'http://hnvs.system.test/setup.php?token=' . $user->email_token;
+            $teacher->email_token = Str::random(60);
+            $teacher->email_token_expires_at = now()->addHours(48);
+            $teacher->save();
+            $link = 'http://hnvs.system.test/setup.php?token=' . $teacher->email_token;
 
             try {
-                Mail::to($user->email)->send(new TeacherCredential($user->firstname, $link));
+                Mail::to($teacher->email)->send(new TeacherCredential($teacher->firstname, $link));
             }catch(Exception $e) {
                 return response()->json([
                     'error' => 'Failed to send email. Please check the email address or try again later.'
@@ -88,7 +88,7 @@ class UserController extends Controller
 
 
             return response()->json([
-                'message' => 'User added successfully.'
+                'message' => 'Teacher added successfully.'
             ], 200);
 
         }catch(ValidationException $e) {
@@ -101,13 +101,13 @@ class UserController extends Controller
 
     public function find(Request $request) {
         return response()->json([
-            'user' => User::find($request->id)
+            'teacher' => User::find($request->id)
         ]);
     }
 
     public function edit(Request $request) {
         try {
-            $user = User::find($request->id);
+            $teacher = User::find($request->id);
 
             $validate = $request->validate([
                 'firstname' => ['nullable', 'string', 'regex:/^[A-Za-z\s]+$/'],
@@ -119,23 +119,23 @@ class UserController extends Controller
                 'email' => [
                     'nullable',
                     'email',
-                    Rule::unique('users')->ignore($user->id)
+                    Rule::unique('users')->ignore($teacher->id)
                 ]
             ]);
 
             if($request->hasFile('image')) {
-                if($user->image && Storage::disk('public')->exists($user->image)) {
-                    Storage::disk('public')->delete($user->image);
+                if($teacher->image && Storage::disk('public')->exists($teacher->image)) {
+                    Storage::disk('public')->delete($teacher->image);
                 }
 
                 $file = $request->file('image');
                 $path = $file->store('images', 'public');
                 $validate['image'] = $path;
             }
-            $user->update($validate);
+            $teacher->update($validate);
 
             return response()->json([
-                'message' => 'User updated successfully'
+                'message' => 'Teacher updated successfully'
             ]);
         }catch(ValidationException $e) {
             return response()->json([
@@ -146,15 +146,15 @@ class UserController extends Controller
 
     public function delete(Request $request) {
         try {
-            $user = User::find($request->id);
-            if($user->image && Storage::disk('public')->exists($user->image)) {
-                Storage::disk('public')->delete($user->image);
+            $teacher = User::find($request->id);
+            if($teacher->image && Storage::disk('public')->exists($teacher->image)) {
+                Storage::disk('public')->delete($teacher->image);
             }
 
-            $user->delete();
+            $teacher->delete();
 
             return response()->json([
-                'message' => 'User deleted'
+                'message' => 'Teacher deleted'
             ]);
         }catch(Exception $e) {
             return response()->json([
@@ -163,12 +163,12 @@ class UserController extends Controller
         }
     }
 
-    // public function count() {
-    //     return response()->json([
-    //         'teachers' => User::count(),
-    //         'user' => Auth::user()
-    //     ]);
-    // }
+    public function count() {
+        return response()->json([
+            'teachers' => User::count(),
+            'user' => Auth::user()
+        ]);
+    }
 
     public function logout(Request $request) {
         $user = Auth::user();
@@ -181,22 +181,22 @@ class UserController extends Controller
     public function setup(Request $request) {
         try {
             $token = $request->token;
-            $user = User::where('email_token', $token)->first();
+            $teacher = User::where('email_token', $token)->first();
 
-            if(!$user) {
+            if(!$teacher) {
                 return response()->json([
                     'invalid' => 'We are sorry, the page requested was invalid. Please try again.'
                 ], 404);
             }
 
-            if(now()->greaterThan($user->email_token_expires_at)) {
+            if(now()->greaterThan($teacher->email_token_expires_at)) {
                 return response()->json([
                     'expired' => 'We are sorry, but the requested page token has expired.<br> Please ask your administrator for your credentials.'
                 ]);
             }
 
             return response()->json([
-                'data' => $user
+                'data' => $teacher
             ]);
 
         }catch(Exception $e) {
@@ -208,13 +208,13 @@ class UserController extends Controller
 
     public function saveSetup(Request $request) {
         try {
-            $user = User::find($request->id);
+            $teacher = User::find($request->id);
             $validate = $request->validate([
                 'password' => 'required'
             ]);
 
-            $user->password = bcrypt($request->password);
-            $user->save();
+            $teacher->password = bcrypt($request->password);
+            $teacher->save();
 
             return response()->json([
                 'message' => 'Password setup saved.'
