@@ -768,9 +768,12 @@
                     <img id="student-qr" src="" alt="QR" />
                 </div>
                     <div class="track">
-                        <div class="strand" id="strand"></div>
-                        <div class="doorway-word" id="doorway-word">Doorway:</div>
-                        <div class="doorway" id="doorway"></div>
+                    <div class="strand">
+                        SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
+                    </div>
+                    <div class="doorway-word">Doorway:</div>
+                    <div class="doorway">DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
+                    </div>
                 </div>
 
             <!-- ID BACK -->
@@ -1162,42 +1165,4 @@ document.getElementById('saveBtn').addEventListener('click', function () {
     });
 });
 </script>
-
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const studentId = params.get('id') || 1;
-
-    fetch(`https://hnvs-id-be.creativedevlabs.com/api/fetchStrandDoorway/${studentId}`, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log("✅ Strand/Doorway Data:", data);
-
-        if (data.strand_name) {
-            document.getElementById('strand').textContent = data.strand_name;
-        } else {
-            document.getElementById('strand').textContent = 'No Strand Assigned';
-        }
-
-        if (data.doorway) {
-            document.getElementById('doorway').textContent = data.doorway;
-        } else {
-            document.getElementById('doorway').textContent = 'No Doorway Assigned';
-        }
-    })
-    .catch(error => {
-        console.error(" Error fetching strand/doorway:", error);
-    });
-});
-</script>
-
-
-
 
