@@ -741,9 +741,12 @@
                 <img id="student-qr" src="" alt="QR" />
             </div>
                 <div class="track">
-                    <div class="strand" id="strand"></div>
-                    <div class="doorway-word" id="doorway-word">Doorway:</div>
-                    <div class="doorway" id="doorway"></div>
+                    <div class="strand" id="strand">
+                        SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
+                    </div>
+                    <div class="doorway-word">Doorway:</div>
+                    <div class="doorway" id="doorway"></div>DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
+                    </div>
             </div>
             <div class="id back" id="idBack" style="display: none;">
                 <div class="id-card-back back-top">
@@ -896,7 +899,6 @@ fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
     document.getElementById('student-photo').src = data.image || "bakla.png";
     document.getElementById('student-signature').src = data.signature || "signatura.png";
     document.getElementById('student-qr').src = data.qr_path || '';
-    
     if (data.photo_position) {
         try {
             const pos = JSON.parse(data.photo_position);
@@ -1152,7 +1154,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(res => res.json())
     .then(data => {
-        console.log(" Strand/Doorway Data:", data);
+        console.log("✅ Strand/Doorway Data:", data);
 
         if (data.strand_name) {
             document.getElementById('strand').textContent = data.strand_name;

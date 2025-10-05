@@ -768,9 +768,12 @@
                     <img id="student-qr" src="" alt="QR" />
                 </div>
                     <div class="track">
-                        <div class="strand" id="strand"></div>
-                        <div class="doorway-word" id="doorway-word">Doorway:</div>
-                        <div class="doorway" id="doorway"></div>
+                    <div class="strand" id="strand">
+                        SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
+                    </div>
+                    <div class="doorway-word">Doorway:</div>
+                    <div class="doorway" id="doorway"></div>DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
+                    </div>
                 </div>
 
             <!-- ID BACK -->
@@ -1162,6 +1165,7 @@ document.getElementById('saveBtn').addEventListener('click', function () {
     });
 });
 </script>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
@@ -1195,7 +1199,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
-
-
-
-
