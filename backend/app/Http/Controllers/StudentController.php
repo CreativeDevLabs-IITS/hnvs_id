@@ -174,7 +174,7 @@ class StudentController extends Controller
                     'Industrial Arts (IA)',
                     'Family and Consumer Science (FCS)'
                 ];
-    
+
                 if(in_array($strand->cluster, $tracks)) {
                     $validate['strand_id'] = $request->specialization;
                 }else {
@@ -258,28 +258,28 @@ class StudentController extends Controller
                 ->where('lrn', $request->lrn)->first();
             }elseif($request->filled('firstname') && $request->filled('lastname')) {
                 $query = Student::query()->with(['section', 'strand', 'subjects']);
-    
+
                 if($request->filled('firstname')) {
                     $query->where('firstname', 'LIKE', "%$request->firstname%");
                 }
-    
+
                 if($request->filled('lastname')) {
                     $query->where('lastname', 'LIKE', "%$request->lastname%");
                 }
-    
+
                 $student = $query->first();
             }else {
                 return response()->json([
                     'error' => 'No search input provided'
                 ], 400);
             }
-    
+
             if(!$student) {
                 return response()->json([
                     'error' => 'Student not found.'
                 ], 404);
             }
-    
+
             return response()->json([
                 'data' => $student,
                 'strands' => Strand::all()
@@ -350,6 +350,7 @@ class StudentController extends Controller
         }
     }
 
+
     public function import(Request $request) {
         try {
             $request->validate([
@@ -360,7 +361,7 @@ class StudentController extends Controller
             foreach ($import->rows as $row) {
                 if(!empty($row['cluster'])) {
                     $strand = Strand::where('cluster', $row['cluster'])->first();
-                    
+
                     if (!$strand) {
                         $strand = Strand::create([
                             'cluster' => $row['cluster'],
@@ -369,9 +370,9 @@ class StudentController extends Controller
                         ]);
                     }
                 }
-                
+
                 $section = Section::where('name', $row['section'])->first();
-                
+
                 if (empty($row['first_name'])) {
                     \Log::warning('Skipping row with missing firstname', $row->toArray());
                     continue;
@@ -403,25 +404,25 @@ class StudentController extends Controller
                 ]);
                $hashedQr = sha1(uniqid((string)$student->id, true));
                     $qrData = env('FRONTEND_URL') . 'student/verify/' . $hashedQr;
-                    
+
                     $qrcode = QrCode::create($qrData)
                         ->setSize(300)
                         ->setMargin(10);
-                    
+
                     // Commented out logo creation to remove it from QR
                     // $logo = Logo::create(public_path('storage/gallery/hnvslogoqr.png'))
                     //     ->setResizeToWidth(60)
                     //     ->setPunchoutBackground(true);
-                    
+
                     $writer = new PngWriter();
                     // Removed $logo so QR will be plain
                     $result = $writer->write($qrcode); // , $logo);
-                    
+
                     $fileName = 'qr_code/' . uniqid() . '.png';
                     Storage::disk('public')->put($fileName, $result->getString());
-                    
+
                     $qr_path = env('APP_URL') . $fileName;
-                    
+
                     $student->qr_path = $qr_path;
                     $student->qr_token = $hashedQr;
                     $student->qr_code = $qrData;
@@ -440,33 +441,132 @@ class StudentController extends Controller
             ]);
         }
     }
-    public function count() {
-        return response()->json([
-            'students' => Student::count(),
-        ]);
-    }
-    public function sectionStrandList() {
-        return response()->json([
-            'sections' => Section::all(),
-            'strands' => Strand::all()
-        ]);
-    }
-    public function subjectStudents(Request $request) {
-        try {
-            $student_ids = $request->ids;
-            $subject_id = Subject::find($request->subject);
 
-            $subject_id->students()->sync($student_ids);
-            return response()->json([
-                'message' => 'Subject roster updated successfully.'
-            ]);
+// public function import(Request $request) {
+//     try {
+//         $request->validate([
+//             'file' => 'required|file|mimes:xlsx,csv'
+//         ]);
 
-        }catch(Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ]);
-        }
-    }
+//         $import = new StudentImport;
+//         Excel::import($import, $request->file('file'));
+
+//         foreach ($import->rows as $row) {
+//             // 🧠 Strand
+//             if(!empty($row['cluster'])) {
+//                 $strand = Strand::where('cluster', $row['cluster'])->first();
+
+//                 if (!$strand) {
+//                     $strand = Strand::create([
+//                         'cluster' => $row['cluster'],
+//                         'track' => $row['track'],
+//                         'specialization' => $row['specialization'] ?? null
+//                     ]);
+//                 }
+//             }
+
+//             // 📌 Section
+//             $section = Section::where('name', $row['section'])->first();
+
+//             if (empty($row['first_name'])) {
+//                 \Log::warning('Skipping row with missing firstname', $row->toArray());
+//                 continue;
+//             }
+
+//             // 📞 Format emergency contact
+//             $namePart = explode(',', $row['emergency_contact']);
+//             $namePart = array_map('trim', $namePart);
+//             $first = $namePart[1] ?? '';
+//             $middle = $namePart[2] ?? '';
+//             $last = $namePart[0] ?? '';
+//             $middleInitial = $middle ? substr($middle, 0, 1) . '.' : '';
+//             $formattedName = $first . ' ' . $middleInitial . ' ' . $last;
+
+//             // 🧍 Create Student
+//             $student = Student::create([
+//                 'firstname' => $row['first_name'],
+//                 'middlename' => $row['middle_name'],
+//                 'lastname' => $row['last_name'],
+//                 'suffix' => $row['suffix'] ?? null,
+//                 'barangay' => $row['barangay'],
+//                 'municipality' => $row['town'],
+//                 'emergency_contact' => $formattedName,
+//                 'lrn' => $row['lrn'],
+//                 'birthdate' => is_numeric($row['birthday'])
+//                     ? Carbon::instance(ExcelDate::excelToDateTimeObject($row['birthday']))->format('Y-m-d')
+//                     : Carbon::parse($row['birthday'])->format('Y-m-d'),
+//                 'year_level' => '11',
+//                 'section_id' => $section->id ?? null,
+//                 'strand_id' => $strand->id ?? null,
+//             ]);
+
+//             // 🌀 Generate QR with logo
+//             $hashedQr = sha1(uniqid((string)$student->id, true));
+//             $qrData = env('FRONTEND_URL') . 'student/verify/' . $hashedQr;
+
+//             $qrcode = QrCode::create($qrData)
+//                 ->setSize(300)
+//                 ->setMargin(10);
+
+//             // ✅ UNCOMMENTED & ACTIVE
+//             $logo = Logo::create(public_path('storage/gallery/hnvslogoqr.png'))
+//                 ->setResizeToWidth(60)
+//                 ->setPunchoutBackground(true);
+
+//             $writer = new PngWriter();
+//             $result = $writer->write($qrcode, $logo);
+
+//             $fileName = 'qr_code/' . $hashedQr . '.png';
+//             Storage::disk('public')->put($fileName, $result->getString());
+
+//             $qr_path = env('APP_URL') . 'storage/' . $fileName;
+
+//             $student->qr_path = $qr_path;
+//             $student->qr_token = $hashedQr;
+//             $student->qr_code = $qrData;
+//             $student->save();
+//         }
+
+//         return response()->json([
+//             'message' => 'Students imported successfully',
+//             'skipped' => isset($skipped) && count($skipped) > 0
+//                         ? 'Some information are missing for student/s: ' . implode(', ', $skipped)
+//                         : ''
+//         ]);
+//     } catch(Exception $e) {
+//         return response()->json([
+//             'error' => $e->getMessage()
+//         ]);
+//     }
+// }
+
+//     public function count() {
+//         return response()->json([
+//             'students' => Student::count(),
+//         ]);
+//     }
+//     public function sectionStrandList() {
+//         return response()->json([
+//             'sections' => Section::all(),
+//             'strands' => Strand::all()
+//         ]);
+//     }
+//     public function subjectStudents(Request $request) {
+//         try {
+//             $student_ids = $request->ids;
+//             $subject_id = Subject::find($request->subject);
+
+//             $subject_id->students()->sync($student_ids);
+//             return response()->json([
+//                 'message' => 'Subject roster updated successfully.'
+//             ]);
+
+//         }catch(Exception $e) {
+//             return response()->json([
+//                 'error' => $e->getMessage()
+//             ]);
+//         }
+//     }
     public function index()
     {
         $students = Student::with('section')->get();
