@@ -1120,7 +1120,7 @@ document.getElementById('saveBtn').addEventListener('click', function () {
     }));
     if(selectedImage) formData.append('image', selectedImage);
     if(selectedSignature) formData.append('signature', selectedSignature);
-    fetch(`https://hnvs-id-be.creativedevlabs.com/api/save-generated-id`, {
+    fetch(`https://hnvs-id-be.creativedevlabs.com/save-generated-id`, {
         method:"POST",
         headers: {
             "Authorization":"Bearer "+localStorage.getItem("token"),
