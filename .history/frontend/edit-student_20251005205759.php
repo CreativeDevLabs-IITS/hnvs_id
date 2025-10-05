@@ -247,13 +247,13 @@
                 
                 strands.forEach(strand => {
                     let exists = Array.from(strandSelect.options).some(
-                        option => option.textContent === strand?.cluster
+                        option => option.textContent === strand.cluster
                     );
                     
                     if(!exists) {
                         let strandOption = document.createElement('option');
                         strandOption.value = strand.id;
-                        strandOption.textContent = strand?.cluster;
+                        strandOption.textContent = strand.cluster;
                         
                         strandSelect.appendChild(strandOption);
                     }
@@ -349,6 +349,7 @@
                         await delay(1000)
                         const student = data.student;
                         const strandSelect = document.getElementById('strand');
+                        
                         document.getElementById('fName').value = student.firstname;
                         document.getElementById('mName').value = student.middlename;
                         document.getElementById('lName').value = student.lastname;
@@ -457,7 +458,6 @@
             const suffix = document.getElementById('suffix');
             const image = document.getElementById('studentImg').files[0];
             const signature = document.getElementById('signature').files[0];
-            const strand = document.getElementById('strand');
 
             let formData = new FormData();
             formData.append('id', id);
@@ -470,14 +470,11 @@
             formData.append('age', document.getElementById('age').value);
             formData.append('year_level', document.getElementById('level').value);
             formData.append('section_id', document.getElementById('section').value);
+            formData.append('strand', document.getElementById('strand').value);
             formData.append('lrn', document.getElementById('lrn').value);
             formData.append('barangay', document.getElementById('brgy').value);
             formData.append('municipality', document.getElementById('municipal').value);
-            
-            if(strand.value != null) {
-                formData.append('strand', strand.value);
-            }
-            
+
             if(specialization.value != null ) {
                 formData.append('specialization', specialization.value);
             }
@@ -517,10 +514,9 @@
                         title: response.message,
                         showConfirmButton: false,
                         timer: 3000,
-                    })
-                    // .then (() => {
-                    //     location.href = 'students.php';
-                    // });
+                    }).then (() => {
+                        location.href = 'students.php';
+                    });
                 }else {
                     Swal.fire({
                         position: "top-end",

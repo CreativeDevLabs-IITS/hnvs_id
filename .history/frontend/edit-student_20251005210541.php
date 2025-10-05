@@ -457,7 +457,6 @@
             const suffix = document.getElementById('suffix');
             const image = document.getElementById('studentImg').files[0];
             const signature = document.getElementById('signature').files[0];
-            const strand = document.getElementById('strand');
 
             let formData = new FormData();
             formData.append('id', id);
@@ -474,10 +473,8 @@
             formData.append('barangay', document.getElementById('brgy').value);
             formData.append('municipality', document.getElementById('municipal').value);
             
-            if(strand.value != null) {
-                formData.append('strand', strand.value);
-            }
-            
+            formData.append('strand', document.getElementById('strand')?.value);
+
             if(specialization.value != null ) {
                 formData.append('specialization', specialization.value);
             }
