@@ -835,7 +835,7 @@ function printVisibleID() {
 <script>
         const params = new URLSearchParams(window.location.search);
         const studentId = params.get('id') || 1;
-        fetch(`https://hnvs-id.creativedevlabs.com/api/showstudentid/${studentId}`, {
+        fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
