@@ -111,7 +111,7 @@ class StudentController extends Controller
                 ->setSize(400)
                 ->setMargin(10);
 
-            $logo = Logo::create(public_path('gallery/hnvslogoqr.png'))
+            $logo = Logo::create(public_path('storage/gallery/hnvslogoqr.png'))
                 ->setResizeToWidth(70)
                 ->setPunchoutBackground(true);
 
