@@ -54,7 +54,7 @@ class RegenerateStudentQrWithLogo extends Command
 
             // 🔁 Update the student record with the new path
             $student->update([
-                'qr_path' => env('APP_URL') . 'storage/' . $fileName
+                'qr_code' => env('APP_URL') . 'storage/' . $fileName
             ]);
 
             $this->info("✅ Regenerated QR for: {$student->firstname} {$student->lastname}");
