@@ -876,7 +876,7 @@ const studentId = params.get('id') || 1;
 let editMode = false;
 let selectedImage = null;
 let selectedSignature = null;
-fetch(`https://hnvs-id.creativedevlabs.com/api/showstudentid/${studentId}`, {
+fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
     method: 'GET',
     headers: {
         'Accept': 'application/json',
