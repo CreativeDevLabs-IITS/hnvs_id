@@ -741,12 +741,9 @@
                 <img id="student-qr" src="" alt="QR" />
             </div>
                 <div class="track">
-                <div class="strand">
-                    SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
-                </div>
-                <div class="doorway-word">Doorway:</div>
-                <div class="doorway">DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
-                </div>
+                    <div class="strand" id="strand"></div>
+                    <div class="doorway-word" id="doorway-word">Doorway:</div>
+                    <div class="doorway" id="doorway"></div>
             </div>
             <div class="id back" id="idBack" style="display: none;">
                 <div class="id-card-back back-top">
@@ -899,6 +896,7 @@ fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
     document.getElementById('student-photo').src = data.image || "bakla.png";
     document.getElementById('student-signature').src = data.signature || "signatura.png";
     document.getElementById('student-qr').src = data.qr_path || '';
+    
     if (data.photo_position) {
         try {
             const pos = JSON.parse(data.photo_position);
@@ -1140,3 +1138,36 @@ document.getElementById('saveBtn').addEventListener('click', function () {
 });
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const studentId = params.get('id') || 1;
+
+    fetch(`https://hnvs-id-be.creativedevlabs.com/api/fetchStrandDoorway/${studentId}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(" Strand/Doorway Data:", data);
+
+        if (data.strand_name) {
+            document.getElementById('strand').textContent = data.strand_name;
+        } else {
+            document.getElementById('strand').textContent = 'No Strand Assigned';
+        }
+
+        if (data.doorway) {
+            document.getElementById('doorway').textContent = data.doorway;
+        } else {
+            document.getElementById('doorway').textContent = 'No Doorway Assigned';
+        }
+    })
+    .catch(error => {
+        console.error(" Error fetching strand/doorway:", error);
+    });
+});
+</script>
