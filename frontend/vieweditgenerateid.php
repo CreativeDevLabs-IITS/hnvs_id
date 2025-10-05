@@ -288,7 +288,6 @@
         .id-card-back {
             height: 300px;
             background: white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             display: flex;
             font-size: 9px;
             position: relative;
@@ -306,7 +305,12 @@
             padding: 12px 8px 5px 8px;
             gap: 5px;
         }
-        .left-content { width: 25%; }
+        .left-content { 
+            width: 25%; 
+            border-left:1px solid;
+            border-top:1.5px solid;
+            border-bottom:1.5px solid;
+        }
         .right-content {
             width: 75%;
             flex: 1;
@@ -393,18 +397,21 @@
             margin-bottom: 4px;
         }
         .qr-box {
-            background: black;
-            color: white;
+            background: none;
+            color: black;
             font-size: 7px;
+            border:1px solid;
             text-align: center;
             padding: 4px 2px;
             margin-top: 1px;
             font-weight: bold;
         }
         .facebook-footer {
-            background: #000000;
-            color: #fff;
-            font-size: 7px;
+            background: none;
+            color: black;
+            font-weight:bold;
+            border-top:1px solid;
+            font-size: 8px;
             text-align: center;
             padding: 5px 0 5px 0;
             letter-spacing: 0.5px;
@@ -423,23 +430,23 @@
             line-height: 1;
         }
         .year-cell, .semester-cell {
-            background-color: #000;
-            color: white;
+            background-color: none;
+            color: black;
             border: 1px solid #333;
             width: -60px;
             height: 56px;
         }
         .word-school-year {
-            background-color: #000;
-            color: white;
-            border: 1px solid #333;
+            background-color: none;
+            color: black;
             width: -60px;
             height: 56px;
         }
         .first-cell, .second-cell {
             background-color: white;
             color: black;
-            border: 1px solid #333;
+            border-right: 1px solid #333;
+            border-bottom: 1px solid #333;
             width: -60px;
             height: 56px;
         }
@@ -448,6 +455,23 @@
             border: 1px solid #333;
             width: -60px;
             height: 56px;
+        }
+        .last .semester-cell{
+            border-bottom:none;
+        }
+        .last .first-cell{
+            border-bottom:none;
+        }
+        .last .second-cell{
+            border-bottom:none;
+        }
+
+        .first .year-cell{
+            border-top:none;
+        }
+
+        .first .empty-cell{
+            border-top:none;
         }
         @media print {
             html, body {
@@ -510,59 +534,89 @@
         }
 </style>
 <style>
-    @media print {
-        html, body {
-            padding: 0;
-            margin: 0;
-        }
-        body * {
-            visibility: hidden;
-        }
-        #idFront, #idBack, 
-        #idFront *, #idBack * {
-            visibility: visible;
-        }
-        #idFront.id-card {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 2.13in;  
-            height: 3.38in; 
-            background: #B8D3E6 !important;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-        }
-        #idBack.id.back {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 2.13in;
-            height: 3.38in;
-            background: white !important;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-        }
-        #idBack .id-card-back.back-top {
-            background: white !important;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-        }
-        .year-cell, .semester-cell,
-        .rotated-text {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-        }
-        .first-cell .rotated-text,
-        .second-cell .rotated-text {
-            background-color: white !important;
-            color: black !important;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-        }
-        @page {
-            margin: 0;
-            size: 2.13in 3.38in; 
-        }
+  
+   @media print {
+      html, body {
+        zoom: 1.03; 
+        padding: 0;
+        margin: 0;
+      }
+
+      body * {
+        visibility: hidden;
+      }
+
+      #idWrapper, #idWrapper * {
+        visibility: visible;
+      }
+
+      #idWrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: white;
+      }
+
+      #idFront, #idBack {
+        page-break-before: avoid;
+        page-break-after: avoid;
+      }
+
+      .front {
+        background-color: #b8d3e6 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      @page {
+        margin: 0;
+        size: auto;
+      }
+    
+      .back {
+        background-color: white !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .id.back .back-top {
+        background-color: white !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+
+      .year-cell,
+      .semester-cell {
+        background-color: black !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+
+      .rotated-text {
+        color: white !important;
+        background-color: black !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+
+      .first-cell .rotated-text,
+      .second-cell .rotated-text {
+        background-color: white !important;
+        color: black !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      /* Print setup */
+      @page {
+        margin: 0;
+        size: auto;
+      }
     }
 </style>
     <div style="height: auto; background-color: #f1f1f1; " class="dashboard">
@@ -651,7 +705,7 @@
                         <div class="left-content">
                             <div class="left-bar year-strip">
                                 <table id="schoolYearTable">
-                                    <tr>
+                                    <tr class="first">
                                         <td class="word-school-year"></td>
                                         <td class="year-cell"><div class="rotated-text">2028-2029</div></td>
                                         <td class="empty-cell"></td>
@@ -675,7 +729,7 @@
                                         <td class="empty-cell"></td>
                                         <td class="empty-cell"></td>
                                     </tr>
-                                    <tr>
+                                    <tr class="last">
                                         <td class="word-school-year"></td>
                                         <td class="semester-cell"><div class="rotated-text">Semester</div></td>
                                         <td class="first-cell"><div class="rotated-text">First</div></td>
@@ -781,7 +835,7 @@ function printVisibleID() {
 <script>
         const params = new URLSearchParams(window.location.search);
         const studentId = params.get('id') || 1;
-        fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
+        fetch(`https://hnvs-id.creativedevlabs.com/api/showstudentid/${studentId}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',

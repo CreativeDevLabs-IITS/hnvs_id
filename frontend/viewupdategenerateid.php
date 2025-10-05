@@ -288,7 +288,6 @@
         .id-card-back {
             height: 300px;
             background: white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             display: flex;
             font-size: 9px;
             position: relative;
@@ -306,7 +305,12 @@
             padding: 12px 8px 5px 8px;
             gap: 5px;
         }
-        .left-content { width: 25%; }
+        .left-content { 
+            width: 25%; 
+            border-left:1px solid;
+            border-top:1.5px solid;
+            border-bottom:1.5px solid;
+        }
         .right-content {
             width: 75%;
             flex: 1;
@@ -393,18 +397,21 @@
             margin-bottom: 4px;
         }
         .qr-box {
-            background: black;
-            color: white;
+            background: none;
+            color: black;
             font-size: 7px;
+            border:1px solid;
             text-align: center;
             padding: 4px 2px;
             margin-top: 1px;
             font-weight: bold;
         }
         .facebook-footer {
-            background: #000000;
-            color: #fff;
-            font-size: 7px;
+            background: none;
+            color: black;
+            font-weight:bold;
+            border-top:1px solid;
+            font-size: 8px;
             text-align: center;
             padding: 5px 0 5px 0;
             letter-spacing: 0.5px;
@@ -422,24 +429,24 @@
             font-size: 7px;
             line-height: 1;
         }
-        .year-cell, .semester-cell {
-            background-color: #000;
-            color: white;
+      .year-cell, .semester-cell {
+            background-color: none;
+            color: black;
             border: 1px solid #333;
             width: -60px;
             height: 56px;
         }
         .word-school-year {
-            background-color: #000;
-            color: white;
-            border: 1px solid #333;
+            background-color: none;
+            color: black;
             width: -60px;
             height: 56px;
         }
         .first-cell, .second-cell {
             background-color: white;
             color: black;
-            border: 1px solid #333;
+            border-right: 1px solid #333;
+            border-bottom: 1px solid #333;
             width: -60px;
             height: 56px;
         }
@@ -448,6 +455,23 @@
             border: 1px solid #333;
             width: -60px;
             height: 56px;
+        }
+        .last .semester-cell{
+            border-bottom:none;
+        }
+        .last .first-cell{
+            border-bottom:none;
+        }
+        .last .second-cell{
+            border-bottom:none;
+        }
+
+        .first .year-cell{
+            border-top:none;
+        }
+
+        .first .empty-cell{
+            border-top:none;
         }
         @media print {
             html, body {
@@ -726,7 +750,7 @@
                 <div class="left-content">
                     <div class="left-bar year-strip">
                         <table id="schoolYearTable">
-                            <tr>
+                            <tr class="first">
                                 <td class="word-school-year"></td>
                                 <td class="year-cell"><div class="rotated-text">2028-2029</div></td>
                                 <td class="empty-cell"></td>
@@ -750,7 +774,7 @@
                                 <td class="empty-cell"></td>
                                 <td class="empty-cell"></td>
                             </tr>
-                            <tr>
+                            <tr class="last">
                                 <td class="word-school-year"></td>
                                 <td class="semester-cell"><div class="rotated-text">Semester</div></td>
                                 <td class="first-cell"><div class="rotated-text">First</div></td>
@@ -852,7 +876,7 @@ const studentId = params.get('id') || 1;
 let editMode = false;
 let selectedImage = null;
 let selectedSignature = null;
-fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
+fetch(`https://hnvs-id.creativedevlabs.com/api/showstudentid/${studentId}`, {
     method: 'GET',
     headers: {
         'Accept': 'application/json',
