@@ -91,6 +91,8 @@ Route::middleware(['auth:sanctum', 'preventBack'])->group(function() {
     Route::post('/save-generated-id', [GenerateidController::class, 'store']);
     Route::get('/showgeneratedids', [GenerateidController::class, 'index']);
     Route::delete('/deletegenerate/{id}', [GenerateidController::class, 'destroy']);
+    Route::get('/fetchStrandDoorway/{id}', [GenerateidController::class, 'fetchStrandDoorway']);
+
 });
 
 

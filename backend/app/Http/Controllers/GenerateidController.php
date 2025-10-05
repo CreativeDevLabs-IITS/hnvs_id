@@ -11,6 +11,7 @@ class GenerateidController extends Controller
     public function index()
     {
         $students = GenerateId::join('students', 'generate_ids.student_id', '=', 'students.id')
+            ->leftJoin('strands', 'students.strand_id', '=', 'strands.id') 
             ->select(
                 'students.id',
                 'students.firstname',
@@ -24,8 +25,11 @@ class GenerateidController extends Controller
                 'students.emergency_contact',
                 'students.image',
                 'students.signature',
+                'students.doorway', 
+                'strands.cluster as strand_name',
+                'students.strand_id',
                 'generate_ids.print_count'
-            )
+                )
             ->get();
         return response()->json($students);
     }
@@ -90,4 +94,27 @@ class GenerateidController extends Controller
             'message' => 'Generated ID deleted successfully'
         ]);
     }
+    public function fetchStrandDoorway($studentId)
+    {
+        $student = \DB::table('students')
+            ->leftJoin('strands', 'students.strand_id', '=', 'strands.id')
+            ->where('students.id', $studentId)
+            ->select(
+                'students.id',
+                'strands.cluster as strand_name',
+                'students.doorway'
+            )
+            ->first();
+
+        if (!$student) {
+            return response()->json(['message' => 'Student not found'], 404);
+        }
+
+        return response()->json([
+            'id' => $student->id,
+            'strand_name' => $student->strand_name,
+            'doorway' => $student->doorway
+        ]);
+    }
+
 }
