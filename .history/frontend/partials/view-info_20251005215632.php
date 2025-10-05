@@ -139,9 +139,6 @@
 
     $(document).on('click', "#view_student", function() {
         let image = document.getElementById('studentImg');
-        const qrUrl = $(this).data('qr');
-        
-        const qrName = qrUrl.split('/').pop();
 
         document.getElementById('fName').value = $(this).data('firstname');
         document.getElementById('mName').value = $(this).data('middlename');
@@ -158,8 +155,6 @@
         document.getElementById('doorway').value = $(this).data('doorway');
         document.getElementById('brgy').value = $(this).data('brgy');
         document.getElementById('municipal').value = $(this).data('municipal');
-        document.getElementById('qrcode').src = `${APP_URL}/storage/qr_code/${qrName}`;
-
         if ($(this).data('image') == null){
             image.style.display =  'none';
             document.getElementById('no-image').textContent = 'No image';
@@ -168,6 +163,9 @@
             image.style.display = 'block';
             image.src = $(this).data('image');
         }
+        const qrUrl = $(this).data('qr');
+        const qrName = qrUrl.spplit('/').pop();
+        document.getElementById('qrcode').src = APP_URL + '/storage/' + qrName;
 
         if($(this).data('specialization') != null) {
             document.getElementById('empty_con').style.display = 'none';

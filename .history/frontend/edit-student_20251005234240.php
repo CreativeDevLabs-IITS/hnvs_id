@@ -380,7 +380,6 @@
                         document.getElementById('lrn').value = student.lrn;
                         document.getElementById('brgy').value = student.barangay;
                         document.getElementById('municipal').value = student.municipality;
-                        document.getElementById('doorway').value = student.doorway ?? '';
                         
                         if(student.suffix != null) {
                             document.getElementById('suffix').value = student.suffix;
@@ -478,7 +477,6 @@
             const image = document.getElementById('studentImg').files[0];
             const signature = document.getElementById('signature').files[0];
             const strand = document.getElementById('strand');
-            const strand = document.getElementById('doorway');
 
             let formData = new FormData();
             formData.append('id', id);
@@ -497,10 +495,6 @@
             
             if(strand.value != null) {
                 formData.append('strand', strand.value);
-            }
-
-            if(doorway.value != null) {
-                formData.append('doorway', doorway.value);
             }
             
             if(specialization.value != null ) {

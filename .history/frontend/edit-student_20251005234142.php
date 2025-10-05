@@ -97,7 +97,6 @@
                                     <div class="input-group">
                                         <label for="strand" class="text-dark">Doorway</label>
                                         <select class="" name="doorway" id="doorway" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
-                                            <option value="" disabled selected>Select Doorway</option>    
                                             <option value="STEM">STEM</option>
                                             <option value="B & E">B & E</option>
                                             <option value="ASSH">ASSH</option>
@@ -380,7 +379,6 @@
                         document.getElementById('lrn').value = student.lrn;
                         document.getElementById('brgy').value = student.barangay;
                         document.getElementById('municipal').value = student.municipality;
-                        document.getElementById('doorway').value = student.doorway ?? '';
                         
                         if(student.suffix != null) {
                             document.getElementById('suffix').value = student.suffix;
@@ -478,7 +476,6 @@
             const image = document.getElementById('studentImg').files[0];
             const signature = document.getElementById('signature').files[0];
             const strand = document.getElementById('strand');
-            const strand = document.getElementById('doorway');
 
             let formData = new FormData();
             formData.append('id', id);
@@ -497,10 +494,6 @@
             
             if(strand.value != null) {
                 formData.append('strand', strand.value);
-            }
-
-            if(doorway.value != null) {
-                formData.append('doorway', doorway.value);
             }
             
             if(specialization.value != null ) {
