@@ -755,33 +755,33 @@
                         <table id="schoolYearTable">
                                     <tr>
                                         <td class="word-school-year"></td>
-                                        <td class="year-cell"><div class="rotated-text">2028-2029</div></td>
+                                        <td class="year-cell"><div class="rotated-text"><b>2028-2029</b></div></td>
                                         <td class="empty-cell"></td>
                                         <td class="empty-cell"></td>
                                     </tr>
                                     <tr>
                                         <td class="word-school-year"></td>
-                                        <td class="year-cell"><div class="rotated-text">2027-2028</div></td>
+                                        <td class="year-cell"><div class="rotated-text"><b>2027-2028</b></div></td>
                                         <td class="empty-cell"></td>
                                         <td class="empty-cell"></td>
                                     </tr>
                                     <tr>
-                                        <td class="word-school-year"><div class="rotated-text">SCHOOL YEAR</div></td>
-                                        <td class="year-cell"><div class="rotated-text">2026-2027</div></td>
-                                        <td class="empty-cell"></td>
-                                        <td class="empty-cell"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="word-school-year"></td>
-                                        <td class="year-cell"><div class="rotated-text">2025-2026</div></td>
+                                        <td class="word-school-year"><div class="rotated-text"><b>SCHOOL YEAR</b></div></td>
+                                        <td class="year-cell"><div class="rotated-text"><b>2026-2027</b></div></td>
                                         <td class="empty-cell"></td>
                                         <td class="empty-cell"></td>
                                     </tr>
                                     <tr>
                                         <td class="word-school-year"></td>
-                                        <td class="semester-cell"><div class="rotated-text">Semester</div></td>
-                                        <td class="first-cell"><div class="rotated-text">First</div></td>
-                                        <td class="second-cell"><div class="rotated-text">Second</div></td>
+                                        <td class="year-cell"><div class="rotated-text"><b>2025-2026</b></div></td>
+                                        <td class="empty-cell"></td>
+                                        <td class="empty-cell"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="word-school-year"></td>
+                                        <td class="semester-cell"><div class="rotated-text"><b>Semester</b></div></td>
+                                        <td class="first-cell"><div class="rotated-text"><b>First</b></div></td>
+                                        <td class="second-cell"><div class="rotated-text"><b>Second</b></div></td>
                                     </tr>
                             </table>
                     </div>
