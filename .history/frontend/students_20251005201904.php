@@ -398,7 +398,7 @@
                 </td>
                 <td>${student.lrn}</td>
                 <td>${student.emergency_contact}</td>
-                <td>${student.contact ?? '--'}</td>
+                <td>${student.contact}</td>
                 `;
                 tableBody.appendChild(row);
             })
