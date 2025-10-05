@@ -876,7 +876,7 @@ const studentId = params.get('id') || 1;
 let editMode = false;
 let selectedImage = null;
 let selectedSignature = null;
-fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
+fetch(`http://backend.test/api/showstudentid/${studentId}`, {
     method: 'GET',
     headers: {
         'Accept': 'application/json',
@@ -896,7 +896,6 @@ fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
     document.getElementById('student-photo').src = data.image || "bakla.png";
     document.getElementById('student-signature').src = data.signature || "signatura.png";
     document.getElementById('student-qr').src = data.qr_path || '';
-    
     if (data.photo_position) {
         try {
             const pos = JSON.parse(data.photo_position);
@@ -1118,7 +1117,7 @@ document.getElementById('saveBtn').addEventListener('click', function () {
     }));
     if(selectedImage) formData.append('image', selectedImage);
     if(selectedSignature) formData.append('signature', selectedSignature);
-    fetch(`https://hnvs-id-be.creativedevlabs.com/api/save-generated-id`, {
+    fetch(`http://backend.test/api/save-generated-id`, {
         method:"POST",
         headers: {
             "Authorization":"Bearer "+localStorage.getItem("token"),
@@ -1137,6 +1136,7 @@ document.getElementById('saveBtn').addEventListener('click', function () {
     });
 });
 </script>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
