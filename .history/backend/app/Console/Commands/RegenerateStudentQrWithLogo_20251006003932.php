@@ -36,7 +36,7 @@ class RegenerateStudentQrWithLogo extends Command
                 ->setSize(300)
                 ->setMargin(10);
 
-            $logoPath = public_path('gallery/hnvslogoqr.png');
+            $logoPath = asset('storage/gallery/hnvslogoqr.png');
             if (!file_exists($logoPath)) {
                 $this->error("🚫 Logo file not found at: {$logoPath}");
                 return;
