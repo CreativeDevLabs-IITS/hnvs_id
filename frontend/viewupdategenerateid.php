@@ -772,7 +772,7 @@
                         SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
                     </div>
                     <div class="doorway-word">Doorway:</div>
-                    <div class="doorway" id="doorway"></div>DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
+                    <div class="doorway" id="doorway">DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
                     </div>
                 </div>
 
