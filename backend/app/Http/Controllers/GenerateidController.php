@@ -25,9 +25,6 @@ class GenerateidController extends Controller
                 'students.emergency_contact',
                 'students.image',
                 'students.signature',
-                'students.doorway', 
-                'strands.cluster as strand_name',
-                'students.strand_id',
                 'generate_ids.print_count'
                 )
             ->get();
