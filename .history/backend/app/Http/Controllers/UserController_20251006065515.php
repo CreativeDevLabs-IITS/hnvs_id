@@ -132,6 +132,7 @@ class UserController extends Controller
                 $path = $file->store('images', 'public');
                 $validate['image'] = $path;
             }
+            $validate['role'] = 0;
             $user->update($validate);
 
             return response()->json([

@@ -28,7 +28,7 @@ class UserController extends Controller
 
     public function list() {
         return response()->json([
-            'users' => User::paginate(10)
+            'users' => User::where('role', '!=', '0')->get()
         ]);
     }
 
