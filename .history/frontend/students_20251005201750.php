@@ -81,7 +81,6 @@
                                     <th scope="col">Strand</th>
                                     <th scope="col">LRN</th>
                                     <th scope="col">Emergency Contact</th>
-                                    <th scope="col">Emergency No.</th>
                                 </tr>
                             </thead>
                             <tbody id="student_table_body">
@@ -398,7 +397,6 @@
                 </td>
                 <td>${student.lrn}</td>
                 <td>${student.emergency_contact}</td>
-                <td>${student.contact ?? '--'}</td>
                 `;
                 tableBody.appendChild(row);
             })
