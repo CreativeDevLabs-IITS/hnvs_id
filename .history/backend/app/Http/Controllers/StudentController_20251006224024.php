@@ -227,7 +227,7 @@ class StudentController extends Controller
 
     public function search(Request $request) {
         try {
-            $students = Student::query()->with(['section', 'strand', 'subjects']);
+            $students = Student::query()->with(['section', 'doorway', 'strand', 'subjects']);
 
             if($request->filled('search')) {
                 $search = $request->input('search');

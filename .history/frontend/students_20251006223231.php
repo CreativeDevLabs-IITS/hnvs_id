@@ -37,7 +37,7 @@
                             </select>                                
                         </div>
                         <div class="input-group d-flex flex-column align-items-baseline" style="width: 100%">
-                            <label for="doorwayFilter" style="font-size: 13px;" class="text-secondary">Doorway</label>
+                            <label for="doorway" style="font-size: 13px;" class="text-secondary">Doorway</label>
                             <select class="" name="doorway" id="doorwayFilter" style="border: none; box-shadow: none; border-bottom: 1px solid #808b96; outline: none !important; width: 100%">
                                 <option value="" class="text-secondary" id="clearDoorway" selected>All</option>  
                                 <option value="STEM">STEM</option>
@@ -309,13 +309,11 @@
         function fetchSearchResults(search, page = 1) {
             const section = document.getElementById('sectionFilter').value;
             const strand = document.getElementById('strandFilter').value;
-            const doorway = document.getElementById('doorwayFilter').value;
 
             const search_params = new URLSearchParams({
                 search: search,
                 strand: strand,
                 section: section,
-                doorway: doorway,
                 page: page
             });
 
@@ -511,7 +509,7 @@
             fetchSearchResults(currentSearch, 1);
         });
 
-        document.getElementById('doorwayFilter').addEventListener('change', () => {
+        document.getElementById('strandFilter').addEventListener('change', () => {
             currentSearch = search.value.trim();
             fetchSearchResults(currentSearch, 1);
         });
@@ -524,12 +522,6 @@
         document.getElementById('clearStrand').addEventListener('click', () => {
             fetchStudents();
             document.getElementById('strandFilter').value = '';
-            currentSearch.value = '';
-        });
-
-        document.getElementById('clearDoorway').addEventListener('click', () => {
-            fetchStudents();
-            document.getElementById('doorwayFilter').value = '';
             currentSearch.value = '';
         });
 
