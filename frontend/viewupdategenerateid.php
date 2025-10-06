@@ -1107,8 +1107,6 @@ saveBtn.addEventListener('click', () => {
     }
 
     ctx.putImageData(imageData, 0, 0);
-
-    // Convert to blob → File (same as original)
     canvasEl.toBlob(blob => {
       selectedSignature = new File([blob], "signature.png", { type: "image/png" });
       document.getElementById('student-signature').src = URL.createObjectURL(selectedSignature);
@@ -1118,8 +1116,6 @@ saveBtn.addEventListener('click', () => {
     alert("Please draw your signature first ✍️");
   } 
 });
-
-// Resize canvas on window resize too (responsive)
 window.addEventListener('resize', () => {
   if (signaturePad) {
     resizeCanvas();
