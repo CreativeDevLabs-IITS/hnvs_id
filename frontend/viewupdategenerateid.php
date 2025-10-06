@@ -51,7 +51,7 @@
             }
 
             .header img {
-            height: 43px;
+            height: 46px;
             width: auto;
             margin-bottom: 2px;
             }
@@ -67,13 +67,13 @@
             }
 
             .school-name {
-            font-size: 6px;
+            font-size: 7px;
             font-weight: 700;
             margin-bottom:2px;
             }
 
             .school-level {
-            font-size: 7.5px;
+            font-size: 6px;
             font-weight: bold;
             margin-bottom:2px;
             line-height: 1;
@@ -867,6 +867,7 @@
         </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <?php include 'partials/_logout.php' ?>
+    <?php include 'partials/config.php' ?>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const idFront = document.getElementById('idFront');
@@ -903,12 +904,17 @@
     </script>
 
 <script>
+const APP_URL = "<?= APP_URL ?>";
+const FRONTEND_URL = "<?= FRONTEND_URL ?>";
+
 const params = new URLSearchParams(window.location.search);
 const studentId = params.get('id') || 1;
 let editMode = false;
 let selectedImage = null;
 let selectedSignature = null;
-fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
+
+// 🔸 Fetch student ID data
+fetch(`${APP_URL}/api/showstudentid/${studentId}`, {
     method: 'GET',
     headers: {
         'Accept': 'application/json',
@@ -927,6 +933,7 @@ fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
     document.getElementById('student-photo').src = data.image || "bakla.png";
     document.getElementById('student-signature').src = data.signature || "signatura.png";
     document.getElementById('student-qr').src = data.qr_path || '';
+
     if (data.photo_position) {
         try {
             const pos = JSON.parse(data.photo_position);
@@ -938,6 +945,7 @@ fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
             photo.style.height = pos.height + 'px';
         } catch (e) { console.error('Invalid photo_position JSON:', e); }
     }
+
     if (data.signature_position) {
         try {
             const pos = JSON.parse(data.signature_position);
@@ -950,6 +958,8 @@ fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
         } catch (e) { console.error('Invalid signature_position JSON:', e); }
     }
 });
+
+// 🧲 Drag + resize helpers
 function makeDraggable(el) {
     let isDragging = false;
     let offsetX, offsetY;
@@ -985,6 +995,7 @@ function makeDraggable(el) {
         el.style.height = sizeH + "px";
     });
 }
+
 document.getElementById('editBtn').addEventListener('click', () => {
     editMode = true;
     const photo = document.getElementById('student-photo');
@@ -993,12 +1004,15 @@ document.getElementById('editBtn').addEventListener('click', () => {
     if(photo) { photo.classList.add("editable-photo"); makeDraggable(photo); }
     if(signature) { signature.classList.add("editable-signature"); makeDraggable(signature); }
 });
+
+// 🖼️ Photo Upload + Drag & Drop
 document.getElementById('photoInput').addEventListener('change', function() {
     if(editMode && this.files && this.files[0]){
         selectedImage = this.files[0];
         document.getElementById('student-photo').src = URL.createObjectURL(this.files[0]);
     }
 });
+
 const photoDrop = document.getElementById('photoDrop');
 photoDrop.addEventListener('dragover', e => { if(editMode){ e.preventDefault(); photoDrop.classList.add('dragover'); } });
 photoDrop.addEventListener('dragleave', () => { if(editMode) photoDrop.classList.remove('dragover'); });
@@ -1011,12 +1025,15 @@ photoDrop.addEventListener('drop', e => {
         document.getElementById('student-photo').src = URL.createObjectURL(selectedImage);
     }
 });
+
+// ✍️ Signature Upload + Drag & Drop
 document.getElementById('signatureInput').addEventListener('change', function() {
     if(editMode && this.files && this.files[0]){
         selectedSignature = this.files[0];
         document.getElementById('student-signature').src = URL.createObjectURL(this.files[0]);
     }
 });
+
 const signatureDrop = document.getElementById('signatureDrop');
 signatureDrop.addEventListener('dragover', e => { if(editMode){ e.preventDefault(); signatureDrop.classList.add('dragover'); } });
 signatureDrop.addEventListener('dragleave', () => { if(editMode) signatureDrop.classList.remove('dragover'); });
@@ -1029,29 +1046,26 @@ signatureDrop.addEventListener('drop', e => {
         document.getElementById('student-signature').src = URL.createObjectURL(selectedSignature);
     }
 });
+
+// ✍️ Signature Pad Logic (modal, save, clear, etc.)
 const signatureModal = document.getElementById('signatureModal');
 const canvas = document.getElementById('signatureCanvas');
 const clearBtn = document.getElementById('clearSignature');
 const saveBtn = document.getElementById('saveSignature');
 const closeBtn = document.getElementById('closeSignature');
 const strokeSelect = document.getElementById('strokeWeight');
-
 let signaturePad;
 
-// Proper canvas scaling for all devices 📱💻
 function resizeCanvas() {
   const ratio = Math.max(window.devicePixelRatio || 1, 1);
   const displayWidth = canvas.offsetWidth;
   const displayHeight = canvas.offsetHeight;
-
   canvas.width = displayWidth * ratio;
   canvas.height = displayHeight * ratio;
-
   const ctx = canvas.getContext('2d');
   ctx.scale(ratio, ratio);
 }
 
-// Initialize signature pad when modal opens
 function initSignaturePad() {
   resizeCanvas();
   signaturePad = new SignaturePad(canvas, {
@@ -1061,7 +1075,6 @@ function initSignaturePad() {
   });
 }
 
-// Stroke thickness change handler
 strokeSelect.addEventListener('change', () => {
   if (signaturePad) {
     const thickness = parseInt(strokeSelect.value);
@@ -1070,7 +1083,6 @@ strokeSelect.addEventListener('change', () => {
   }
 });
 
-// Open modal
 editSignatureBtn.addEventListener('click', () => {
   signatureModal.style.display = 'flex';
   setTimeout(() => {
@@ -1078,34 +1090,20 @@ editSignatureBtn.addEventListener('click', () => {
   }, 50);
 });
 
-// Clear signature
-clearBtn.addEventListener('click', () => {
-  signaturePad.clear();
-});
+clearBtn.addEventListener('click', () => signaturePad.clear());
+closeBtn.addEventListener('click', () => signatureModal.style.display = 'none');
 
-// Close modal
-closeBtn.addEventListener('click', () => {
-  signatureModal.style.display = 'none';
-});
-
-// Save signature 🧠 same naming & logic as before
 saveBtn.addEventListener('click', () => {
   if (!signaturePad.isEmpty()) {
-    // Get cleaned image
     const canvasEl = signaturePad.canvas;
     const ctx = canvasEl.getContext("2d");
     const imageData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
     const data = imageData.data;
 
     for (let i = 0; i < data.length; i += 4) {
-      const r = data[i];
-      const g = data[i + 1];
-      const b = data[i + 2];
-      if (r > 240 && g > 240 && b > 240) {
-        data[i + 3] = 0; // transparent background
-      }
+      const r = data[i], g = data[i+1], b = data[i+2];
+      if (r > 240 && g > 240 && b > 240) data[i+3] = 0;
     }
-
     ctx.putImageData(imageData, 0, 0);
     canvasEl.toBlob(blob => {
       selectedSignature = new File([blob], "signature.png", { type: "image/png" });
@@ -1122,27 +1120,34 @@ window.addEventListener('resize', () => {
     signaturePad.clear();
   }
 });
+
+// 💾 Save edited data
 const notyf = new Notyf({ position:{x:'right',y:'top'}, duration:3000, ripple:true, dismissible:true });
 document.getElementById('saveBtn').addEventListener('click', function () {
     const formData = new FormData();
     formData.append('student_id', studentId);
+
     const photo = document.getElementById('student-photo');
     const signature = document.getElementById('student-signature');
+
     formData.append('photo_position', JSON.stringify({
         left: photo.offsetLeft,
         top: photo.offsetTop,
         width: photo.offsetWidth,
         height: photo.offsetHeight
     }));
+
     formData.append('signature_position', JSON.stringify({
         left: signature.offsetLeft,
         top: signature.offsetTop,
         width: signature.offsetWidth,
         height: signature.offsetHeight
     }));
+
     if(selectedImage) formData.append('image', selectedImage);
     if(selectedSignature) formData.append('signature', selectedSignature);
-    fetch(`https://hnvs-id-be.creativedevlabs.com/api/save-generated-id`, {
+
+    fetch(`${APP_URL}/api/save-generated-id`, {
         method:"POST",
         headers: {
             "Authorization":"Bearer "+localStorage.getItem("token"),
@@ -1162,12 +1167,16 @@ document.getElementById('saveBtn').addEventListener('click', function () {
 });
 </script>
 
+
 <script>
+const APP_URL = "<?= APP_URL ?>";
+const FRONTEND_URL = "<?= FRONTEND_URL ?>";
+
 document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const studentId = params.get('id') || 1;
 
-    fetch(`https://hnvs-id-be.creativedevlabs.com/api/fetchStrandDoorway/${studentId}`, {
+    fetch(`${APP_URL}/api/fetchStrandDoorway/${studentId}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -1176,22 +1185,55 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(res => res.json())
     .then(data => {
-        console.log("✅ Strand/Doorway Data:", data);
+        console.log(" Strand/Doorway Data:", data);
 
-        if (data.strand_name) {
-            document.getElementById('strand').textContent = data.strand_name;
-        } else {
-            document.getElementById('strand').textContent = 'No Strand Assigned';
+        const strandEl = document.getElementById('strand');
+        const doorwayEl = document.getElementById('doorway');
+        const doorwayWordEl = document.getElementById('doorwayWord');
+
+        let strandName = data.strand_name || 'No Strand Assigned';
+
+        if (strandName.toUpperCase() === 'STEM') {
+            strandName = 'SCIENCE, TECHNOLOGY, ENGINEERING & MATHEMATICS (STEM)';
         }
 
-        if (data.doorway) {
-            document.getElementById('doorway').textContent = data.doorway;
+        strandEl.textContent = strandName;
+
+        if (data.doorway && String(data.doorway).trim().length > 0) {
+            doorwayEl.textContent = data.doorway;
+            doorwayEl.style.display = 'block';
+            doorwayWordEl.style.display = 'block';
+            strandEl.classList.remove('big-strand');
         } else {
-            document.getElementById('doorway').textContent = 'No Doorway Assigned';
+            doorwayEl.style.display = 'none';
+            doorwayWordEl.style.display = 'none';
+            strandEl.classList.add('big-strand');
         }
     })
     .catch(error => {
-        console.error(" Error fetching strand/doorway:", error);
+        console.error("Error fetching strand/doorway:", error);
     });
 });
 </script>
+
+<style>
+.strand-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.strand {
+    text-align: center;
+    font-size: 10px !important;
+    transition: all 0.3s ease;
+}
+
+.big-strand {
+    font-size: 10px !important;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 8px !important;
+}
+</style>

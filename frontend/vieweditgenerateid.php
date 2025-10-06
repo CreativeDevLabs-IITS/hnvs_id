@@ -50,7 +50,7 @@
             }
 
             .header img {
-            height: 43px;
+            height: 46px;
             width: auto;
             margin-bottom: 2px;
             }
@@ -66,13 +66,13 @@
             }
 
             .school-name {
-            font-size: 6px;
+            font-size: 7px;
             font-weight: 700;
             margin-bottom:2px;
             }
 
             .school-level {
-            font-size: 7.5px;
+            font-size: 6px;
             font-weight: bold;
             margin-bottom:2px;
             line-height: 1;
@@ -760,6 +760,7 @@
                 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <?php include 'partials/_logout.php' ?>
+<?php include 'partials/config.php' ?>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const frontBtn = document.getElementById('showFront');
@@ -809,17 +810,21 @@ function printVisibleID() {
 </script>
 
 <script>
-        const params = new URLSearchParams(window.location.search);
-        const studentId = params.get('id') || 1;
-        fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
+    const APP_URL = "<?= APP_URL ?>";
+    const FRONTEND_URL = "<?= FRONTEND_URL ?>";
+
+    const params = new URLSearchParams(window.location.search);
+    const studentId = params.get('id') || 1;
+
+    fetch(`${APP_URL}/api/showstudentid/${studentId}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
-        })
-        .then(res => res.json())
-        .then(data => {
+    })
+    .then(res => res.json())
+    .then(data => {
         document.getElementById('lrn-bar').textContent = data.lrn;
         document.getElementById('last-name').textContent  = data.lastname;
         document.getElementById('first-name').firstChild.textContent = data.firstname + ' ';
@@ -830,43 +835,46 @@ function printVisibleID() {
         document.getElementById('brgy-address').textContent = `${data.barangay}, ${data.municipality}`;
         document.getElementById('student-photo').src = data.image || "bakla.png";
         document.getElementById('student-signature').src = data.signature || "signatura.png";
+
         if (data.qr_path) {
             document.getElementById('student-qr').src = data.qr_path;
         }
+
         if (data.photo_position) {
             try {
-            const pos = JSON.parse(data.photo_position);
-            const photo = document.getElementById('student-photo');
-            photo.style.position = 'absolute';
-            photo.style.left = pos.left + 'px';
-            photo.style.top = pos.top + 'px';
-            photo.style.width = pos.width + 'px';
-            photo.style.height = pos.height + 'px';
+                const pos = JSON.parse(data.photo_position);
+                const photo = document.getElementById('student-photo');
+                photo.style.position = 'absolute';
+                photo.style.left = pos.left + 'px';
+                photo.style.top = pos.top + 'px';
+                photo.style.width = pos.width + 'px';
+                photo.style.height = pos.height + 'px';
             } catch (e) {
-            console.error('Invalid photo_position JSON:', e);
+                console.error('Invalid photo_position JSON:', e);
             }
         }
+
         if (data.signature_position) {
             try {
-            const pos = JSON.parse(data.signature_position);
-            const signature = document.getElementById('student-signature');
-            signature.style.position = 'absolute';
-            signature.style.left = pos.left + 'px';
-            signature.style.top = pos.top + 'px';
-            signature.style.width = pos.width + 'px';
-            signature.style.height = pos.height + 'px';
+                const pos = JSON.parse(data.signature_position);
+                const signature = document.getElementById('student-signature');
+                signature.style.position = 'absolute';
+                signature.style.left = pos.left + 'px';
+                signature.style.top = pos.top + 'px';
+                signature.style.width = pos.width + 'px';
+                signature.style.height = pos.height + 'px';
             } catch (e) {
-            console.error('Invalid signature_position JSON:', e);
+                console.error('Invalid signature_position JSON:', e);
             }
         }
-    });
+    })
+    .catch(err => console.error('❌ Error fetching student ID:', err));
 </script>
 
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const studentId = params.get('id') || 1;
+    const APP_URL = "<?= APP_URL ?>";
+    const FRONTEND_URL = "<?= FRONTEND_URL ?>";
 
     fetch(`https://hnvs-id-be.creativedevlabs.com/api/fetchStrandDoorway/${studentId}`, {
         method: 'GET',
@@ -877,22 +885,54 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(res => res.json())
     .then(data => {
-        console.log("✅ Strand/Doorway Data:", data);
+        console.log(" Strand/Doorway Data:", data);
 
-        if (data.strand_name) {
-            document.getElementById('strand').textContent = data.strand_name;
-        } else {
-            document.getElementById('strand').textContent = 'No Strand Assigned';
+        const strandEl = document.getElementById('strand');
+        const doorwayEl = document.getElementById('doorway');
+        const doorwayWordEl = document.getElementById('doorwayWord');
+
+        let strandName = data.strand_name || 'No Strand Assigned';
+
+        if (strandName.toUpperCase() === 'STEM') {
+            strandName = 'SCIENCE, TECHNOLOGY, ENGINEERING & MATHEMATICS (STEM)';
         }
 
-        if (data.doorway) {
-            document.getElementById('doorway').textContent = data.doorway;
+        strandEl.textContent = strandName;
+
+        if (data.doorway && String(data.doorway).trim().length > 0) {
+            doorwayEl.textContent = data.doorway;
+            doorwayEl.style.display = 'block';
+            doorwayWordEl.style.display = 'block';
+            strandEl.classList.remove('big-strand');
         } else {
-            document.getElementById('doorway').textContent = 'No Doorway Assigned';
+            doorwayEl.style.display = 'none';
+            doorwayWordEl.style.display = 'none';
+            strandEl.classList.add('big-strand');
         }
     })
     .catch(error => {
-        console.error(" Error fetching strand/doorway:", error);
+        console.error("Error fetching strand/doorway:", error);
     });
-});
 </script>
+
+<style>
+.strand-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.strand {
+    text-align: center;
+    font-size: 10px !important;
+    transition: all 0.3s ease;
+}
+
+.big-strand {
+    font-size: 10px !important;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 8px !important;
+}
+</style>
