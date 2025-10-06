@@ -51,7 +51,7 @@
             }
 
             .header img {
-            height: 43px;
+            height: 46px;
             width: auto;
             margin-bottom: 2px;
             }
@@ -67,13 +67,13 @@
             }
 
             .school-name {
-            font-size: 6px;
+            font-size: 7px;
             font-weight: 700;
             margin-bottom:2px;
             }
 
             .school-level {
-            font-size: 7.5px;
+            font-size: 6px;
             font-weight: bold;
             margin-bottom:2px;
             line-height: 1;
@@ -1180,28 +1180,37 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(res => res.json())
     .then(data => {
-        console.log("✅ Strand/Doorway Data:", data);
+        console.log(" Strand/Doorway Data:", data);
 
         const strandEl = document.getElementById('strand');
         const doorwayEl = document.getElementById('doorway');
+        const doorwayWordEl = document.getElementById('doorwayWord');
 
-        // Set strand name
-        strandEl.textContent = data.strand_name || 'No Strand Assigned';
+        let strandName = data.strand_name || 'No Strand Assigned';
 
-        // Check doorway
-        if (data.doorway) {
+        if (strandName.toUpperCase() === 'STEM') {
+            strandName = 'SCIENCE, TECHNOLOGY, ENGINEERING & MATHEMATICS (STEM)';
+        }
+
+        strandEl.textContent = strandName;
+
+        if (data.doorway && String(data.doorway).trim().length > 0) {
             doorwayEl.textContent = data.doorway;
+            doorwayEl.style.display = 'block';
+            doorwayWordEl.style.display = 'block';
             strandEl.classList.remove('big-strand');
         } else {
-            doorwayEl.textContent = '';
+            doorwayEl.style.display = 'none';
+            doorwayWordEl.style.display = 'none';
             strandEl.classList.add('big-strand');
         }
     })
     .catch(error => {
-        console.error("❌ Error fetching strand/doorway:", error);
+        console.error("Error fetching strand/doorway:", error);
     });
 });
 </script>
+
 <style>
 .strand-container {
     display: flex;
@@ -1212,14 +1221,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 .strand {
     text-align: center;
-    font-size: 1.2em;
+    font-size: 10px !important;
     transition: all 0.3s ease;
 }
 
 .big-strand {
-    font-size: 20px !important;
+    font-size: 10px !important;
     font-weight: bold;
     text-align: center;
-    margin-top:5px !important;
+    margin-top: 8px !important;
 }
 </style>

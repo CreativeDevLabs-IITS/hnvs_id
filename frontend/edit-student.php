@@ -478,7 +478,7 @@
             const image = document.getElementById('studentImg').files[0];
             const signature = document.getElementById('signature').files[0];
             const strand = document.getElementById('strand');
-            const strand = document.getElementById('doorway');
+            const doorway = document.getElementById('doorway');
 
             let formData = new FormData();
             formData.append('id', id);
