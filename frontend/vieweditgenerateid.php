@@ -914,12 +914,14 @@ function printVisibleID() {
         const doorwayEl = document.getElementById('doorway');
         const doorwayWordEl = document.getElementById('doorwayWord');
 
+        // 🔹 Clean and uppercase values
         let strandName = data.strand_name ? data.strand_name.toUpperCase().trim() : '';
         let doorwayName = data.doorway ? data.doorway.toUpperCase().trim() : '';
 
         let displayStrand = 'No Strand Assigned';
         let hideDoorway = false;
 
+        // 🔹 Match strand + doorway logic
         if (strandName === 'STEM' && doorwayName === 'STEM') {
             displayStrand = 'SCIENCE, TECHNOLOGY, ENGINEERING & MATHEMATICS (STEM)';
             hideDoorway = true;
@@ -940,18 +942,13 @@ function printVisibleID() {
             displayStrand = strandName || 'No Strand Assigned';
         }
 
-        // ✅ Apply <br> ONLY for BUSINESS & ENTREPRENEURSHIP (B & E)
-        if (displayStrand.includes('BUSINESS & ENTREPRENEURSHIP (B & E)')) {
-            displayStrand = displayStrand.replace(
-                '(B & E)',
-                '<br><span class="abbr">(B & E)</span>'
-            );
-        }
-
-        strandEl.innerHTML = displayStrand;
-
-        // ✅ Hide doorway if needed
-        if (hideDoorway || !data.doorway || data.doorway.trim().length === 0) {
+        // 🔹 If doorway is the same as strand OR empty/null → hide doorway
+        if (
+            hideDoorway ||
+            !doorwayName ||
+            doorwayName.length === 0 ||
+            doorwayName === strandName
+        ) {
             doorwayEl.style.display = 'none';
             doorwayWordEl.style.display = 'none';
             strandEl.classList.add('big-strand');
@@ -961,6 +958,8 @@ function printVisibleID() {
             doorwayWordEl.style.display = 'block';
             strandEl.classList.remove('big-strand');
         }
+
+        strandEl.innerHTML = displayStrand;
     })
     .catch(error => {
         console.error("Error fetching strand/doorway:", error);
