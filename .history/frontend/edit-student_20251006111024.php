@@ -543,9 +543,9 @@
                         showConfirmButton: false,
                         timer: 3000,
                     })
-                    .then (() => {
-                        location.href = 'students.php';
-                    });
+                    // .then (() => {
+                    //     location.href = 'students.php';
+                    // });
                 }else {
                     Swal.fire({
                         position: "top-end",
