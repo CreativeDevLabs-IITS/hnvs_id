@@ -51,7 +51,7 @@
             }
 
             .header img {
-            height: 43px;
+            height: 46px;
             width: auto;
             margin-bottom: 2px;
             }
@@ -67,13 +67,13 @@
             }
 
             .school-name {
-            font-size: 6px;
+            font-size: 7px;
             font-weight: 700;
             margin-bottom:2px;
             }
 
             .school-level {
-            font-size: 7.5px;
+            font-size: 6px;
             font-weight: bold;
             margin-bottom:2px;
             line-height: 1;
@@ -1186,22 +1186,55 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(res => res.json())
     .then(data => {
-        console.log("✅ Strand/Doorway Data:", data);
+        console.log(" Strand/Doorway Data:", data);
 
-        if (data.strand_name) {
-            document.getElementById('strand').textContent = data.strand_name;
-        } else {
-            document.getElementById('strand').textContent = 'No Strand Assigned';
+        const strandEl = document.getElementById('strand');
+        const doorwayEl = document.getElementById('doorway');
+        const doorwayWordEl = document.getElementById('doorwayWord');
+
+        let strandName = data.strand_name || 'No Strand Assigned';
+
+        if (strandName.toUpperCase() === 'STEM') {
+            strandName = 'SCIENCE, TECHNOLOGY, ENGINEERING & MATHEMATICS (STEM)';
         }
 
-        if (data.doorway) {
-            document.getElementById('doorway').textContent = data.doorway;
+        strandEl.textContent = strandName;
+
+        if (data.doorway && String(data.doorway).trim().length > 0) {
+            doorwayEl.textContent = data.doorway;
+            doorwayEl.style.display = 'block';
+            doorwayWordEl.style.display = 'block';
+            strandEl.classList.remove('big-strand');
         } else {
-            document.getElementById('doorway').textContent = 'No Doorway Assigned';
+            doorwayEl.style.display = 'none';
+            doorwayWordEl.style.display = 'none';
+            strandEl.classList.add('big-strand');
         }
     })
     .catch(error => {
-        console.error("❌ Error fetching strand/doorway:", error);
+        console.error("Error fetching strand/doorway:", error);
     });
 });
 </script>
+
+<style>
+.strand-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.strand {
+    text-align: center;
+    font-size: 10px !important;
+    transition: all 0.3s ease;
+}
+
+.big-strand {
+    font-size: 10px !important;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 8px !important;
+}
+</style>

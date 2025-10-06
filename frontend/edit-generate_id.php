@@ -51,7 +51,7 @@
             }
 
             .header img {
-            height: 43px;
+            height: 46px;
             width: auto;
             margin-bottom: 2px;
             }
@@ -67,13 +67,13 @@
             }
 
             .school-name {
-            font-size: 6px;
+            font-size: 7px;
             font-weight: 700;
             margin-bottom:2px;
             }
 
             .school-level {
-            font-size: 7.5px;
+            font-size: 6px;
             font-weight: bold;
             margin-bottom:2px;
             line-height: 1;
@@ -1143,43 +1143,45 @@ document.getElementById('saveBtn').addEventListener('click', function () {
     const APP_URL = "<?= APP_URL ?>";
     const FRONTEND_URL = "<?= FRONTEND_URL ?>";
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const params = new URLSearchParams(window.location.search);
-        const studentId = params.get('id') || 1;
+    fetch(`https://hnvs-id-be.creativedevlabs.com/api/fetchStrandDoorway/${studentId}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(" Strand/Doorway Data:", data);
 
-        fetch(`${APP_URL}/api/fetchStrandDoorway/${studentId}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log("✅ Strand/Doorway Data:", data);
+        const strandEl = document.getElementById('strand');
+        const doorwayEl = document.getElementById('doorway');
+        const doorwayWordEl = document.getElementById('doorwayWord');
 
-            const strandEl = document.getElementById('strand');
-            const doorwayEl = document.getElementById('doorway');
-            const doorwayWordEl = document.getElementById('doorwayWord');
+        let strandName = data.strand_name || 'No Strand Assigned';
 
-            strandEl.textContent = data.strand_name || 'No Strand Assigned';
+        if (strandName.toUpperCase() === 'STEM') {
+            strandName = 'SCIENCE, TECHNOLOGY, ENGINEERING & MATHEMATICS (STEM)';
+        }
 
-            if (data.doorway && String(data.doorway).trim().length > 0) {
-                doorwayEl.textContent = data.doorway;
-                doorwayEl.style.display = 'block';
-                doorwayWordEl.style.display = 'block';
-                strandEl.classList.remove('big-strand');
-            } else {
-                doorwayEl.style.display = 'none';
-                doorwayWordEl.style.display = 'none';
-                strandEl.classList.add('big-strand');
-            }
-        })
-        .catch(error => {
-            console.error("❌ Error fetching strand/doorway:", error);
-        });
+        strandEl.textContent = strandName;
+
+        if (data.doorway && String(data.doorway).trim().length > 0) {
+            doorwayEl.textContent = data.doorway;
+            doorwayEl.style.display = 'block';
+            doorwayWordEl.style.display = 'block';
+            strandEl.classList.remove('big-strand');
+        } else {
+            doorwayEl.style.display = 'none';
+            doorwayWordEl.style.display = 'none';
+            strandEl.classList.add('big-strand');
+        }
+    })
+    .catch(error => {
+        console.error(" Error fetching strand/doorway:", error);
     });
 </script>
+
 
 
 <style>
@@ -1192,14 +1194,14 @@ document.getElementById('saveBtn').addEventListener('click', function () {
 
 .strand {
     text-align: center;
-    font-size: 1.2em;
+    font-size: 10px !important;
     transition: all 0.3s ease;
 }
 
 .big-strand {
-    font-size: 20px !important;
+    font-size: 10px !important;
     font-weight: bold;
     text-align: center;
-    margin-top:5px !important;
+    margin-top: 8px !important;
 }
 </style>
