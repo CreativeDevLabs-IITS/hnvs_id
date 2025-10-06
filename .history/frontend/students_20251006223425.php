@@ -309,13 +309,11 @@
         function fetchSearchResults(search, page = 1) {
             const section = document.getElementById('sectionFilter').value;
             const strand = document.getElementById('strandFilter').value;
-            const doorway = document.getElementById('doorwayFilter').value;
 
             const search_params = new URLSearchParams({
                 search: search,
                 strand: strand,
                 section: section,
-                doorway: doorway,
                 page: page
             });
 
