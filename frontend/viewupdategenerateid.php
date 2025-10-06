@@ -1182,44 +1182,20 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(data => {
         console.log("✅ Strand/Doorway Data:", data);
 
-        const strandEl = document.getElementById('strand');
-        const doorwayEl = document.getElementById('doorway');
-
-        // Set strand name
-        strandEl.textContent = data.strand_name || 'No Strand Assigned';
-
-        // Check doorway
-        if (data.doorway) {
-            doorwayEl.textContent = data.doorway;
-            strandEl.classList.remove('big-strand');
+        if (data.strand_name) {
+            document.getElementById('strand').textContent = data.strand_name;
         } else {
-            doorwayEl.textContent = '';
-            strandEl.classList.add('big-strand');
+            document.getElementById('strand').textContent = 'No Strand Assigned';
+        }
+
+        if (data.doorway) {
+            document.getElementById('doorway').textContent = data.doorway;
+        } else {
+            document.getElementById('doorway').textContent = 'No Doorway Assigned';
         }
     })
     .catch(error => {
-        console.error("❌ Error fetching strand/doorway:", error);
+        console.error(" Error fetching strand/doorway:", error);
     });
 });
 </script>
-<style>
-.strand-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.strand {
-    text-align: center;
-    font-size: 1.2em;
-    transition: all 0.3s ease;
-}
-
-.big-strand {
-    font-size: 20px !important;
-    font-weight: bold;
-    text-align: center;
-    margin-top:5px !important;
-}
-</style>

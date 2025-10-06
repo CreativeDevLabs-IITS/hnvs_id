@@ -513,20 +513,20 @@
             }
             }
             .switch-btn {
-        background: linear-gradient(90deg, #5420B5 60%, #7B3FF2 100%);
-        color: #fff;
-        border: none;
-        outline: none;
-        padding: 10px 28px;
-        margin: 0 8px;
-        border-radius: 24px;
-        font-size: 15px;
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 600;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(84,32,181,0.08);
-        transition: background 0.2s, transform 0.2s;
-        }
+            background: linear-gradient(90deg, #5420B5 60%, #7B3FF2 100%);
+            color: #fff;
+            border: none;
+            outline: none;
+            padding: 10px 28px;
+            margin: 0 8px;
+            border-radius: 24px;
+            font-size: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(84,32,181,0.08);
+            transition: background 0.2s, transform 0.2s;
+            }
 
         .switch-btn:hover, .switch-btn.active {
             background: linear-gradient(90deg, #2b2a2c 60%, #212122 100%);
@@ -534,76 +534,54 @@
         }
 </style>
 <style>
-    
-    @media print {
+       @media print {
         html, body {
-            zoom: 1.03; 
             padding: 0;
             margin: 0;
         }
-
         body * {
             visibility: hidden;
         }
-
-        #idWrapper, #idWrapper * {
+        #idFront, #idBack, 
+        #idFront *, #idBack * {
             visibility: visible;
         }
-
-        #idWrapper {
+        #idFront.id-card {
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            background: white;
-        }
-
-        #idFront, #idBack {
-            page-break-before: avoid;
-            page-break-after: avoid;
-        }
-
-        .front {
-            background-color: #b8d3e6 !important;
+            width: 2.13in;  
+            height: 3.38in; 
+            background: #B8D3E6 !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
-
-        @page {
-            margin: 0;
-            size: auto;
-        }
-        
-        .back {
-            background-color: white !important;
+        #idBack.id.back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2.13in;
+            height: 3.38in;
+            background: white !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
-
-        .id.back .back-top {
-            background-color: white !important;
+        #idBack .id-card-back.back-top {
+            background: white !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
-
-
-        .year-cell,
-        .semester-cell {
-            background-color: white !important;
-            color: white !important;
+        .year-cell, .semester-cell,
+        .rotated-text {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
-
-
         .rotated-text {
             background-color: white !important; 
             color: black !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
-            }
-
-
+        }
         .first-cell .rotated-text,
         .second-cell .rotated-text {
             background-color: white !important;
@@ -611,13 +589,9 @@
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
-         .facebook-footer {
-            padding: 1px 0 5px 0 !important;
-        }
-        /* Print setup */
         @page {
             margin: 0;
-            size: auto;
+            size: 2.13in 3.38in; 
         }
     }
 </style>
@@ -905,44 +879,20 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(data => {
         console.log("✅ Strand/Doorway Data:", data);
 
-        const strandEl = document.getElementById('strand');
-        const doorwayEl = document.getElementById('doorway');
-
-        // Set strand name
-        strandEl.textContent = data.strand_name || 'No Strand Assigned';
-
-        // Check doorway
-        if (data.doorway) {
-            doorwayEl.textContent = data.doorway;
-            strandEl.classList.remove('big-strand');
+        if (data.strand_name) {
+            document.getElementById('strand').textContent = data.strand_name;
         } else {
-            doorwayEl.textContent = '';
-            strandEl.classList.add('big-strand');
+            document.getElementById('strand').textContent = 'No Strand Assigned';
+        }
+
+        if (data.doorway) {
+            document.getElementById('doorway').textContent = data.doorway;
+        } else {
+            document.getElementById('doorway').textContent = 'No Doorway Assigned';
         }
     })
     .catch(error => {
-        console.error("❌ Error fetching strand/doorway:", error);
+        console.error(" Error fetching strand/doorway:", error);
     });
 });
 </script>
-<style>
-.strand-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.strand {
-    text-align: center;
-    font-size: 1.2em;
-    transition: all 0.3s ease;
-}
-
-.big-strand {
-    font-size: 20px !important;
-    font-weight: bold;
-    text-align: center;
-    margin-top:5px !important;
-}
-</style>
