@@ -744,7 +744,7 @@
                     <div class="strand" id="strand">
                         SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
                     </div>
-                    <div class="doorway-word">Doorway:</div>
+                    <div class="doorway-word" id="doorwayWord">Doorway:</div>
                     <div class="doorway" id="doorway">DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
                     </div>
             </div>
@@ -1156,20 +1156,52 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(data => {
         console.log("✅ Strand/Doorway Data:", data);
 
-        if (data.strand_name) {
-            document.getElementById('strand').textContent = data.strand_name;
-        } else {
-            document.getElementById('strand').textContent = 'No Strand Assigned';
-        }
+        const strandEl = document.getElementById('strand');
+        const doorwayEl = document.getElementById('doorway');
+        const doorwayWordEl = document.getElementById('doorwayWord');
 
-        if (data.doorway) {
-            document.getElementById('doorway').textContent = data.doorway;
+        strandEl.textContent = data.strand_name || 'No Strand Assigned';
+
+        // ✨ FIXED CONDITION (handles null, undefined, empty, or spaces)
+        if (data.doorway && String(data.doorway).trim().length > 0) {
+            // Show doorway
+            doorwayEl.textContent = data.doorway;
+            doorwayEl.style.display = 'block';
+            doorwayWordEl.style.display = 'block';
+            strandEl.classList.remove('big-strand');
         } else {
-            document.getElementById('doorway').textContent = 'No Doorway Assigned';
+            // Totally hide doorway and label
+            doorwayEl.style.display = 'none';
+            doorwayWordEl.style.display = 'none';
+
+            // Make strand bigger and centered
+            strandEl.classList.add('big-strand');
         }
     })
     .catch(error => {
-        console.error(" Error fetching strand/doorway:", error);
+        console.error("❌ Error fetching strand/doorway:", error);
     });
 });
 </script>
+
+<style>
+.strand-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.strand {
+    text-align: center;
+    font-size: 1.2em;
+    transition: all 0.3s ease;
+}
+
+.big-strand {
+    font-size: 20px !important;
+    font-weight: bold;
+    text-align: center;
+    margin-top:5px !important;
+}
+</style>
