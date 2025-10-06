@@ -809,17 +809,21 @@ function printVisibleID() {
 </script>
 
 <script>
-        const params = new URLSearchParams(window.location.search);
-        const studentId = params.get('id') || 1;
-        fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
+    const APP_URL = "<?= APP_URL ?>";
+    const FRONTEND_URL = "<?= FRONTEND_URL ?>";
+
+    const params = new URLSearchParams(window.location.search);
+    const studentId = params.get('id') || 1;
+
+    fetch(`${APP_URL}/api/showstudentid/${studentId}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
-        })
-        .then(res => res.json())
-        .then(data => {
+    })
+    .then(res => res.json())
+    .then(data => {
         document.getElementById('lrn-bar').textContent = data.lrn;
         document.getElementById('last-name').textContent  = data.lastname;
         document.getElementById('first-name').firstChild.textContent = data.firstname + ' ';
@@ -830,69 +834,77 @@ function printVisibleID() {
         document.getElementById('brgy-address').textContent = `${data.barangay}, ${data.municipality}`;
         document.getElementById('student-photo').src = data.image || "bakla.png";
         document.getElementById('student-signature').src = data.signature || "signatura.png";
+
         if (data.qr_path) {
             document.getElementById('student-qr').src = data.qr_path;
         }
+
         if (data.photo_position) {
             try {
-            const pos = JSON.parse(data.photo_position);
-            const photo = document.getElementById('student-photo');
-            photo.style.position = 'absolute';
-            photo.style.left = pos.left + 'px';
-            photo.style.top = pos.top + 'px';
-            photo.style.width = pos.width + 'px';
-            photo.style.height = pos.height + 'px';
+                const pos = JSON.parse(data.photo_position);
+                const photo = document.getElementById('student-photo');
+                photo.style.position = 'absolute';
+                photo.style.left = pos.left + 'px';
+                photo.style.top = pos.top + 'px';
+                photo.style.width = pos.width + 'px';
+                photo.style.height = pos.height + 'px';
             } catch (e) {
-            console.error('Invalid photo_position JSON:', e);
+                console.error('Invalid photo_position JSON:', e);
             }
         }
+
         if (data.signature_position) {
             try {
-            const pos = JSON.parse(data.signature_position);
-            const signature = document.getElementById('student-signature');
-            signature.style.position = 'absolute';
-            signature.style.left = pos.left + 'px';
-            signature.style.top = pos.top + 'px';
-            signature.style.width = pos.width + 'px';
-            signature.style.height = pos.height + 'px';
+                const pos = JSON.parse(data.signature_position);
+                const signature = document.getElementById('student-signature');
+                signature.style.position = 'absolute';
+                signature.style.left = pos.left + 'px';
+                signature.style.top = pos.top + 'px';
+                signature.style.width = pos.width + 'px';
+                signature.style.height = pos.height + 'px';
             } catch (e) {
-            console.error('Invalid signature_position JSON:', e);
+                console.error('Invalid signature_position JSON:', e);
             }
         }
-    });
+    })
+    .catch(err => console.error('❌ Error fetching student ID:', err));
 </script>
 
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const studentId = params.get('id') || 1;
+    const APP_URL = "<?= APP_URL ?>";
+    const FRONTEND_URL = "<?= FRONTEND_URL ?>";
 
-    fetch(`https://hnvs-id-be.creativedevlabs.com/api/fetchStrandDoorway/${studentId}`, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log("✅ Strand/Doorway Data:", data);
+    document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const studentId = params.get('id') || 1;
 
-        if (data.strand_name) {
-            document.getElementById('strand').textContent = data.strand_name;
-        } else {
-            document.getElementById('strand').textContent = 'No Strand Assigned';
-        }
+        fetch(`${APP_URL}/api/fetchStrandDoorway/${studentId}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("✅ Strand/Doorway Data:", data);
 
-        if (data.doorway) {
-            document.getElementById('doorway').textContent = data.doorway;
-        } else {
-            document.getElementById('doorway').textContent = 'No Doorway Assigned';
-        }
-    })
-    .catch(error => {
-        console.error(" Error fetching strand/doorway:", error);
+            if (data.strand_name) {
+                document.getElementById('strand').textContent = data.strand_name;
+            } else {
+                document.getElementById('strand').textContent = 'No Strand Assigned';
+            }
+
+            if (data.doorway) {
+                document.getElementById('doorway').textContent = data.doorway;
+            } else {
+                document.getElementById('doorway').textContent = 'No Doorway Assigned';
+            }
+        })
+        .catch(error => {
+            console.error("❌ Error fetching strand/doorway:", error);
+        });
     });
-});
 </script>
+

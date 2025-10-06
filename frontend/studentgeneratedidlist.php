@@ -167,28 +167,29 @@
     <?php include 'partials/_logout.php' ?>
     <?php include 'partials/config.php' ?>
     <script>
-            const APP_URL = "<?= APP_URL ?>";
-    const FRONTEND_URL = "<?= FRONTEND_URL ?>"
+    const APP_URL = "<?= APP_URL ?>";
+    const FRONTEND_URL = "<?= FRONTEND_URL ?>";
+
     document.addEventListener('DOMContentLoaded', () => {
         const token = localStorage.getItem('token');
-        if(!token) {
+        if (!token) {
             location.replace(`${FRONTEND_URL}`);
-        }else {
+        } else {
             if (window.history && window.history.pushState) {
                 window.history.pushState(null, null, location.href);
                 window.onpopstate = function () {
-                    window.history.pushState(null, null, location.href); 
+                    window.history.pushState(null, null, location.href);
                 };
             }
         }
     });
-    </script>
+</script>
 
 <script>
-    const rowsPerPage = 5; 
+    const rowsPerPage = 5;
     let currentPage = 1;
     let students = [];
-    let filteredStudents = []; 
+    let filteredStudents = [];
 
     function renderTablePage(page = 1) {
         const tbody = document.getElementById("studentTableBody");
@@ -272,7 +273,7 @@
                     confirmButtonText: "Yes, delete it!"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        fetch(`https://hnvs-id-be.creativedevlabs.com/api/deletegenerate/${id}`, {
+                        fetch(`${APP_URL}/api/deletegenerate/${id}`, {
                             method: "DELETE",
                             headers: {
                                 "Accept": "application/json",
@@ -299,18 +300,16 @@
         renderPaginationInfo(start, end, dataToRender.length);
     }
 
-    // Arrows style pagination
     function renderPaginationControls(dataArray) {
         const totalPages = Math.ceil(dataArray.length / rowsPerPage);
         const paginationDiv = document.getElementById("paginationControls");
         paginationDiv.innerHTML = "";
 
-        if (totalPages <= 1) return; 
+        if (totalPages <= 1) return;
 
         const container = document.createElement("div");
         container.className = "d-flex justify-content-center align-items-center gap-3";
 
-        // Prev
         const prevBtn = document.createElement("button");
         prevBtn.className = "btn btn-light";
         prevBtn.innerHTML = '<i class="bi bi-chevron-left"></i>';
@@ -322,11 +321,9 @@
             }
         });
 
-        // Page text
         const pageText = document.createElement("span");
         pageText.textContent = `Page ${currentPage} of ${totalPages}`;
 
-        // Next
         const nextBtn = document.createElement("button");
         nextBtn.className = "btn btn-light";
         nextBtn.innerHTML = '<i class="bi bi-chevron-right"></i>';
@@ -352,8 +349,8 @@
         infoDiv.textContent = `Showing ${showingStart} to ${showingEnd} of ${total} students`;
     }
 
-    // Fetch students
-    fetch(`https://hnvs-id-be.creativedevlabs.com/api/showgeneratedids`, {
+    // 🔥 Fetch students gamit APP_URL
+    fetch(`${APP_URL}/api/showgeneratedids`, {
         headers: {
             "Accept": "application/json",
             "Authorization": "Bearer " + localStorage.getItem("token")
@@ -361,13 +358,12 @@
     })
     .then(res => res.json())
     .then(data => {
-        console.log("API Response:", data); 
+        console.log("API Response:", data);
         students = Array.isArray(data) ? data : (data.data || []);
         renderTablePage(currentPage);
     })
     .catch(err => console.error(err));
 
-    // Search
     document.getElementById("searchInput").addEventListener("input", (e) => {
         const query = e.target.value.trim().toLowerCase();
         filteredStudents = students.filter(student => 
@@ -379,6 +375,7 @@
         renderTablePage(currentPage);
     });
 </script>
+
 
 
 
