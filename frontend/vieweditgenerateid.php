@@ -552,6 +552,12 @@
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
+        .rotated-text {
+            background-color: white !important; 
+            color: black !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
         .first-cell .rotated-text,
         .second-cell .rotated-text {
             background-color: white !important;
