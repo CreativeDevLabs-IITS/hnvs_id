@@ -288,7 +288,6 @@
         .id-card-back {
             height: 300px;
             background: white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             display: flex;
             font-size: 9px;
             position: relative;
@@ -306,7 +305,12 @@
             padding: 12px 8px 5px 8px;
             gap: 5px;
         }
-        .left-content { width: 25%; }
+        .left-content { 
+            width: 25%; 
+            border-left:1px solid;
+            border-top:1.5px solid;
+            border-bottom:1.5px solid;
+        }
         .right-content {
             width: 75%;
             flex: 1;
@@ -393,18 +397,21 @@
             margin-bottom: 4px;
         }
         .qr-box {
-            background: black;
-            color: white;
+            background: none;
+            color: black;
             font-size: 7px;
+            border:1px solid;
             text-align: center;
             padding: 4px 2px;
             margin-top: 1px;
             font-weight: bold;
         }
         .facebook-footer {
-            background: #000000;
-            color: #fff;
-            font-size: 7px;
+            background: none;
+            color: black;
+            font-weight:bold;
+            border-top:1px solid;
+            font-size: 8px;
             text-align: center;
             padding: 5px 0 5px 0;
             letter-spacing: 0.5px;
@@ -423,31 +430,48 @@
             line-height: 1;
         }
         .year-cell, .semester-cell {
-            background-color: #000;
-            color: white;
+            background-color: none;
+            color: black;
             border: 1px solid #333;
-            width: 20px;
-            height: 94px;
+            width: -60px;
+            height: 56px;
         }
         .word-school-year {
-            background-color: #000;
-            color: white;
-            border: 1px solid #333;
-            width: 20px;
-            height: 90px;
+            background-color: none;
+            color: black;
+            width: -60px;
+            height: 56px;
         }
         .first-cell, .second-cell {
             background-color: white;
             color: black;
-            border: 1px solid #333;
-            width: 20px;
-            height: 90px;
+            border-right: 1px solid #333;
+            border-bottom: 1px solid #333;
+            width: -60px;
+            height: 56px;
         }
         .empty-cell {
             background-color: white;
             border: 1px solid #333;
-            width: 15px;
-            height: 90px;
+            width: -60px;
+            height: 56px;
+        }
+        .last .semester-cell{
+            border-bottom:none;
+        }
+        .last .first-cell{
+            border-bottom:none;
+        }
+        .last .second-cell{
+            border-bottom:none;
+        }
+
+        .first .year-cell{
+            border-top:none;
+        }
+
+        .first .empty-cell{
+            border-top:none;
         }
         @media print {
             html, body {
@@ -489,20 +513,20 @@
             }
             }
             .switch-btn {
-        background: linear-gradient(90deg, #5420B5 60%, #7B3FF2 100%);
-        color: #fff;
-        border: none;
-        outline: none;
-        padding: 10px 28px;
-        margin: 0 8px;
-        border-radius: 24px;
-        font-size: 15px;
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 600;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(84,32,181,0.08);
-        transition: background 0.2s, transform 0.2s;
-        }
+            background: linear-gradient(90deg, #5420B5 60%, #7B3FF2 100%);
+            color: #fff;
+            border: none;
+            outline: none;
+            padding: 10px 28px;
+            margin: 0 8px;
+            border-radius: 24px;
+            font-size: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(84,32,181,0.08);
+            transition: background 0.2s, transform 0.2s;
+            }
 
         .switch-btn:hover, .switch-btn.active {
             background: linear-gradient(90deg, #2b2a2c 60%, #212122 100%);
@@ -510,7 +534,7 @@
         }
 </style>
 <style>
-    @media print {
+       @media print {
         html, body {
             padding: 0;
             margin: 0;
@@ -644,50 +668,62 @@
                         <img id="student-qr" src="" alt="QR" />
                     </div>
                         <div class="track">
-                        <div class="strand">
-                            SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
-                        </div>
-                        <div class="doorway-word">Doorway:</div>
-                        <div class="doorway">DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
-                        </div>
+                    <div class="strand" id="strand">
+                        SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
+                    </div>
+                    <div class="doorway-word">Doorway:</div>
+                    <div class="doorway" id="doorway">DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
+                    </div>
                     </div>
                     <!-- ID BACK -->
                     <div class="id back" id="idBack" style="display: none;">
                         <div class="id-card-back back-top">
                         <div class="left-content">
                             <div class="left-bar year-strip">
-                            <table id="schoolYearTable">
-                                <tr>
-                                <td class="word-school-year"></td>
-                                <td class="year-cell"><div class="rotated-text">2026-2027</div></td>
-                                <td class="empty-cell"></td>
-                                <td class="empty-cell"></td>
-                                </tr>
-                                <tr>
-                                <td class="word-school-year"><div class="rotated-text">SCHOOL YEAR</div></td>
-                                <td class="year-cell"><div class="rotated-text">2025-2026</div></td>
-                                <td class="empty-cell"></td>
-                                <td class="empty-cell"></td>
-                                </tr>
-                                <tr>
-                                <td class="word-school-year"></td>
-                                <td class="semester-cell"><div class="rotated-text">Semester</div></td>
-                                <td class="first-cell"><div class="rotated-text">First</div></td>
-                                <td class="second-cell"><div class="rotated-text">Second</div></td>
-                                </tr>
-                            </table>
+                                <table id="schoolYearTable">
+                                    <tr class="first">
+                                        <td class="word-school-year"></td>
+                                        <td class="year-cell"><div class="rotated-text"><b>2028-2029</b></div></td>
+                                        <td class="empty-cell"></td>
+                                        <td class="empty-cell"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="word-school-year"></td>
+                                        <td class="year-cell"><div class="rotated-text"><b>2027-2028</b></div></td>
+                                        <td class="empty-cell"></td>
+                                        <td class="empty-cell"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="word-school-year"><div class="rotated-text"><b>SCHOOL YEAR</b></div></td>
+                                        <td class="year-cell"><div class="rotated-text"><b>2026-2027</b></div></td>
+                                        <td class="empty-cell"></td>
+                                        <td class="empty-cell"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="word-school-year"></td>
+                                        <td class="year-cell"><div class="rotated-text"><b>2025-2026</b></div></td>
+                                        <td class="empty-cell"></td>
+                                        <td class="empty-cell"></td>
+                                    </tr>
+                                    <tr class="last">
+                                        <td class="word-school-year"></td>
+                                        <td class="semester-cell"><div class="rotated-text"><b>Semester</b></div></td>
+                                        <td class="first-cell"><div class="rotated-text"><b>First</b></div></td>
+                                        <td class="second-cell"><div class="rotated-text"><b>Second</b></div></td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                         <div class="right-content">
                             <div class="top-text">
                             This is to certify that the person whose<br>
-                            picture and signature appear herein<br>
-                            is a bonafide student of <b>Hilongos<br>
-                            National Vocaational School.</b>
+                            picture and signature appear <br>
+                            herein is a bonafide student of <b>Hilongos
+                            National Vocational School.</b>
                             </div>
                             <div class="back-signature">
                             <div class="signature-img-wrap">
-                                <img src="" alt="signature" class="back-signature-img">
+                                <img src="logoprincipal.png" alt="signature" class="back-signature-img">
                             </div>
                             <div class="signature-name">RICHARD A. GABISON PhD, DPA</div>
                             <div class="director">School Principal IV</div>
@@ -696,7 +732,7 @@
                             <b>IMPORTANT REMINDERS</b><br>
                             Always wear this ID while inside<br>
                             the school campus.<br>
-                            <b>Do not forget your<br>STUDENT LRN NUMBER.</b>
+                            <b>Do not forget your<br>LRN NUMBER.</b>
                             </div>
                             <div class="contact_1">
                             If lost and found, please surrender<br>
@@ -706,7 +742,7 @@
                             </div>
                             <div class="contact">
                             <b>In case of emergency,<br>please contact</b>
-                            <div class="contact-name" id="ename">EFREN IBAÑEZ</div>
+                            <div class="contact-name" id="econtactname">EFREN IBAÑEZ</div>
                             <div class="contact-number" id="cnumber">0935-121-9395</div>
                             </div>
                             <div class="qr-box">
@@ -718,7 +754,7 @@
                         </div>
                         </div>
                         <div class="facebook-footer back-bottom">
-                        https://www.hnvs.edu.ph.com/
+                            https://hnvs.edu.ph/
                         </div>
                     </div>
                 </div>
@@ -775,7 +811,7 @@ function printVisibleID() {
 <script>
         const params = new URLSearchParams(window.location.search);
         const studentId = params.get('id') || 1;
-        fetch(`http://hnvs_backend.test/api/showstudentid/${studentId}`, {
+        fetch(`https://hnvs-id-be.creativedevlabs.com/api/showstudentid/${studentId}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -789,7 +825,8 @@ function printVisibleID() {
         document.getElementById('first-name').firstChild.textContent = data.firstname + ' ';
         document.getElementById('middle-name').textContent = data.middlename ? data.middlename.charAt(0) + '.' : '';
         document.getElementById('dob-num').textContent   = data.birthdate;
-        document.getElementById('cnumber').textContent   = data.emergency_contact;
+        document.getElementById('cnumber').textContent   = data.contact;
+        document.getElementById('econtactname').textContent   = data.emergency_contact;
         document.getElementById('brgy-address').textContent = `${data.barangay}, ${data.municipality}`;
         document.getElementById('student-photo').src = data.image || "bakla.png";
         document.getElementById('student-signature').src = data.signature || "signatura.png";
@@ -826,3 +863,36 @@ function printVisibleID() {
 </script>
 
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const studentId = params.get('id') || 1;
+
+    fetch(`https://hnvs-id-be.creativedevlabs.com/api/fetchStrandDoorway/${studentId}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("✅ Strand/Doorway Data:", data);
+
+        if (data.strand_name) {
+            document.getElementById('strand').textContent = data.strand_name;
+        } else {
+            document.getElementById('strand').textContent = 'No Strand Assigned';
+        }
+
+        if (data.doorway) {
+            document.getElementById('doorway').textContent = data.doorway;
+        } else {
+            document.getElementById('doorway').textContent = 'No Doorway Assigned';
+        }
+    })
+    .catch(error => {
+        console.error(" Error fetching strand/doorway:", error);
+    });
+});
+</script>

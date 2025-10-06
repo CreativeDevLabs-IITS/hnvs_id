@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Student;
-use App\Models\Generateid;
+use App\Models\GenerateId;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Http\Request;
 
@@ -10,7 +10,8 @@ class GenerateidController extends Controller
 {
     public function index()
     {
-        $students = Generateid::join('students', 'generate_ids.student_id', '=', 'students.id')
+        $students = GenerateId::join('students', 'generate_ids.student_id', '=', 'students.id')
+            ->leftJoin('strands', 'students.strand_id', '=', 'strands.id') 
             ->select(
                 'students.id',
                 'students.firstname',
@@ -25,7 +26,7 @@ class GenerateidController extends Controller
                 'students.image',
                 'students.signature',
                 'generate_ids.print_count'
-            )
+                )
             ->get();
         return response()->json($students);
     }
@@ -36,13 +37,13 @@ class GenerateidController extends Controller
             'signature' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'photo_position' => 'nullable|string',     
             'signature_position' => 'nullable|string',
-            'school_year' => 'nullable|string|max:20', // ✅ idagdag
+            'school_year' => 'nullable|string|max:20', 
         ]);
-        $generated = Generateid::where('student_id', $request->student_id)->first();
+        $generated = GenerateId::where('student_id', $request->student_id)->first();
         if ($generated) {
             $generated->increment('print_count');
         } else {
-            $generated = Generateid::create([
+            $generated = GenerateId::create([
                 'student_id' => $request->student_id,
                 'print_count' => 1,
             ]);
@@ -78,7 +79,7 @@ class GenerateidController extends Controller
     }
     public function destroy($id)
     {
-        $generated = Generateid::where('student_id', $id)->first();
+        $generated = GenerateId::where('student_id', $id)->first();
         if (!$generated) {
             return response()->json([
                 'message' => 'Generated ID not found'
@@ -90,4 +91,27 @@ class GenerateidController extends Controller
             'message' => 'Generated ID deleted successfully'
         ]);
     }
+    public function fetchStrandDoorway($studentId)
+    {
+        $student = \DB::table('students')
+            ->leftJoin('strands', 'students.strand_id', '=', 'strands.id')
+            ->where('students.id', $studentId)
+            ->select(
+                'students.id',
+                'strands.cluster as strand_name',
+                'students.doorway'
+            )
+            ->first();
+
+        if (!$student) {
+            return response()->json(['message' => 'Student not found'], 404);
+        }
+
+        return response()->json([
+            'id' => $student->id,
+            'strand_name' => $student->strand_name,
+            'doorway' => $student->doorway
+        ]);
+    }
+
 }

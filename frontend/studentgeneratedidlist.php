@@ -111,6 +111,8 @@
     }
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?php include 'partials/_head.php' ?>
     <div style="height: auto; background-color: #f1f1f1; " class="dashboard">
@@ -146,7 +148,7 @@
                                     <th scope="col">Address</th>
                                     <th scope="col">Age</th>
                                     <th scope="col">LRN</th>
-                                    <th scope="col">Contact</th>
+                                    <th scope="col">Emergency Contact Name</th>
                                     <th scope="col">Image</th>
                                 </tr>
                             </thead>
@@ -187,13 +189,16 @@
     let currentPage = 1;
     let students = [];
     let filteredStudents = []; 
+
     function renderTablePage(page = 1) {
         const tbody = document.getElementById("studentTableBody");
         tbody.innerHTML = "";
+
         const dataToRender = filteredStudents.length > 0 || document.getElementById("searchInput").value
             ? filteredStudents
             : students;
-        if (dataToRender.length === 0) {
+
+        if (!Array.isArray(dataToRender) || dataToRender.length === 0) {
             const tr = document.createElement("tr");
             tr.innerHTML = `
                 <td colspan="7" class="text-center text-muted py-4">
@@ -205,9 +210,11 @@
             document.getElementById("paginationInfo").textContent = "";
             return;
         }
+
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
         const paginatedStudents = dataToRender.slice(start, end);
+
         paginatedStudents.forEach(student => {
             const tr = document.createElement("tr");
             tr.innerHTML = `
@@ -249,6 +256,8 @@
             `;
             tbody.appendChild(tr);
         });
+
+        // Delete action
         document.querySelectorAll(".btn-delete").forEach(btn => {
             btn.addEventListener("click", (e) => {
                 e.preventDefault();
@@ -263,7 +272,7 @@
                     confirmButtonText: "Yes, delete it!"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        fetch(`http://hnvs_backend.test/api/deletegenerate/${id}`, {
+                        fetch(`https://hnvs-id-be.creativedevlabs.com/api/deletegenerate/${id}`, {
                             method: "DELETE",
                             headers: {
                                 "Accept": "application/json",
@@ -285,32 +294,66 @@
                 });
             });
         });
+
         renderPaginationControls(dataToRender);
         renderPaginationInfo(start, end, dataToRender.length);
     }
+
+    // Arrows style pagination
     function renderPaginationControls(dataArray) {
         const totalPages = Math.ceil(dataArray.length / rowsPerPage);
         const paginationDiv = document.getElementById("paginationControls");
         paginationDiv.innerHTML = "";
-        for (let i = 1; i <= totalPages; i++) {
-            const btn = document.createElement("button");
-            btn.textContent = i;
-            btn.className = "page-btn " + (i === currentPage ? "active" : "");
-            btn.addEventListener("click", () => {
-                currentPage = i;
+
+        if (totalPages <= 1) return; 
+
+        const container = document.createElement("div");
+        container.className = "d-flex justify-content-center align-items-center gap-3";
+
+        // Prev
+        const prevBtn = document.createElement("button");
+        prevBtn.className = "btn btn-light";
+        prevBtn.innerHTML = '<i class="bi bi-chevron-left"></i>';
+        prevBtn.disabled = (currentPage === 1);
+        prevBtn.addEventListener("click", () => {
+            if (currentPage > 1) {
+                currentPage--;
                 renderTablePage(currentPage);
-            });
-            paginationDiv.appendChild(btn);
-        }
+            }
+        });
+
+        // Page text
+        const pageText = document.createElement("span");
+        pageText.textContent = `Page ${currentPage} of ${totalPages}`;
+
+        // Next
+        const nextBtn = document.createElement("button");
+        nextBtn.className = "btn btn-light";
+        nextBtn.innerHTML = '<i class="bi bi-chevron-right"></i>';
+        nextBtn.disabled = (currentPage === totalPages);
+        nextBtn.addEventListener("click", () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTablePage(currentPage);
+            }
+        });
+
+        container.appendChild(prevBtn);
+        container.appendChild(pageText);
+        container.appendChild(nextBtn);
+
+        paginationDiv.appendChild(container);
     }
+
     function renderPaginationInfo(start, end, total) {
         const infoDiv = document.getElementById("paginationInfo");
         const showingStart = total === 0 ? 0 : start + 1;
         const showingEnd = Math.min(end, total);
         infoDiv.textContent = `Showing ${showingStart} to ${showingEnd} of ${total} students`;
     }
-    // Fetch students from API
-    fetch("http://hnvs_backend.test/api/showgeneratedids", {
+
+    // Fetch students
+    fetch(`https://hnvs-id-be.creativedevlabs.com/api/showgeneratedids`, {
         headers: {
             "Accept": "application/json",
             "Authorization": "Bearer " + localStorage.getItem("token")
@@ -318,11 +361,13 @@
     })
     .then(res => res.json())
     .then(data => {
-        students = data;
+        console.log("API Response:", data); 
+        students = Array.isArray(data) ? data : (data.data || []);
         renderTablePage(currentPage);
     })
     .catch(err => console.error(err));
-    // Search input listener
+
+    // Search
     document.getElementById("searchInput").addEventListener("input", (e) => {
         const query = e.target.value.trim().toLowerCase();
         filteredStudents = students.filter(student => 
@@ -334,3 +379,6 @@
         renderTablePage(currentPage);
     });
 </script>
+
+
+
