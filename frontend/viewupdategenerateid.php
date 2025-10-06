@@ -867,6 +867,7 @@
         </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <?php include 'partials/_logout.php' ?>
+    <?php include 'partials/config.php' ?>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const idFront = document.getElementById('idFront');
