@@ -746,7 +746,7 @@
                     <div class="strand" id="strand">
                         SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
                     </div>
-                    <div class="doorway-word">Doorway:</div>
+                    <div class="doorway-word" id="doorwayWord">Doorway:</div>
                     <div class="doorway" id="doorway">DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
                     </div>
                 </div>
@@ -1142,15 +1142,7 @@ document.getElementById('saveBtn').addEventListener('click', function () {
 });
 </script>
 
-
 <script>
-const APP_URL = "<?= APP_URL ?>";
-const FRONTEND_URL = "<?= FRONTEND_URL ?>";
-
-document.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const studentId = params.get('id') || 1;
-
     fetch(`${APP_URL}/api/fetchStrandDoorway/${studentId}`, {
         method: 'GET',
         headers: {
@@ -1166,30 +1158,61 @@ document.addEventListener('DOMContentLoaded', () => {
         const doorwayEl = document.getElementById('doorway');
         const doorwayWordEl = document.getElementById('doorwayWord');
 
-        let strandName = data.strand_name || 'No Strand Assigned';
+        let strandName = data.strand_name ? data.strand_name.toUpperCase().trim() : '';
+        let doorwayName = data.doorway ? data.doorway.toUpperCase().trim() : '';
 
-        if (strandName.toUpperCase() === 'STEM') {
-            strandName = 'SCIENCE, TECHNOLOGY, ENGINEERING & MATHEMATICS (STEM)';
+        let displayStrand = 'No Strand Assigned';
+        let hideDoorway = false;
+
+        if (strandName === 'STEM' && doorwayName === 'STEM') {
+            displayStrand = 'SCIENCE, TECHNOLOGY, ENGINEERING & MATHEMATICS (STEM)';
+            hideDoorway = true;
+        } 
+        else if (strandName === 'B & E' && doorwayName === 'B & E') {
+            displayStrand = 'BUSINESS & ENTREPRENEURSHIP<br>(B & E)';
+            hideDoorway = true;
+        } 
+        else if (strandName === 'ASSH' && doorwayName === 'ASSH') {
+            displayStrand = 'ARTS, SOCIAL SCIENCES, HUMANITIES (ASSH)';
+            hideDoorway = true;
+        } 
+        else if (strandName === 'SHW' && doorwayName === 'SHW') {
+            displayStrand = 'SPORTS, HEALTH, AND WELLNESS (SHW)';
+            hideDoorway = true;
+        } 
+        else {
+            displayStrand = strandName || 'No Strand Assigned';
         }
 
-        strandEl.textContent = strandName;
+        // ✅ Apply <br> ONLY for BUSINESS & ENTREPRENEURSHIP (B & E)
+        if (displayStrand.includes('BUSINESS & ENTREPRENEURSHIP (B & E)')) {
+            displayStrand = displayStrand.replace(
+                '(B & E)',
+                '<br><span class="abbr">(B & E)</span>'
+            );
+        }
 
-        if (data.doorway && String(data.doorway).trim().length > 0) {
+        strandEl.innerHTML = displayStrand;
+
+        // ✅ Hide doorway if needed
+        if (hideDoorway || !data.doorway || data.doorway.trim().length === 0) {
+            doorwayEl.style.display = 'none';
+            doorwayWordEl.style.display = 'none';
+            strandEl.classList.add('big-strand');
+        } else {
             doorwayEl.textContent = data.doorway;
             doorwayEl.style.display = 'block';
             doorwayWordEl.style.display = 'block';
             strandEl.classList.remove('big-strand');
-        } else {
-            doorwayEl.style.display = 'none';
-            doorwayWordEl.style.display = 'none';
-            strandEl.classList.add('big-strand');
         }
     })
     .catch(error => {
         console.error("Error fetching strand/doorway:", error);
     });
-});
 </script>
+
+
+
 
 <style>
 .strand-container {
@@ -1197,18 +1220,24 @@ document.addEventListener('DOMContentLoaded', () => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    padding: 2px 5px;
 }
 
 .strand {
     text-align: center;
-    font-size: 10px !important;
-    transition: all 0.3s ease;
+    font-size: 10px;   
+    font-weight: 600;
+    line-height: 1.1;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 .big-strand {
-    font-size: 10px !important;
+    font-size: 10px;  
     font-weight: bold;
     text-align: center;
-    margin-top: 8px !important;
+    line-height: 1.2;
+    margin-top: 10px;
 }
 </style>
