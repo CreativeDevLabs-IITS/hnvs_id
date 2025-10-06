@@ -45,7 +45,7 @@
                                 <option value="ASSH">ASSH</option>
                                 <option value="SHW">SHW</option>
                                 <option value="(IA) Driving NC II">(IA) Driving NC II</option>
-                                <option value="(IA) Automotive Servicing NC I">(IA) Automotive Servicing NC II</option>
+                                <option value="(IA) Automotive Servicing NC I">(IA) Automotive Servicing NC I</option>
                                 <option value="(IA) Manual Metal Arc Welding (MMAW) NC II">(IA) Manual Metal Arc Welding (MMAW) NC II</option>
                                 <option value="(FCS) Kitchen Operations NC II">(FCS) Kitchen Operations NC II</option>
                                 <option value="(FCS) Bakery Operations NC II">(FCS) Bakery Operations NC II</option>
