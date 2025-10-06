@@ -91,23 +91,16 @@ class StudentController extends Controller
                 $validate['strand_id'] = $strand->id;
             }
 
-            if ($request->hasFile('image')) {
+            if($request->hasFile('image')) {
                 $file = $request->file('image');
-                $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('images'), $filename);
-                $validate['image'] = env('APP_URL') . '/images/' . $filename;
+                $path = $file->store('images', 'public');
+                $validate['image'] = env('APP_URL') . $path;
             }
 
             if($request->hasFile('signature')) {
                 $signFile = $request->file('signature');
                 $signPath = $signFile->store('images', 'public');
                 $validate['signature'] = env('APP_URL') . $signPath;
-            }
-            if ($request->hasFile('signature')) {
-                $file = $request->file('signature');
-                $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('images'), $filename);
-                $validate['signature'] = env('APP_URL') . '/images/' . $filename;
             }
 
             $student = Student::create($validate);
@@ -194,11 +187,10 @@ class StudentController extends Controller
                 if($student->image && Storage::disk('public')->exists($student->image)) {
                     Storage::disk('public')->delete($student->image);
                 }
-                
+
                 $file = $request->file('image');
-                $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('images'), $filename);
-                $validate['image'] = env('APP_URL') . '/images/' . $filename;
+                $path = $file->store('images', 'public');
+                $validate['image'] = env('APP_URL') . $path;
             }
 
             if($request->hasFile('signature')) {
@@ -206,11 +198,9 @@ class StudentController extends Controller
                     Storage::disk('public')->delete($student->signature);
                 }
 
-
-                $file = $request->file('signature');
-                $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('images'), $filename);
-                $validate['signature'] = env('APP_URL') . '/images/' . $filename;
+                $signFile = $request->file('signature');
+                $signPath = $signFile->store('images', 'public');
+                $validate['signature'] = env('APP_URL') . $signPath;
             }
 
             $student->update($validate);
@@ -243,11 +233,6 @@ class StudentController extends Controller
                 $students->whereHas('section', function ($query) use ($section) {
                     $query->where('name', $section);
                 });
-            }
-
-            if($request->filled('doorway')) {
-                $doorway = $request->input('doorway');
-                $students->where('doorway', $doorway);
             }
 
             if($request->filled('strand')) {

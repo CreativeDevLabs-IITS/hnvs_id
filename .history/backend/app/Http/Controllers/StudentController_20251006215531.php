@@ -245,11 +245,6 @@ class StudentController extends Controller
                 });
             }
 
-            if($request->filled('doorway')) {
-                $doorway = $request->input('doorway');
-                $students->where('doorway', $doorway);
-            }
-
             if($request->filled('strand')) {
                 $strand = $request->input('strand');
                 $students->whereHas('strand', function ($query) use ($strand) {
