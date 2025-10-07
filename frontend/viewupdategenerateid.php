@@ -650,25 +650,7 @@
     align-items:center; 
     flex-direction:column;
 ">
-  <canvas id="signatureCanvas" style="
-      border:3px solid #fff; 
-      background:#fff; 
-      width:70vw; 
-      height:70vh;
-  "></canvas>
 
-  <!-- Stroke thickness -->
-  <div style="margin-top:15px;">
-    <label for="strokeWeight" style="color:white; font-weight:bold;">Stroke:</label>
-    <select id="strokeWeight">
-      <option value="1">Thin</option>
-      <option value="2">Light</option>
-      <option value="3" selected>Normal</option>
-      <option value="5">Bold</option>
-      <option value="7">Extra Bold</option>
-      <option value="10">Heavy</option>
-    </select>
-  </div>
 
   <!-- Buttons -->
   <div style="margin-top:15px;">
@@ -676,6 +658,15 @@
     <button id="saveSignature" style="padding:12px 25px; font-weight:bold;">Save</button>
     <button id="closeSignature" style="padding:12px 25px; font-weight:bold;">Cancel</button>
   </div>
+  <canvas id="signatureCanvas" style="
+      border:3px solid #fff; 
+      background:#fff; 
+      width:70vw; 
+      height:70vh;
+  "></canvas>
+
+
+
 </div>
 
 <!-- Signature Pad Library -->
@@ -1031,6 +1022,8 @@ const closeBtn = document.getElementById('closeSignature');
 const strokeSelect = document.getElementById('strokeWeight');
 let signaturePad;
 
+const DEFAULT_STROKE = 5;
+
 function resizeCanvas() {
   const ratio = Math.max(window.devicePixelRatio || 1, 1);
   const displayWidth = canvas.offsetWidth;
@@ -1045,18 +1038,11 @@ function initSignaturePad() {
   resizeCanvas();
   signaturePad = new SignaturePad(canvas, {
     penColor: "black",
-    minWidth: parseInt(strokeSelect.value),
-    maxWidth: parseInt(strokeSelect.value),
+    minWidth: DEFAULT_STROKE,
+    maxWidth: DEFAULT_STROKE,
   });
 }
 
-strokeSelect.addEventListener('change', () => {
-  if (signaturePad) {
-    const thickness = parseInt(strokeSelect.value);
-    signaturePad.minWidth = thickness;
-    signaturePad.maxWidth = thickness;
-  }
-});
 
 editSignatureBtn.addEventListener('click', () => {
   signatureModal.style.display = 'flex';

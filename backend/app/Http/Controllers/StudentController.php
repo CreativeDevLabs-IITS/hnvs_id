@@ -194,7 +194,7 @@ class StudentController extends Controller
                 if($student->image && Storage::disk('public')->exists($student->image)) {
                     Storage::disk('public')->delete($student->image);
                 }
-                
+
                 $file = $request->file('image');
                 $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->move(public_path('images'), $filename);
