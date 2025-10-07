@@ -896,25 +896,27 @@ function printVisibleID() {
         let hideDoorway = false;
 
         // 🔹 Match strand + doorway logic
-        if (strandName === 'STEM' && doorwayName === 'STEM') {
+        // 🔹 Match strand + doorway logic (with fallback if doorway is missing)
+        if (strandName === 'STEM' && (!doorwayName || doorwayName === 'STEM')) {
             displayStrand = 'SCIENCE, TECHNOLOGY, ENGINEERING & MATHEMATICS (STEM)';
             hideDoorway = true;
-        } 
-        else if (strandName === 'B & E' && doorwayName === 'B & E') {
+        }
+        else if (strandName === 'B & E' && (!doorwayName || doorwayName === 'B & E')) {
             displayStrand = 'BUSINESS & ENTREPRENEURSHIP<br>(B & E)';
             hideDoorway = true;
-        } 
-        else if (strandName === 'ASSH' && doorwayName === 'ASSH') {
+        }
+        else if (strandName === 'ASSH' && (!doorwayName || doorwayName === 'ASSH')) {
             displayStrand = 'ARTS, SOCIAL SCIENCES, HUMANITIES (ASSH)';
             hideDoorway = true;
-        } 
-        else if (strandName === 'SHW' && doorwayName === 'SHW') {
+        }
+        else if (strandName === 'SHW' && (!doorwayName || doorwayName === 'SHW')) {
             displayStrand = 'SPORTS, HEALTH, AND WELLNESS (SHW)';
             hideDoorway = true;
-        } 
+        }
         else {
             displayStrand = strandName || 'No Strand Assigned';
         }
+
 
         // 🔹 If doorway is the same as strand OR empty/null → hide doorway
         if (
