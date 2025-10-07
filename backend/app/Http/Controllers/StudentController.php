@@ -50,9 +50,9 @@ class StudentController extends Controller
     public function create(Request $request) {
         try {
             $validate = $request->validate([
-                'firstname' => ['required', 'string',
-                'middlename' => ['nullable', 'string',
-                'lastname' => ['required', 'string',
+                'firstname' => 'required', 'string',
+                'middlename' => 'nullable', 'string',
+                'lastname' => 'required', 'string',
                 'suffix' => 'nullable',
                 'contact' => 'required',
                 'emergency_contact' => 'required',
@@ -157,9 +157,9 @@ class StudentController extends Controller
         try {
             $student = Student::find($request->id);
             $validate = $request->validate([
-                'firstname' => ['nullable', 'string',
-                'middlename' => ['nullable', 'string',
-                'lastname' => ['nullable', 'string',
+                'firstname' => 'nullable', 'string',
+                'middlename' => 'nullable', 'string',
+                'lastname' => 'nullable', 'string',
                 'suffix' => 'nullable',
                 'contact' => 'nullable',
                 'emergency_contact' => 'nullable',
