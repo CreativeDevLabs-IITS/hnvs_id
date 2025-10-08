@@ -61,7 +61,7 @@ class StudentController extends Controller
                 'lrn' => 'required',
                 'barangay' => 'required',
                 'municipality' => 'required',
-                'signature' => 'required|mimes:png,jpg,jpeg',
+                'signature' => 'nullable|mimes:png,jpg,jpeg',
                 'section_id' => 'required',
                 'year_level' => 'required|numeric',
             ]);
