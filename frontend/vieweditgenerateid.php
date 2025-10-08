@@ -897,6 +897,10 @@ function printVisibleID() {
             document.getElementById('strand').innerText = student.strand.specialization.toUpperCase();
         }
 
+        if(!student.doorway) {
+            document.getElementById('doorwayWord').style.display = 'none';
+        }
+        
         if(student.doorway && student.doorway == student.strand.cluster) {
             document.getElementById('doorway').style.display = 'none';
             document.getElementById('doorwayWord').style.display = 'none';
