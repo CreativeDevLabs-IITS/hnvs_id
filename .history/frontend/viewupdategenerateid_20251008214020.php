@@ -734,9 +734,11 @@
                     <img id="student-qr" src="" alt="QR" />
                 </div>
                     <div class="track">
-                    <div class="strand" id="strand"></div>
-                    <div class="doorway-word mt-1" id="doorwayWord">Doorway:</div>
-                    <div class="doorway" id="doorway"></div>
+                    <div class="strand" id="strand">
+                        SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
+                    </div>
+                    <div class="doorway-word" id="doorwayWord">Doorway:</div>
+                    <div class="doorway" id="doorway">DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
                     </div>
                 </div>
 
