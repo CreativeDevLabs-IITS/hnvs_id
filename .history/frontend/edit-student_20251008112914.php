@@ -228,7 +228,7 @@
             fetch(`${APP_URL}/api/section/strand/list`, {
                 method: 'GET',
                 headers: {
-                    'Accept': 'application/json',
+                    'Accept': 'Application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('token')
                 }
             })
@@ -350,7 +350,7 @@
             fetch(`${APP_URL}/api/find/student`, {
                 method: 'POST',
                 headers: {
-                    'Accept': 'application/json',
+                    'Accept': 'Application/json',
                     'Content-Type': 'Application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 },

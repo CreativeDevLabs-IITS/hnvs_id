@@ -228,7 +228,7 @@
             fetch(`${APP_URL}/api/section/strand/list`, {
                 method: 'GET',
                 headers: {
-                    'Accept': 'application/json',
+                    'Accept': 'Application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('token')
                 }
             })
@@ -278,7 +278,6 @@
                     }
                 })
 
-                populateForm();
             })
         })
 
@@ -339,7 +338,7 @@
         }        
 
         // populate form
-        function populateForm() {
+        $(document).ready(function() {
             // document.getElementById('lineLoader').style.display = 'block';
             const url = new URLSearchParams(window.location.search);
             const id = url.get('id');
@@ -350,7 +349,7 @@
             fetch(`${APP_URL}/api/find/student`, {
                 method: 'POST',
                 headers: {
-                    'Accept': 'application/json',
+                    'Accept': 'Application/json',
                     'Content-Type': 'Application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 },
@@ -387,16 +386,16 @@
                             document.getElementById('suffix').value = student.suffix;
                         }
                 
-                        if(student.strand) {
-                            strandSelect.value = student.strand.id;
-                            if(student.strand.specialization != null) {
-                                await populateSpecialization.call(strandSelect);
+                        // if(student.strand) {
+                        //     strandSelect.value = student.strand.id;
+                        //     if(student.strand.specialization != null) {
+                        //         await populateSpecialization.call(strandSelect);
             
-                                let specializationSelect = document.getElementById('specializationCon');
-                                specializationSelect.style.display = 'block';
-                                document.getElementById('specialization').value = student.strand.id;
-                            }
-                        }
+                        //         let specializationSelect = document.getElementById('specializationCon');
+                        //         specializationSelect.style.display = 'block';
+                        //         document.getElementById('specialization').value = student.strand.id;
+                        //     }
+                        // }
                         
                         document.getElementById('screenLoaderCon').style.display = 'none';
                         document.getElementById('content').style.display = 'block';
@@ -459,7 +458,7 @@
                 
                 loadSpecialization(); 
             })
-        }
+        })
 
 
         // on change strand
