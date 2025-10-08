@@ -881,7 +881,6 @@ function printVisibleID() {
     })
     .then(res => res.json())
     .then(data => {
-        console.log("Student Info Data: ", data.student);
         const student = data.student;
 
         if(student.strand.cluster == 'STEM' ||
