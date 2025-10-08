@@ -228,7 +228,7 @@
             fetch(`${APP_URL}/api/section/strand/list`, {
                 method: 'GET',
                 headers: {
-                    'Accept': 'application/json',
+                    'Accept': 'Application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('token')
                 }
             })
@@ -278,7 +278,6 @@
                     }
                 })
 
-                populateForm();
             })
         })
 
@@ -339,8 +338,8 @@
         }        
 
         // populate form
-        function populateForm() {
-            // document.getElementById('lineLoader').style.display = 'block';
+        $(document).ready(function() {
+            document.getElementById('lineLoader').style.display = 'block';
             const url = new URLSearchParams(window.location.search);
             const id = url.get('id');
             const dropifyInput = $('#studentImg');
@@ -350,7 +349,7 @@
             fetch(`${APP_URL}/api/find/student`, {
                 method: 'POST',
                 headers: {
-                    'Accept': 'application/json',
+                    'Accept': 'Application/json',
                     'Content-Type': 'Application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 },
@@ -459,7 +458,7 @@
                 
                 loadSpecialization(); 
             })
-        }
+        })
 
 
         // on change strand
