@@ -668,9 +668,11 @@
                         <img id="student-qr" src="" alt="QR" />
                     </div>
                         <div class="track">
-                    <div class="strand" id="strand"></div>
-                    <div class="doorway-word mt-1" id="doorwayWord">Doorway:</div>
-                    <div class="doorway" id="doorway"></div>
+                    <div class="strand" id="strand">
+                        SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
+                    </div>
+                    <div class="doorway-word" id="doorwayWord">Doorway:</div>
+                    <div class="doorway" id="doorway">DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
                     </div>
                     </div>
                     <!-- ID BACK -->
@@ -870,6 +872,75 @@ function printVisibleID() {
 </script>
 
 
+<!-- <script>
+    fetch(`${APP_URL}/api/fetchStrandDoorway/${studentId}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(" Strand/Doorway Data:", data);
+
+        const strandEl = document.getElementById('strand');
+        const doorwayEl = document.getElementById('doorway');
+        const doorwayWordEl = document.getElementById('doorwayWord');
+
+        // 🔹 Clean and uppercase values
+        let strandName = data.strand_name ? data.strand_name.toUpperCase().trim() : '';
+        let doorwayName = data.doorway ? data.doorway.toUpperCase().trim() : '';
+
+        let displayStrand = 'No Strand Assigned';
+        let hideDoorway = false;
+
+        // 🔹 Match strand + doorway logic
+        // 🔹 Match strand + doorway logic (with fallback if doorway is missing)
+        if (strandName === 'STEM' && (!doorwayName || doorwayName === 'STEM')) {
+            displayStrand = 'SCIENCE, TECHNOLOGY, ENGINEERING & MATHEMATICS (STEM)';
+            hideDoorway = true;
+        }
+        else if (strandName === 'B & E' && (!doorwayName || doorwayName === 'B & E')) {
+            displayStrand = 'BUSINESS & ENTREPRENEURSHIP<br>(B & E)';
+            hideDoorway = true;
+        }
+        else if (strandName === 'ASSH' && (!doorwayName || doorwayName === 'ASSH')) {
+            displayStrand = 'ARTS, SOCIAL SCIENCES, HUMANITIES (ASSH)';
+            hideDoorway = true;
+        }
+        else if (strandName === 'SHW' && (!doorwayName || doorwayName === 'SHW')) {
+            displayStrand = 'SPORTS, HEALTH, AND WELLNESS (SHW)';
+            hideDoorway = true;
+        }
+        else {
+            displayStrand = strandName || 'No Strand Assigned';
+        }
+
+
+        // 🔹 If doorway is the same as strand OR empty/null → hide doorway
+        if (
+            hideDoorway ||
+            !doorwayName ||
+            doorwayName.length === 0 ||
+            doorwayName === strandName
+        ) {
+            doorwayEl.style.display = 'none';
+            doorwayWordEl.style.display = 'none';
+            strandEl.classList.add('big-strand');
+        } else {
+            doorwayEl.textContent = data.doorway;
+            doorwayEl.style.display = 'block';
+            doorwayWordEl.style.display = 'block';
+            strandEl.classList.remove('big-strand');
+        }
+
+        strandEl.innerHTML = displayStrand;
+    })
+    .catch(error => {
+        console.error("Error fetching strand/doorway:", error);
+    });
+</script> -->
 
 <script>
     fetch(`${APP_URL}/api/fetchStudentInfo/${studentId}`, {

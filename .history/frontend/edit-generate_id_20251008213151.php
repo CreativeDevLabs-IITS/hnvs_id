@@ -4,8 +4,8 @@
 <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Notyf CSS & JS (kung wala pa) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 <style>
     body {
@@ -142,16 +142,18 @@
             left: 0px;
             height: 80px;
             z-index: 3;
+            
             }
 
 
-            .signature img {
+   .signature img {
                 object-fit:contain;
             height: 100%;
             width:100%
             display:block;
             
             }
+
 
             .bottom-container {
             position: absolute;
@@ -253,7 +255,6 @@
             justify-content: center;
             text-align: center;
             font-size: 8px;
-            
             }
 
             .doorway-word {
@@ -261,7 +262,7 @@
             justify-content: center;
             text-align: center;
             font-size: 6px;
-            margin-top:-1px;
+             margin-top:-1px;
             }
 
             .doorway {
@@ -288,6 +289,7 @@
         .id-card-back {
             height: 300px;
             background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             display: flex;
             font-size: 9px;
             position: relative;
@@ -305,12 +307,7 @@
             padding: 12px 8px 5px 8px;
             gap: 5px;
         }
-        .left-content { 
-            width: 25%; 
-            border-left:1px solid;
-            border-top:1.5px solid;
-            border-bottom:1.5px solid;
-        }
+        .left-content { width: 25%; }
         .right-content {
             width: 75%;
             flex: 1;
@@ -397,21 +394,18 @@
             margin-bottom: 4px;
         }
         .qr-box {
-            background: none;
-            color: black;
+            background: black;
+            color: white;
             font-size: 7px;
-            border:1px solid;
             text-align: center;
             padding: 4px 2px;
             margin-top: 1px;
             font-weight: bold;
         }
         .facebook-footer {
-            background: none;
-            color: black;
-            font-weight:bold;
-            border-top:1px solid;
-            font-size: 8px;
+            background: #000000;
+            color: #fff;
+            font-size: 7px;
             text-align: center;
             padding: 5px 0 5px 0;
             letter-spacing: 0.5px;
@@ -429,24 +423,24 @@
             font-size: 7px;
             line-height: 1;
         }
-      .year-cell, .semester-cell {
-            background-color: none;
-            color: black;
+        .year-cell, .semester-cell {
+            background-color: #000;
+            color: white;
             border: 1px solid #333;
             width: -60px;
             height: 56px;
         }
         .word-school-year {
-            background-color: none;
-            color: black;
+            background-color: #000;
+            color: white;
+            border: 1px solid #333;
             width: -60px;
             height: 56px;
         }
         .first-cell, .second-cell {
             background-color: white;
             color: black;
-            border-right: 1px solid #333;
-            border-bottom: 1px solid #333;
+            border: 1px solid #333;
             width: -60px;
             height: 56px;
         }
@@ -455,23 +449,6 @@
             border: 1px solid #333;
             width: -60px;
             height: 56px;
-        }
-        .last .semester-cell{
-            border-bottom:none;
-        }
-        .last .first-cell{
-            border-bottom:none;
-        }
-        .last .second-cell{
-            border-bottom:none;
-        }
-
-        .first .year-cell{
-            border-top:none;
-        }
-
-        .first .empty-cell{
-            border-top:none;
         }
         @media print {
             html, body {
@@ -549,7 +526,7 @@
 </style>
 <style>
     
-    @media print {
+  @media print {
         html, body {
             padding: 0;
             margin: 0;
@@ -614,7 +591,6 @@
         <div style="position: sticky; top: 0; z-index: 5">
             <?php include 'partials/_navbar.php' ?>
         </div>
-        
         <div style="display: grid; grid-template-columns: 250px 1fr">
             <?php include 'partials/_sidebar.php' ?>
             <div class="py-3 pe-3 ps-5">
@@ -632,10 +608,10 @@
                         <button id="showFront" class="switch-btn active">Front</button>
                         <button id="showBack" class="switch-btn">Back</button>
                         <button id="editBtn" class="switch-btn">Edit</button>
-                        <button id="saveBtn" class="switch-btn">Update</button>
+                        <button id="saveBtn" class="switch-btn">Save</button>
                         <button id="editSignatureBtn" class="switch-btn">Edit Signature</button>
                         <button class="switch-btn print-button" onclick="printVisibleID()">
-                            Print
+                                Print
                         </button>
                     </div>
 <!-- Signature Pad Modal -->
@@ -666,11 +642,11 @@
   "></canvas>
 
 
-
 </div>
 
 <!-- Signature Pad Library -->
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+
                     <div style="display: flex; gap: 20px; margin-bottom: 10px;">
                             <div id="fontSizeControls" style="display:none;">
                                 <label for="nameFontSize" style="font-weight:bold;">Name Font Size:</label>
@@ -684,102 +660,95 @@
                             </div>
                     </div>
                 </div>
-            <div style="display: flex; justify-content: center; gap: 20px; margin-top: 5px;">
-            <div class="id-card" id="idFront" style="display: block;">
-                <div class="watermark-logo">
-                <img src="gear.png" alt="Background Logo" />
-                </div>
-
-                <div class="logo-school"></div>
-                <div class="header">
-                <img src="logo.png" alt="Logo" />
-                <div class="school-info">
-                    <div class="school-name">HILONGOS NATIONAL <br /><span>VOCATIONAL SCHOOL</span></div>
-                    <div class="school-level">SENIOR HIGH <br> SCHOOL DEPARTMENT</div>
-                    <div class="school-id">SCHOOL ID: 303374</div>
-                </div>
-                </div>
-                <div class="lrn">
-                <div class="lrn-label">LRN</div>
-                <div class="lrn-bar" id="lrn-bar"></div>
-                </div>
-
-                <div class="photo" id="photoDrop">
-                <img id="student-photo" src="bakla.png" alt="Photo" />
-                <input type="file" id="photoInput" accept="image/*" style="display:none;" />
-                </div>
-
-                <div class="signature" id="signatureDrop">
-                <img id="student-signature" src="signatura.png" alt="Signature" />
-                <input type="file" id="signatureInput" accept="image/*" style="display:none;" />
-                </div>
-
-                <div class="bottom-container">
-                <div class="left-box">
-                    <div class="name">
-                    <div class="last-name" id="last-name"></div>
-                    <div class="first-name" id="first-name">
-                        <span class="middle-name" id="middle-name"></span>
+                <div style="display: flex; justify-content: center; gap: 20px; margin-top: 30px; scale: 110%;">
+                    <div class="id-card" id="idFront" style="display: block;">
+                    <div class="watermark-logo">
+                        <img src="gear.png" alt="Background Logo" />
                     </div>
+                    <div class="logo-school"></div>
+                    <div class="header">
+                        <img src="logo.png" alt="Logo" />
+                        <div class="school-info">
+                        <div class="school-name">HILONGOS NATIONAL <br /><span>VOCATIONAL SCHOOL</span></div>
+                        <div class="school-level">SENIOR HIGH <br> SCHOOL DEPARTMENT</div>
+                        <div class="school-id">SCHOOL ID: 303374</div>
+                        </div>
                     </div>
-                    <div class="info">
-                    <div class="dob">Date of Birth:</div>
-                    <div class="dob-num" id="dob-num"></div>
-                    <div class="address">Address:</div>
-                    <div class="brgy-address" id="brgy-address"></div>
+                    <div class="lrn">
+                        <div class="lrn-label">LRN</div>
+                        <div class="lrn-bar" id="lrn-bar"></div>
+                    </div>
+                    <div class="photo" id="photoDrop">
+                        <img id="student-photo" src="bakla.png" alt="Photo" />
+                        <input type="file" id="photoInput" accept="image/*" style="display:none;" />
+                    </div>
+                    <div class="signature" id="signatureDrop">
+                        <img id="student-signature" src="signatura.png" alt="Signature" />
+                        <input type="file" id="signatureInput" accept="image/*" style="display:none;" />
+                    </div>
+                    <div class="bottom-container">
+                        <div class="left-box">
+                        <div class="name">
+                            <div class="last-name" id="last-name"></div>
+                            <div class="first-name" id="first-name">
+                            <span class="middle-name" id="middle-name"></span>
+                            </div>
+                        </div>
+                        <div class="info">
+                            <div class="dob">Date of Birth:</div>
+                            <div class="dob-num" id="dob-num"></div>
+                            <div class="address">Address:</div>
+                            <div class="brgy-address" id="brgy-address"></div>
+                        </div>
                     </div>
                 </div>
-                </div>
-                <div class="qr-code">
-                    <img id="student-qr" src="" alt="QR" />
-                </div>
-                    <div class="track">
+            <div class="qr-code">
+                <img id="student-qr" src="" alt="QR" />
+            </div>
+                <div class="track">
                     <div class="strand" id="strand"></div>
-                    <div class="doorway-word mt-1" id="doorwayWord">Doorway:</div>
+                    <div class="doorway-word" id="doorwayWord">Doorway:</div>
                     <div class="doorway" id="doorway"></div>
                     </div>
-                </div>
-
-            <!-- ID BACK -->
+            </div>
             <div class="id back" id="idBack" style="display: none;">
                 <div class="id-card-back back-top">
                 <div class="left-content">
                     <div class="left-bar year-strip">
                         <table id="schoolYearTable">
-                            <tr class="first">
-                                <td class="word-school-year"></td>
-                                <td class="year-cell"><div class="rotated-text"><b>2028-2029</b></div></td>
-                                <td class="empty-cell"></td>
-                                <td class="empty-cell"></td>
-                            </tr>
-                            <tr>
-                                <td class="word-school-year"></td>
-                                <td class="year-cell"><div class="rotated-text"><b>2027-2028</b></div></td>
-                                <td class="empty-cell"></td>
-                                <td class="empty-cell"></td>
-                            </tr>
-                            <tr>
-                                <td class="word-school-year"><div class="rotated-text"><b>SCHOOL YEAR</b></div></td>
-                                <td class="year-cell"><div class="rotated-text"><b>2026-2027</b></div></td>
-                                <td class="empty-cell"></td>
-                                <td class="empty-cell"></td>
-                            </tr>
-                            <tr>
-                                <td class="word-school-year"></td>
-                                <td class="year-cell"><div class="rotated-text"><b>2025-2026</b></div></td>
-                                <td class="empty-cell"></td>
-                                <td class="empty-cell"></td>
-                            </tr>
-                            <tr class="last">
-                                <td class="word-school-year"></td>
-                                <td class="semester-cell"><div class="rotated-text"><b>Semester</b></div></td>
-                                <td class="first-cell"><div class="rotated-text"><b>First</b></div></td>
-                                <td class="second-cell"><div class="rotated-text"><b>Second</b></div></td>
-                            </tr>
-                        </table>
+                                    <tr>
+                                        <td class="word-school-year"></td>
+                                        <td class="year-cell"><div class="rotated-text"><b>2028-2029</b></div></td>
+                                        <td class="empty-cell"></td>
+                                        <td class="empty-cell"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="word-school-year"></td>
+                                        <td class="year-cell"><div class="rotated-text"><b>2027-2028</b></div></td>
+                                        <td class="empty-cell"></td>
+                                        <td class="empty-cell"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="word-school-year"><div class="rotated-text"><b>SCHOOL YEAR</b></div></td>
+                                        <td class="year-cell"><div class="rotated-text"><b>2026-2027</b></div></td>
+                                        <td class="empty-cell"></td>
+                                        <td class="empty-cell"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="word-school-year"></td>
+                                        <td class="year-cell"><div class="rotated-text"><b>2025-2026</b></div></td>
+                                        <td class="empty-cell"></td>
+                                        <td class="empty-cell"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="word-school-year"></td>
+                                        <td class="semester-cell"><div class="rotated-text"><b>Semester</b></div></td>
+                                        <td class="first-cell"><div class="rotated-text"><b>First</b></div></td>
+                                        <td class="second-cell"><div class="rotated-text"><b>Second</b></div></td>
+                                    </tr>
+                            </table>
                     </div>
                 </div>
-
                 <div class="right-content">
                     <div class="top-text">
                     This is to certify that the person whose<br>
@@ -787,7 +756,6 @@
                     herein is a bonafide student of <b>Hilongos
                     National Vocational School.</b>
                     </div>
-
                     <div class="back-signature">
                     <div class="signature-img-wrap">
                         <img src="logoprincipal.png" alt="signature" class="back-signature-img">
@@ -795,27 +763,23 @@
                     <div class="signature-name">RICHARD A. GABISON PhD, DPA</div>
                     <div class="director">School Principal IV</div>
                     </div>
-
                     <div class="reminders">
                     <b>IMPORTANT REMINDERS</b><br>
                     Always wear this ID while inside<br>
                     the school campus.<br>
-                    <b>Do not forget your<br> LRN NUMBER.</b>
+                    <b>Do not forget your<br>LRN NUMBER.</b>
                     </div>
-
                     <div class="contact_1">
                     If lost and found, please surrender<br>
                     this ID to the<br><b>
                     HNVS SHS OFFICE,</b><br>
                     Hilongos National Vocational School <br>RV Fulache St. Hilongos, Leyte
                     </div>
-
                     <div class="contact">
                     <b>In case of emergency,<br>please contact</b>
                     <div class="contact-name" id="econtactname">EFREN IBAÑEZ</div>
                     <div class="contact-number" id="cnumber">0935-121-9395</div>
                     </div>
-
                     <div class="qr-box">
                     PLEASE SCAN THE QR<br>
                     CODE AT THE FRONT<br>
@@ -827,31 +791,37 @@
                 <div class="facebook-footer back-bottom">
                 https://hnvs.edu.ph/
                 </div>
-            </div>
         </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <?php include 'partials/_logout.php' ?>
-    <?php include 'partials/config.php' ?>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const idFront = document.getElementById('idFront');
-            const idBack = document.getElementById('idBack');
-            const frontBtn = document.getElementById('showFront');
-            const backBtn = document.getElementById('showBack');
-            frontBtn.addEventListener('click', () => {
-            idFront.style.display = 'block';
-            idBack.style.display = 'none';
-            frontBtn.classList.add('active');
-            backBtn.classList.remove('active');
-            });
-            backBtn.addEventListener('click', () => {
-            idFront.style.display = 'none';
-            idBack.style.display = 'block';
-            backBtn.classList.add('active');
-            frontBtn.classList.remove('active');
-            });
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+<?php include 'partials/_logout.php' ?>
+<?php include 'partials/config.php' ?>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const idFront = document.getElementById('idFront');
+        const idBack = document.getElementById('idBack');
+        const frontBtn = document.getElementById('showFront');
+        const backBtn = document.getElementById('showBack');
+
+        // Show Front
+        frontBtn.addEventListener('click', () => {
+        idFront.style.display = 'block';
+        idBack.style.display = 'none';
+        frontBtn.classList.add('active');
+        backBtn.classList.remove('active');
         });
-        function printVisibleID() {
+
+        // Show Back
+        backBtn.addEventListener('click', () => {
+        idFront.style.display = 'none';
+        idBack.style.display = 'block';
+        backBtn.classList.add('active');
+        frontBtn.classList.remove('active');
+        });
+    });
+    function printVisibleID() {
             const idFront = document.getElementById('idFront');
             const idBack = document.getElementById('idBack');
             const isFrontVisible = idFront.style.display !== 'none';
@@ -865,8 +835,7 @@
                 window.print();
             }, 100);
         }
-    </script>
-
+</script>
 <script>
 const APP_URL = "<?= APP_URL ?>";
 const FRONTEND_URL = "<?= FRONTEND_URL ?>";
@@ -877,7 +846,6 @@ let editMode = false;
 let selectedImage = null;
 let selectedSignature = null;
 
-// 🔸 Fetch student ID data
 fetch(`${APP_URL}/api/showstudentid/${studentId}`, {
     method: 'GET',
     headers: {
@@ -892,12 +860,12 @@ fetch(`${APP_URL}/api/showstudentid/${studentId}`, {
     document.getElementById('first-name').firstChild.textContent = data.firstname + ' ';
     document.getElementById('middle-name').textContent = data.middlename ? data.middlename.charAt(0) + '.' : '';
     document.getElementById('dob-num').textContent   = data.birthdate;
-    document.getElementById('cnumber').textContent   = data.emergency_contact;
+    document.getElementById('cnumber').textContent   = data.contact;
+    document.getElementById('econtactname').textContent   = data.emergency_contact;
     document.getElementById('brgy-address').textContent = `${data.barangay}, ${data.municipality}`;
     document.getElementById('student-photo').src = data.image || "bakla.png";
     document.getElementById('student-signature').src = data.signature || "signatura.png";
     document.getElementById('student-qr').src = data.qr_path || '';
-
     if (data.photo_position) {
         try {
             const pos = JSON.parse(data.photo_position);
@@ -909,7 +877,6 @@ fetch(`${APP_URL}/api/showstudentid/${studentId}`, {
             photo.style.height = pos.height + 'px';
         } catch (e) { console.error('Invalid photo_position JSON:', e); }
     }
-
     if (data.signature_position) {
         try {
             const pos = JSON.parse(data.signature_position);
@@ -923,7 +890,6 @@ fetch(`${APP_URL}/api/showstudentid/${studentId}`, {
     }
 });
 
-// 🧲 Drag + resize helpers
 function makeDraggable(el) {
     let isDragging = false;
     let offsetX, offsetY;
@@ -969,7 +935,6 @@ document.getElementById('editBtn').addEventListener('click', () => {
     if(signature) { signature.classList.add("editable-signature"); makeDraggable(signature); }
 });
 
-// 🖼️ Photo Upload + Drag & Drop
 document.getElementById('photoInput').addEventListener('change', function() {
     if(editMode && this.files && this.files[0]){
         selectedImage = this.files[0];
@@ -990,7 +955,6 @@ photoDrop.addEventListener('drop', e => {
     }
 });
 
-// ✍️ Signature Upload + Drag & Drop
 document.getElementById('signatureInput').addEventListener('change', function() {
     if(editMode && this.files && this.files[0]){
         selectedSignature = this.files[0];
@@ -1011,7 +975,7 @@ signatureDrop.addEventListener('drop', e => {
     }
 });
 
-// ✍️ Signature Pad Logic (modal, save, clear, etc.)
+// Signature Modal Code (unchanged)
 const signatureModal = document.getElementById('signatureModal');
 const canvas = document.getElementById('signatureCanvas');
 const clearBtn = document.getElementById('clearSignature');
@@ -1019,8 +983,8 @@ const saveBtn = document.getElementById('saveSignature');
 const closeBtn = document.getElementById('closeSignature');
 const strokeSelect = document.getElementById('strokeWeight');
 let signaturePad;
-
 const DEFAULT_STROKE = 5;
+
 
 function resizeCanvas() {
   const ratio = Math.max(window.devicePixelRatio || 1, 1);
@@ -1042,6 +1006,7 @@ function initSignaturePad() {
 }
 
 
+
 editSignatureBtn.addEventListener('click', () => {
   signatureModal.style.display = 'flex';
   setTimeout(() => {
@@ -1049,8 +1014,13 @@ editSignatureBtn.addEventListener('click', () => {
   }, 50);
 });
 
-clearBtn.addEventListener('click', () => signaturePad.clear());
-closeBtn.addEventListener('click', () => signatureModal.style.display = 'none');
+clearBtn.addEventListener('click', () => {
+  signaturePad.clear();
+});
+
+closeBtn.addEventListener('click', () => {
+  signatureModal.style.display = 'none';
+});
 
 saveBtn.addEventListener('click', () => {
   if (!signaturePad.isEmpty()) {
@@ -1060,10 +1030,16 @@ saveBtn.addEventListener('click', () => {
     const data = imageData.data;
 
     for (let i = 0; i < data.length; i += 4) {
-      const r = data[i], g = data[i+1], b = data[i+2];
-      if (r > 240 && g > 240 && b > 240) data[i+3] = 0;
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+      if (r > 240 && g > 240 && b > 240) {
+        data[i + 3] = 0;
+      }
     }
+
     ctx.putImageData(imageData, 0, 0);
+
     canvasEl.toBlob(blob => {
       selectedSignature = new File([blob], "signature.png", { type: "image/png" });
       document.getElementById('student-signature').src = URL.createObjectURL(selectedSignature);
@@ -1073,6 +1049,7 @@ saveBtn.addEventListener('click', () => {
     alert("Please draw your signature first ✍️");
   } 
 });
+
 window.addEventListener('resize', () => {
   if (signaturePad) {
     resizeCanvas();
@@ -1080,32 +1057,26 @@ window.addEventListener('resize', () => {
   }
 });
 
-// 💾 Save edited data
 const notyf = new Notyf({ position:{x:'right',y:'top'}, duration:3000, ripple:true, dismissible:true });
 document.getElementById('saveBtn').addEventListener('click', function () {
     const formData = new FormData();
     formData.append('student_id', studentId);
-
     const photo = document.getElementById('student-photo');
     const signature = document.getElementById('student-signature');
-
     formData.append('photo_position', JSON.stringify({
         left: photo.offsetLeft,
         top: photo.offsetTop,
         width: photo.offsetWidth,
         height: photo.offsetHeight
     }));
-
     formData.append('signature_position', JSON.stringify({
         left: signature.offsetLeft,
         top: signature.offsetTop,
         width: signature.offsetWidth,
         height: signature.offsetHeight
     }));
-
     if(selectedImage) formData.append('image', selectedImage);
     if(selectedSignature) formData.append('signature', selectedSignature);
-
     fetch(`${APP_URL}/api/save-generated-id`, {
         method:"POST",
         headers: {
@@ -1126,6 +1097,75 @@ document.getElementById('saveBtn').addEventListener('click', function () {
 });
 </script>
 
+
+<!-- <script>
+    fetch(`${APP_URL}/api/fetchStrandDoorway/${studentId}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(" Strand/Doorway Data:", data);
+
+        const strandEl = document.getElementById('strand');
+        const doorwayEl = document.getElementById('doorway');
+        const doorwayWordEl = document.getElementById('doorwayWord');
+
+        // 🔹 Clean and uppercase values
+        let strandName = data.strand_name ? data.strand_name.toUpperCase().trim() : '';
+        let doorwayName = data.doorway ? data.doorway.toUpperCase().trim() : '';
+
+        let displayStrand = 'No Strand Assigned';
+        let hideDoorway = false;
+
+        // 🔹 Match strand + doorway logic (with fallback if doorway is missing)
+        if (strandName === 'STEM' && (!doorwayName || doorwayName === 'STEM')) {
+            displayStrand = 'SCIENCE, TECHNOLOGY, ENGINEERING & MATHEMATICS (STEM)';
+            hideDoorway = true;
+        }
+        else if (strandName === 'B & E' && (!doorwayName || doorwayName === 'B & E')) {
+            displayStrand = 'BUSINESS & ENTREPRENEURSHIP<br>(B & E)';
+            hideDoorway = true;
+        }
+        else if (strandName === 'ASSH' && (!doorwayName || doorwayName === 'ASSH')) {
+            displayStrand = 'ARTS, SOCIAL SCIENCES, HUMANITIES (ASSH)';
+            hideDoorway = true;
+        }
+        else if (strandName === 'SHW' && (!doorwayName || doorwayName === 'SHW')) {
+            displayStrand = 'SPORTS, HEALTH, AND WELLNESS (SHW)';
+            hideDoorway = true;
+        }
+        else {
+            displayStrand = strandName || 'No Strand Assigned';
+        }
+
+
+        // 🔹 If doorway is the same as strand OR empty/null → hide doorway
+        if (
+            hideDoorway ||
+            !doorwayName ||
+            doorwayName.length === 0 ||
+            doorwayName === strandName
+        ) {
+            doorwayEl.style.display = 'none';
+            doorwayWordEl.style.display = 'none';
+            strandEl.classList.add('big-strand');
+        } else {
+            doorwayEl.textContent = data.doorway;
+            doorwayEl.style.display = 'block';
+            doorwayWordEl.style.display = 'block';
+            strandEl.classList.remove('big-strand');
+        }
+
+        strandEl.innerHTML = displayStrand;
+    })
+    .catch(error => {
+        console.error("Error fetching strand/doorway:", error);
+    });
+</script> -->
 
 <script>
     fetch(`${APP_URL}/api/fetchStudentInfo/${studentId}`, {
@@ -1153,18 +1193,9 @@ document.getElementById('saveBtn').addEventListener('click', function () {
         ) {
             document.getElementById('strand').innerText = student.strand.specialization.toUpperCase();
         }
-
-        if(student.doorway && student.doorway == student.strand.cluster) {
-            document.getElementById('doorway').style.display = 'none';
-            document.getElementById('doorwayWord').style.display = 'none';
-        }
-
-        if(student.doorway && student.doorway != student.strand.cluster) {
-            document.getElementById('doorway').innerText = student.doorway.toUpperCase();
-        }
-        
     })
 </script>
+
 
 
 
@@ -1196,3 +1227,6 @@ document.getElementById('saveBtn').addEventListener('click', function () {
     margin-top: 10px;
 }
 </style>
+
+
+

@@ -734,9 +734,11 @@
                     <img id="student-qr" src="" alt="QR" />
                 </div>
                     <div class="track">
-                    <div class="strand" id="strand"></div>
-                    <div class="doorway-word mt-1" id="doorwayWord">Doorway:</div>
-                    <div class="doorway" id="doorway"></div>
+                    <div class="strand" id="strand">
+                        SCIENCE, TECHNOLOGY, ENGINEERING, & MATHEMATICS (STEM)
+                    </div>
+                    <div class="doorway-word" id="doorwayWord">Doorway:</div>
+                    <div class="doorway" id="doorway">DRIVING NC II AND AUTOMOTIVE SERVICING NC I</div>
                     </div>
                 </div>
 
@@ -1126,9 +1128,8 @@ document.getElementById('saveBtn').addEventListener('click', function () {
 });
 </script>
 
-
 <script>
-    fetch(`${APP_URL}/api/fetchStudentInfo/${studentId}`, {
+    fetch(`${APP_URL}/api/fetchStrandDoorway/${studentId}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -1137,33 +1138,63 @@ document.getElementById('saveBtn').addEventListener('click', function () {
     })
     .then(res => res.json())
     .then(data => {
-        console.log("Student Info Data: ", data.student);
-        const student = data.student;
+        console.log(" Strand/Doorway Data:", data);
 
-        if(student.strand.cluster == 'STEM' ||
-           student.strand.cluster == 'B & E' ||
-           student.strand.cluster == 'ASSH' ||
-           student.strand.cluster == 'SHW'
+        const strandEl = document.getElementById('strand');
+        const doorwayEl = document.getElementById('doorway');
+        const doorwayWordEl = document.getElementById('doorwayWord');
+
+        // 🔹 Clean and uppercase values
+        let strandName = data.strand_name ? data.strand_name.toUpperCase().trim() : '';
+        let doorwayName = data.doorway ? data.doorway.toUpperCase().trim() : '';
+
+        let displayStrand = 'No Strand Assigned';
+        let hideDoorway = false;
+
+       // 🔹 Match strand + doorway logic (with fallback if doorway is missing)
+        if (strandName === 'STEM' && (!doorwayName || doorwayName === 'STEM')) {
+            displayStrand = 'SCIENCE, TECHNOLOGY, ENGINEERING & MATHEMATICS (STEM)';
+            hideDoorway = true;
+        }
+        else if (strandName === 'B & E' && (!doorwayName || doorwayName === 'B & E')) {
+            displayStrand = 'BUSINESS & ENTREPRENEURSHIP<br>(B & E)';
+            hideDoorway = true;
+        }
+        else if (strandName === 'ASSH' && (!doorwayName || doorwayName === 'ASSH')) {
+            displayStrand = 'ARTS, SOCIAL SCIENCES, HUMANITIES (ASSH)';
+            hideDoorway = true;
+        }
+        else if (strandName === 'SHW' && (!doorwayName || doorwayName === 'SHW')) {
+            displayStrand = 'SPORTS, HEALTH, AND WELLNESS (SHW)';
+            hideDoorway = true;
+        }
+        else {
+            displayStrand = strandName || 'No Strand Assigned';
+        }
+
+
+        // 🔹 If doorway is the same as strand OR empty/null → hide doorway
+        if (
+            hideDoorway ||
+            !doorwayName ||
+            doorwayName.length === 0 ||
+            doorwayName === strandName
         ) {
-            document.getElementById('strand').innerText = student.strand.description.toUpperCase();
+            doorwayEl.style.display = 'none';
+            doorwayWordEl.style.display = 'none';
+            strandEl.classList.add('big-strand');
+        } else {
+            doorwayEl.textContent = data.doorway;
+            doorwayEl.style.display = 'block';
+            doorwayWordEl.style.display = 'block';
+            strandEl.classList.remove('big-strand');
         }
 
-        if(student.strand.cluster == 'Industrial Arts (IA)' || 
-           student.strand.cluster == 'Family and Consumer Science (FCS)'
-        ) {
-            document.getElementById('strand').innerText = student.strand.specialization.toUpperCase();
-        }
-
-        if(student.doorway && student.doorway == student.strand.cluster) {
-            document.getElementById('doorway').style.display = 'none';
-            document.getElementById('doorwayWord').style.display = 'none';
-        }
-
-        if(student.doorway && student.doorway != student.strand.cluster) {
-            document.getElementById('doorway').innerText = student.doorway.toUpperCase();
-        }
-        
+        strandEl.innerHTML = displayStrand;
     })
+    .catch(error => {
+        console.error("Error fetching strand/doorway:", error);
+    });
 </script>
 
 
