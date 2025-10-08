@@ -653,7 +653,7 @@
 
 
   <!-- Buttons -->
-  <div style="margin-top:15px;">
+  <div style="margin-top:15px; margin-bottom:15px">
     <button id="clearSignature" style="padding:12px 25px; font-weight:bold;">Clear</button>
     <button id="saveSignature" style="padding:12px 25px; font-weight:bold;">Save</button>
     <button id="closeSignature" style="padding:12px 25px; font-weight:bold;">Cancel</button>
