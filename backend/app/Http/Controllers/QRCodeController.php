@@ -8,6 +8,7 @@ use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\User;
+use App\Models\Strand;
 use Carbon\Carbon;
 
 class QRCodeController extends Controller
