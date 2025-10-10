@@ -1120,14 +1120,6 @@ document.getElementById('saveBtn').addEventListener('click', function () {
             document.getElementById('strand').innerText = student.strand.description.toUpperCase();
         }
 
-        if(student.doorway == 'STEM' ||
-           student.doorway == 'B & E' ||
-           student.doorway == 'ASSH' ||
-           student.doorway == 'SHW'
-        ) {
-            document.getElementById('strand').innerText = student.strand.description.toUpperCase();
-        }
-
         if(student.strand.cluster == 'Industrial Arts (IA)' || 
            student.strand.cluster == 'Family and Consumer Science (FCS)'
         ) {
@@ -1136,6 +1128,14 @@ document.getElementById('saveBtn').addEventListener('click', function () {
 
         if(!student.doorway) {
             document.getElementById('doorwayWord').style.display = 'none';
+        }
+
+        if(student.doorway == 'STEM' ||
+           student.doorway == 'B & E' ||
+           student.doorway == 'ASSH' ||
+           student.doorway == 'SHW'
+        ) {
+            document.getElementById('strand').innerText = student.strand.description.toUpperCase();
         }
 
         if(student.doorway && student.doorway == student.strand.cluster) {
