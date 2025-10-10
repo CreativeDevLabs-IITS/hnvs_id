@@ -1136,6 +1136,7 @@ document.getElementById('saveBtn').addEventListener('click', function () {
            student.doorway == 'SHW'
         ) {
             document.getElementById('doorway').innerText = student.strand.description.toUpperCase();
+            console.log(student.doorway);
         }
 
         if(student.doorway && student.doorway == student.strand.cluster) {
