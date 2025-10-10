@@ -1138,8 +1138,8 @@ document.getElementById('saveBtn').addEventListener('click', function () {
             getDoorway(student.doorway).then(res => {
                 if(!res.error) {
                     const doorway = res.doorway.description;
-                    document.getElementById('doorway').innerText = student.strand.description.toUpperCase();
                     console.log(doorway);
+                    // document.getElementById('doorway').innerText = student.strand.description.toUpperCase();
                 }
             })
 
