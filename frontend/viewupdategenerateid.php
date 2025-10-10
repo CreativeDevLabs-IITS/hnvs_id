@@ -1163,7 +1163,6 @@ document.getElementById('saveBtn').addEventListener('click', function () {
         }
 
         if(!student.doorway) {
-            document.getElementById('strand').classList.add('mt-1');
             document.getElementById('doorwayWord').style.display = 'none';
         }
 
