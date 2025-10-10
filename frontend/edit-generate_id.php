@@ -1158,6 +1158,7 @@ document.getElementById('saveBtn').addEventListener('click', function () {
 
     async function getDoorway(doorway) {
         const res = await fetch(`${APP_URL}/api/get-doorway`, {
+            method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
