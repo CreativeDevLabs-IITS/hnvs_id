@@ -92,24 +92,4 @@ class QRCodeController extends Controller
             ], 500);
         }
     }
-
-    public function getDoorway(Request $request) {
-        try {
-            $doorway = Strand::where('cluster', $request->doorway)->first();
-            if(!$doorway) {
-                return response()->json([
-                    'error' => "Doorway not found."
-                ], 404);
-            }
-            
-            return response()->json([
-                'doorway' => $doorway
-            ], 200);
-        }catch(Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-                'cause' => $request->doorway
-            ], 500);
-        }
-    }
 }
