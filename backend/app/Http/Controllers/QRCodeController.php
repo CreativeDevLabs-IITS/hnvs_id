@@ -93,7 +93,7 @@ class QRCodeController extends Controller
         }
     }
 
-    public function getStudentDoorway(Request $request) {
+    public function getDoorway(Request $request) {
         try {
             $doorway = Strand::where('cluster', $request->doorway)->first();
             if(!$doorway) {
