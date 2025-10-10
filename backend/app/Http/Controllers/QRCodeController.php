@@ -107,7 +107,8 @@ class QRCodeController extends Controller
             ], 200);
         }catch(Exception $e) {
             return response()->json([
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'cause' => $request->doorway
             ], 500);
         }
     }
