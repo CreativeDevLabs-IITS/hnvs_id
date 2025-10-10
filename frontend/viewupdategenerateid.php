@@ -733,7 +733,7 @@
                 <div class="qr-code">
                     <img id="student-qr" src="" alt="QR" />
                 </div>
-                    <div class="track">
+                    <div class="track d-flex flex-column justify-content-center">
                     <div class="strand" id="strand"></div>
                     <div class="doorway-word mt-1" id="doorwayWord">Doorway:</div>
                     <div class="doorway" id="doorway"></div>
@@ -1144,6 +1144,14 @@ document.getElementById('saveBtn').addEventListener('click', function () {
            student.strand.cluster == 'B & E' ||
            student.strand.cluster == 'ASSH' ||
            student.strand.cluster == 'SHW'
+        ) {
+            document.getElementById('strand').innerText = student.strand.description.toUpperCase();
+        }
+
+        if(student.doorway == 'STEM' ||
+           student.doorway == 'B & E' ||
+           student.doorway == 'ASSH' ||
+           student.doorway == 'SHW'
         ) {
             document.getElementById('strand').innerText = student.strand.description.toUpperCase();
         }
