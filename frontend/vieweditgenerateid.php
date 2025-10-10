@@ -881,6 +881,7 @@ function printVisibleID() {
     })
     .then(res => res.json())
     .then(data => {
+        console.log("Student Info Data: ", data.student);
         const student = data.student;
 
         if(student.strand.cluster == 'STEM' ||
@@ -906,10 +907,9 @@ function printVisibleID() {
         }
 
         if(!student.doorway) {
-            document.getElementById('strand').classList.add('mt-1');
             document.getElementById('doorwayWord').style.display = 'none';
         }
-        
+
         if(student.doorway && student.doorway == student.strand.cluster) {
             document.getElementById('doorway').style.display = 'none';
             document.getElementById('doorwayWord').style.display = 'none';
