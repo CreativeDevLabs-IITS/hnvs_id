@@ -1139,7 +1139,7 @@ document.getElementById('saveBtn').addEventListener('click', function () {
                 if(!res.error) {
                     const doorway = res.doorway.description;
                     document.getElementById('doorway').innerText = student.strand.description.toUpperCase();
-                    console.log(res);
+                    console.log(doorway);
                 }
             })
 
