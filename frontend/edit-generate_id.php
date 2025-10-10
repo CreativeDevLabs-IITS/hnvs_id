@@ -1125,7 +1125,7 @@ document.getElementById('saveBtn').addEventListener('click', function () {
            student.doorway == 'ASSH' ||
            student.doorway == 'SHW'
         ) {
-            document.getElementById('strand').innerText = student.strand.description.toUpperCase() + ' ' + `(student.doorway)`;
+            document.getElementById('strand').innerText = student.strand.description.toUpperCase() + ' ' + `(${student.doorway})`;
         }
 
         if(student.strand.cluster == 'Industrial Arts (IA)' || 
@@ -1135,7 +1135,6 @@ document.getElementById('saveBtn').addEventListener('click', function () {
         }
 
         if(!student.doorway) {
-            document.getElementById('strand').classList.add('mt-1');
             document.getElementById('doorwayWord').style.display = 'none';
         }
 
