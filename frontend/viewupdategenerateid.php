@@ -1163,7 +1163,12 @@ document.getElementById('saveBtn').addEventListener('click', function () {
            student.doorway == 'ASSH' ||
            student.doorway == 'SHW'
         ) {
-            document.getElementById('doorway').innerText = student.strand.description.toUpperCase();
+            getDoorway(student.doorway).then(res => {
+                if(!res.error) {
+                    const doorway = res.doorway.description;
+                    document.getElementById('doorway').innerText = doorway.toUpperCase();
+                }
+            })
         }
         
         if(student.doorway && student.doorway == student.strand.cluster) {
@@ -1176,6 +1181,27 @@ document.getElementById('saveBtn').addEventListener('click', function () {
         }
         
     })
+
+    async function getDoorway(doorway) {
+        const res = await fetch(`${APP_URL}/api/get-doorway`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            body: JSON.stringify({ doorway: doorway })
+        });
+
+        const response = await res.json();
+
+        if(!res.ok) {
+            console.log(response.message);
+        }
+
+        return response;
+    }
+    
 </script>
 
 
