@@ -389,7 +389,12 @@
                         }
                 
                         if(student.strand) {
-                            strandSelect.value = student.strand.id;
+                            Array.from(strandSelect.options).forEach(option => {
+                                if (option.textContent === student.strand.cluster) {
+                                    strandSelect.value = option.value;
+                                    return;
+                                }
+                            });
                             if(student.strand.specialization != null) {
                                 await populateSpecialization.call(strandSelect);
             
