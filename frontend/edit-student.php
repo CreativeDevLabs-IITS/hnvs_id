@@ -277,7 +277,8 @@
                         strandSelect.appendChild(strandOption);
                     }
                 })
-
+            })
+            .finally(() => {
                 populateForm();
             })
         })
