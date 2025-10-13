@@ -558,14 +558,9 @@ class StudentController extends Controller
 // }
 
     public function count() {
-        $students = Student::count();
-        $ids = GenerateId::count();
-        $noIdCount = $students - $ids;
-
         return response()->json([
-            'students' => $students,
-            'idcount' => $ids,
-            'noIdCount' => $noIdCount
+            'students' => Student::count(),
+            'id-count' => GenerateId::count()
         ]);
     }
     public function sectionStrandList() {

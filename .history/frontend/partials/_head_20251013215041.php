@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://hnvs-id-be.creativedevlabs.com/dist/css/dropify.min.css">
-    <link rel="stylesheet" href="css/pageStyling.css">
+    <link rel="stylesheet" href="css/pagesstyl.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
     <title>HNVS</title>
 </head>
