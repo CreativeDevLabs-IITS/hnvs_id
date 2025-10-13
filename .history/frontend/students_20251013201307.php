@@ -418,7 +418,7 @@
                 </td>
                 <td>${student.lrn}</td>
                 <td>${student.emergency_contact}</td>
-                <td style="color: ${student.contact ?? '#F54927'}">${student.contact ?? 'No Contact#'}</td>
+                <td>${student.contact ?? '—'}</td>
                 `;
                 tableBody.appendChild(row);
             })

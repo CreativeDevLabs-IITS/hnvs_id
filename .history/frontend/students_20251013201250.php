@@ -91,8 +91,8 @@
                             <thead class="table-secondary border">
                                 <tr>
                                     <th scope="col">Actions</th>
-                                    <th scope="col">Image</th>
                                     <th scope="col">Signature</th>
+                                    <th scope="col">Image</th>
                                     <th scope="col">Fullname</th>
                                     <th scope="col">Section</th>
                                     <th scope="col">Strand</th>
@@ -418,7 +418,7 @@
                 </td>
                 <td>${student.lrn}</td>
                 <td>${student.emergency_contact}</td>
-                <td style="color: ${student.contact ?? '#F54927'}">${student.contact ?? 'No Contact#'}</td>
+                <td>${student.contact ?? '—'}</td>
                 `;
                 tableBody.appendChild(row);
             })
