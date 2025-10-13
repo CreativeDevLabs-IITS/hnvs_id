@@ -91,8 +91,8 @@
                             <thead class="table-secondary border">
                                 <tr>
                                     <th scope="col">Actions</th>
-                                    <th scope="col">Image</th>
                                     <th scope="col">Signature</th>
+                                    <th scope="col">Image</th>
                                     <th scope="col">Fullname</th>
                                     <th scope="col">Section</th>
                                     <th scope="col">Strand</th>
@@ -403,11 +403,11 @@
                         </ul>
                     </div>
                 </td>
-                <td style="color: ${student.image ?? '#F54927'}">${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${student.image}" />` : 'No Image'}</td>
-                <td style="color: ${student.signature ?? '#F54927'}">${student.signature ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${student.signature}" />` : 'No Signature' }</td>
+                <td style="color: ${student.signature ? '' : '#F54927'}">${student.signature ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${student.signature}" />` : 'No Signature' }</td>
+                <td style="color: ${student.image ? '' : '#F54927'}">${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${student.image}" />` : 'No Image'}</td>
                 <td>${student.lastname + ', ' + student.firstname + ' ' + (student.suffix != null ? student.suffix : '') + ' ' + (student.middlename != null ? student.middlename.charAt(0) : '') + '.'}</td>
                 <td>${student.section ? student.section.name : '—'}</td>
-                <td style="color: ${student.strand ?? '#F54927'}">
+                <td style="${student.strand ? '' : '#F54927'}">
                 ${student.strand 
                 ? (student.strand.cluster === 'Industrial Arts (IA)' 
                     ? `(IA) ${student.strand.specialization}`
@@ -418,7 +418,7 @@
                 </td>
                 <td>${student.lrn}</td>
                 <td>${student.emergency_contact}</td>
-                <td style="color: ${student.contact ?? '#F54927'}">${student.contact ?? 'No Contact#'}</td>
+                <td>${student.contact ?? '—'}</td>
                 `;
                 tableBody.appendChild(row);
             })
