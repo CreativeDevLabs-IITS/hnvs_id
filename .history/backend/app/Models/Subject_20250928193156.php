@@ -18,8 +18,7 @@ class Subject extends Model
         'section',
         'day',
         'time_start',
-        'time_end',
-        'grace_period'
+        'time_end'
     ];
 
     public function teachers() {

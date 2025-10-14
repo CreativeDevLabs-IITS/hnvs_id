@@ -55,12 +55,6 @@ class StudentController extends Controller
             foreach($ids as $id) {
                 $student = Student::find($id);
 
-                if($student->is_paid == 1) {
-                    return response()->json([
-                        'error' => 'Student named ' . $student->firstname . ' ' . $student->lastname . ' is already marked as paid.'
-                    ], 400);
-                }
-
                 if($student) {
                     $student->is_paid = 1;
                     $student->update();
@@ -90,12 +84,6 @@ class StudentController extends Controller
 
             foreach($ids as $id) {
                 $student = Student::find($id);
-
-                if($student->is_paid == 0) {
-                    return response()->json([
-                        'error' => 'Student named ' . $student->firstname . ' ' . $student->lastname . ' is not marked as paid.'
-                    ], 400);
-                }
 
                 if($student) {
                     $student->is_paid = 0;

@@ -250,9 +250,9 @@
                         showConfirmButton: false,
                         timer: 900,
                     })
-                    // .then (() => {
-                    //     location.href = 'subjects.php';
-                    // });
+                    .then (() => {
+                        location.href = 'subjects.php';
+                    });
                 }else {
                     Swal.fire({
                         position: "top-end",

@@ -653,9 +653,9 @@
                         showConfirmButton: false,
                         timer: 2000,
                     })
-                    .then (() => {
-                        location.reload();
-                    });
+                    // .then (() => {
+                    //     location.reload();
+                    // });
                 }else {
                     Swal.fire({
                         position: "top-end",
@@ -710,9 +710,9 @@
                         showConfirmButton: false,
                         timer: 2000,
                     })
-                    .then (() => {
-                        location.reload();
-                    });
+                    // .then (() => {
+                    //     location.reload();
+                    // });
                 }else {
                     Swal.fire({
                         position: "top-end",

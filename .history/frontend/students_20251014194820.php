@@ -99,7 +99,7 @@
                             </div>
                             Payment Done
                         </div>
-                        <div id="removePaidBtn" style="display: none; gap: 5px; font-weight: bold; cursor: pointer; justify-content: center ; padding: 7px 12px; width: 170px; font-size: 13px; background-color: #F54927; color: #fff">
+                        <div id="removePaidBtn" style="display: none; gap: 5px; font-weight: bold; cursor: pointer; justify-content: center ; padding: 7px 12px; width: 150px; font-size: 13px; background-color: #F54927; color: #fff">
                             <div class="spinner-border spinner-border-sm" id="removePaidSpinner" style="display: none" role="status">
                                 <span class="visually-hidden">Loading...</span>
                             </div>
@@ -112,7 +112,7 @@
                                 <tr>
                                     <th scope=""><input class="form-check-input" id="allCheckAll" type="checkbox" hidden></th>
                                     <th scope="col">Actions</th>
-                                    <th scope="col">Payment</th>
+                                    <th scope="col">Payment Status</th>
                                     <th scope="col">Image</th>
                                     <th scope="col">Signature</th>
                                     <th scope="col">Fullname</th>
@@ -653,9 +653,9 @@
                         showConfirmButton: false,
                         timer: 2000,
                     })
-                    .then (() => {
-                        location.reload();
-                    });
+                    // .then (() => {
+                    //     location.reload();
+                    // });
                 }else {
                     Swal.fire({
                         position: "top-end",
@@ -672,63 +672,6 @@
             })
             .finally(() => {
                 document.getElementById('paidSpinner').style.display = 'none';
-            })
-        })
-
-        $(document).on('click', '#removePaidBtn', function() {
-            document.getElementById('removePaidSpinner').style.display = 'block';
-            const selectedBox = [];
-
-            Array.from(selectedIds).forEach(value => {
-                selectedBox.push(parseInt(value));
-            });
-            
-            console.log(selectedIds);
-
-            fetch(`${APP_URL}/api/remove-paid/students`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'Application.json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
-                    'Content-Type': 'Application/json'
-                },
-                body: JSON.stringify({
-                    ids: selectedBox
-                })
-            })
-            .then(res => res.json())
-            .then(response => {
-                if (response.message) {
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        color: "#fff",
-                        background:  "#28b463",
-                        width: 350,
-                        toast: true,
-                        title: response.message,
-                        showConfirmButton: false,
-                        timer: 2000,
-                    })
-                    .then (() => {
-                        location.reload();
-                    });
-                }else {
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "error",
-                        color: "#fff",
-                        width: 350,
-                        background:  "#cc0202",
-                        toast: true,
-                        title: response.error,
-                        showConfirmButton: false,
-                        timer: 4000,
-                    })
-                }
-            })
-            .finally(() => {
-                document.getElementById('removePaidSpinner').style.display = 'none';
             })
         })
 
