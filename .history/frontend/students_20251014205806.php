@@ -308,8 +308,6 @@
             document.getElementById('paidBtn').style.display = 'flex';
             document.getElementById('removePaidBtn').style.display = 'flex';
             document.getElementById('allCheckAll').hidden = false;
-            document.querySelectorAll('.studentCheckbox').forEach(cb => cb.hidden = false);
-            bindCheckboxListener();
         })
 
         // pupulate table and search
@@ -390,6 +388,14 @@
                 checkedAll = true;
             }
 
+            const bulkButton = document.getElementById('bulkAction');
+            if(!bulkButton.hidden) {
+                document.querySelectorAll('.studentCheckbox').forEach(checkbox => {
+                    checkbox.hidden = false;
+                })
+                bindCheckboxListener();
+            }
+
             students.forEach((student, index) => {
                 const is_checked = selectedIds.has(String(student.id)) || student.subjects.some(subject => subject.id == id) || checkedAll;
                 let row = document.createElement('tr');
@@ -462,12 +468,6 @@
                 `;
                 tableBody.appendChild(row);
             })
-            
-            const bulkAction = document.getElementById('allCheckAll');
-            if(!bulkAction.hidden) {
-                document.querySelectorAll('.studentCheckbox').forEach(cb => cb.hidden = false);
-                bindCheckboxListener();
-            }
         }
 
         function bindCheckboxListener() {

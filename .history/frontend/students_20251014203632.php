@@ -110,7 +110,7 @@
                         <table class="table table-hover align-middle rounded overflow-hidden" style="font-size: 13px; overflow: visible !important">
                             <thead class="table-secondary border">
                                 <tr>
-                                    <th scope=""><input class="form-check-input" id="allCheckAll" type="checkbox" hidden></th>
+                                    <th scope=""><input class="form-check-input" id="allCheckAll" type="checkbox" style="display: none"></th>
                                     <th scope="col">Actions</th>
                                     <th scope="col">Payment</th>
                                     <th scope="col">Image</th>
@@ -305,10 +305,6 @@
 
         // show bulk action
         document.getElementById('bulkAction').addEventListener('click', () => {
-            document.getElementById('paidBtn').style.display = 'flex';
-            document.getElementById('removePaidBtn').style.display = 'flex';
-            document.getElementById('allCheckAll').hidden = false;
-            document.querySelectorAll('.studentCheckbox').forEach(cb => cb.hidden = false);
             bindCheckboxListener();
         })
 
@@ -463,14 +459,20 @@
                 tableBody.appendChild(row);
             })
             
-            const bulkAction = document.getElementById('allCheckAll');
-            if(!bulkAction.hidden) {
-                document.querySelectorAll('.studentCheckbox').forEach(cb => cb.hidden = false);
+            const bulkButton = document.getElementById('bulkAction');
+            if(bulkButton.style.display == 'flex') {
                 bindCheckboxListener();
             }
         }
 
         function bindCheckboxListener() {
+            document.getElementById('paidBtn').style.display = 'flex';
+            document.getElementById('removePaidBtn').style.display = 'flex';
+            document.getElementById('allCheckAll').style.display = 'flex';
+            document.querySelectorAll('.studentCheckbox').forEach(checkbox => {
+                checkbox.hidden = false;
+            })
+
             document.querySelectorAll('.studentCheckbox').forEach(checkBox => {
                 const id = checkBox.value;
 
