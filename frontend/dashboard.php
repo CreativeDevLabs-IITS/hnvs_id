@@ -11,7 +11,7 @@
             <div class="py-3 pe-3 ps-5">
                 <div class="fs-4">Dashboard</div>
                 <div class="d-flex flex-wrap gap-4 mt-5">
-                    <div class="ps-4 pe-5 py-4 bg-white rounded-4 shadow" id="id_percentage" style="width: 300px; display: none">
+                    <div class="ps-4 py-4 bg-white rounded-4 shadow" id="id_percentage" style="width: 300px; display: none">
                         <div style="font-size: 18px;">Total ID Percentage</div>
                         <div class="fw-bold fs-1 mt-3 d-flex align-items-center gap-2">
                             <div class="progress-ring" id="circle-border">
