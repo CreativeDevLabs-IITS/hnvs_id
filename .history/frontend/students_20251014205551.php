@@ -308,8 +308,6 @@
             document.getElementById('paidBtn').style.display = 'flex';
             document.getElementById('removePaidBtn').style.display = 'flex';
             document.getElementById('allCheckAll').hidden = false;
-            document.querySelectorAll('.studentCheckbox').forEach(cb => cb.hidden = false);
-            bindCheckboxListener();
         })
 
         // pupulate table and search
@@ -363,6 +361,13 @@
             .then(data => {
                 const students = data.students.data;
                 const meta = data.students;
+                const bulkButton = document.getElementById('bulkAction');
+                    if(bulkButton.hidden) {
+                        document.querySelectorAll('.studentCheckbox').forEach(checkbox => {
+                            checkbox.hidden = false;
+                        })
+                        bindCheckboxListener();
+                    }
                 renderTable(students, meta);
                 renderPagination(meta, true);
             })
@@ -463,9 +468,11 @@
                 tableBody.appendChild(row);
             })
             
-            const bulkAction = document.getElementById('allCheckAll');
-            if(!bulkAction.hidden) {
-                document.querySelectorAll('.studentCheckbox').forEach(cb => cb.hidden = false);
+            const bulkButton = document.getElementById('bulkAction');
+            if(bulkButton.hidden == false) {
+                document.querySelectorAll('.studentCheckbox').forEach(checkbox => {
+                    checkbox.hidden = false;
+                })
                 bindCheckboxListener();
             }
         }

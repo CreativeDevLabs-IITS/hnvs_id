@@ -308,8 +308,9 @@
             document.getElementById('paidBtn').style.display = 'flex';
             document.getElementById('removePaidBtn').style.display = 'flex';
             document.getElementById('allCheckAll').hidden = false;
-            document.querySelectorAll('.studentCheckbox').forEach(cb => cb.hidden = false);
-            bindCheckboxListener();
+            document.querySelectorAll('.studentCheckbox').forEach(checkbox => {
+                checkbox.hidden = false;
+            })
         })
 
         // pupulate table and search
@@ -369,8 +370,16 @@
         }
 
         function renderTable(students, meta) {
+            const bulkButton = document.getElementById('bulkAction');
             const tableBody = document.getElementById('student_table_body');
             tableBody.innerHTML = '';
+            
+            if(bulkButton.hidden == false) {
+                document.querySelectorAll('.studentCheckbox').forEach(checkbox => {
+                    console.log('hi')
+                    checkbox.hidden = false;
+                })
+            }
 
             if(students.length  < 1) {
                 const emptyRow = document.createElement('tr');
@@ -462,12 +471,8 @@
                 `;
                 tableBody.appendChild(row);
             })
-            
-            const bulkAction = document.getElementById('allCheckAll');
-            if(!bulkAction.hidden) {
-                document.querySelectorAll('.studentCheckbox').forEach(cb => cb.hidden = false);
-                bindCheckboxListener();
-            }
+
+            bindCheckboxListener();
         }
 
         function bindCheckboxListener() {

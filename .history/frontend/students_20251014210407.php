@@ -305,11 +305,10 @@
 
         // show bulk action
         document.getElementById('bulkAction').addEventListener('click', () => {
+            document.getElementById('bulkAction').setAttribute('data-active');
             document.getElementById('paidBtn').style.display = 'flex';
             document.getElementById('removePaidBtn').style.display = 'flex';
             document.getElementById('allCheckAll').hidden = false;
-            document.querySelectorAll('.studentCheckbox').forEach(cb => cb.hidden = false);
-            bindCheckboxListener();
         })
 
         // pupulate table and search
@@ -463,9 +462,11 @@
                 tableBody.appendChild(row);
             })
             
-            const bulkAction = document.getElementById('allCheckAll');
-            if(!bulkAction.hidden) {
-                document.querySelectorAll('.studentCheckbox').forEach(cb => cb.hidden = false);
+            const bulkButton = document.getElementById('bulkAction');
+            if(bukkButton.hasAttribute('data-active')) {
+                document.querySelectorAll('.studentCheckbox').forEach(checkbox => {
+                    checkbox.hidden = false;
+                })
                 bindCheckboxListener();
             }
         }

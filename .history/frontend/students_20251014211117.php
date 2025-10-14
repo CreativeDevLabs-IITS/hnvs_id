@@ -308,8 +308,7 @@
             document.getElementById('paidBtn').style.display = 'flex';
             document.getElementById('removePaidBtn').style.display = 'flex';
             document.getElementById('allCheckAll').hidden = false;
-            document.querySelectorAll('.studentCheckbox').forEach(cb => cb.hidden = false);
-            bindCheckboxListener();
+            document.getElementById('allCheckAll').setAttribute('data-active', 'true');
         })
 
         // pupulate table and search
@@ -464,8 +463,10 @@
             })
             
             const bulkAction = document.getElementById('allCheckAll');
-            if(!bulkAction.hidden) {
-                document.querySelectorAll('.studentCheckbox').forEach(cb => cb.hidden = false);
+            if(bulkAction.hidden) {
+                document.querySelectorAll('.studentCheckbox').forEach(checkbox => {
+                    checkbox.hidden = false;
+                })
                 bindCheckboxListener();
             }
         }

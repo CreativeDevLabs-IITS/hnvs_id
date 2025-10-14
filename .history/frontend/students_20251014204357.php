@@ -308,8 +308,9 @@
             document.getElementById('paidBtn').style.display = 'flex';
             document.getElementById('removePaidBtn').style.display = 'flex';
             document.getElementById('allCheckAll').hidden = false;
-            document.querySelectorAll('.studentCheckbox').forEach(cb => cb.hidden = false);
-            bindCheckboxListener();
+            document.querySelectorAll('.studentCheckbox').forEach(checkbox => {
+                checkbox.hidden = false;
+            })
         })
 
         // pupulate table and search
@@ -463,9 +464,8 @@
                 tableBody.appendChild(row);
             })
             
-            const bulkAction = document.getElementById('allCheckAll');
-            if(!bulkAction.hidden) {
-                document.querySelectorAll('.studentCheckbox').forEach(cb => cb.hidden = false);
+            const paidButton = document.getElementById('bulkAction');
+            if(!bulkButton.hidden) {
                 bindCheckboxListener();
             }
         }
