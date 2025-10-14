@@ -99,7 +99,7 @@
                             </div>
                             Payment Done
                         </div>
-                        <div id="removePaidBtn" style="display: none; gap: 5px; font-weight: bold; cursor: pointer; justify-content: center ; padding: 7px 12px; width: 170px; font-size: 13px; background-color: #F54927; color: #fff">
+                        <div id="removePaidBtn" style="display: none; gap: 5px; font-weight: bold; cursor: pointer; justify-content: center ; padding: 7px 12px; width: 150px; font-size: 13px; background-color: #F54927; color: #fff">
                             <div class="spinner-border spinner-border-sm" id="removePaidSpinner" style="display: none" role="status">
                                 <span class="visually-hidden">Loading...</span>
                             </div>
@@ -653,9 +653,9 @@
                         showConfirmButton: false,
                         timer: 2000,
                     })
-                    .then (() => {
-                        location.reload();
-                    });
+                    // .then (() => {
+                    //     location.reload();
+                    // });
                 }else {
                     Swal.fire({
                         position: "top-end",
@@ -710,9 +710,9 @@
                         showConfirmButton: false,
                         timer: 2000,
                     })
-                    .then (() => {
-                        location.reload();
-                    });
+                    // .then (() => {
+                    //     location.reload();
+                    // });
                 }else {
                     Swal.fire({
                         position: "top-end",
@@ -728,7 +728,7 @@
                 }
             })
             .finally(() => {
-                document.getElementById('removePaidSpinner').style.display = 'none';
+                document.getElementById('paidSpinner').style.display = 'none';
             })
         })
 

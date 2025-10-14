@@ -64,8 +64,7 @@ Route::middleware(['auth:sanctum', 'preventBack'])->group(function() {
     Route::get('/count/students', [StudentController::class, 'count']);
     Route::get('/section/strand/list', [StudentController::class, 'sectionStrandList']);
     Route::post('/student/roster', [StudentController::class, 'subjectRoster']);
-    Route::post('/paid/students', [StudentController::class, 'paidStudents']);
-    Route::post('/remove-paid/students', [StudentController::class, 'removePaidStudents']);
+    Route::post('/paid/students', [SubjectController::class, 'paidStudents']);
 
     Route::post('/create/strand', [StrandController::class, 'create']);
     Route::post('/update/strand', [StrandController::class, 'update']);

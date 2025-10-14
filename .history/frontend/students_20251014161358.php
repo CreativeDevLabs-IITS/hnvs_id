@@ -83,27 +83,13 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item text-dark d-flex gap-2 align-items-center" style="font-size: 13px; cursor: pointer" id="bulkAction">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-checkbox"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 11l3 3l8 -8" /><path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9" /></svg>
+                                        <a class="cursor-pointer dropdown-item text-dark d-flex gap-2 align-items-center" style="font-size: 13px" id="bulkAction">
+                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-import"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 13v-8a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-5.5m-9.5 -2h7m-3 -3l3 3l-3 3" /></svg>                                        
                                             Bulk Action
                                         </a>
                                     </li>
                                 </ul>
                             </div>
-                        </div>
-                    </div>
-                    <div class="d-flex gap-2" class="mb-2">
-                        <div id="paidBtn" style="display: none; gap: 5px; font-weight: bold; cursor: pointer; justify-content: center ; padding: 7px 12px; width: 150px; font-size: 13px; background-color: #259C07; color: #fff">
-                            <div class="spinner-border spinner-border-sm" id="paidSpinner" style="display: none" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                            Payment Done
-                        </div>
-                        <div id="removePaidBtn" style="display: none; gap: 5px; font-weight: bold; cursor: pointer; justify-content: center ; padding: 7px 12px; width: 170px; font-size: 13px; background-color: #F54927; color: #fff">
-                            <div class="spinner-border spinner-border-sm" id="removePaidSpinner" style="display: none" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                            Remove Payment
                         </div>
                     </div>
                     <div class="table-responsive mt-4">
@@ -112,7 +98,6 @@
                                 <tr>
                                     <th scope=""><input class="form-check-input" id="allCheckAll" type="checkbox" hidden></th>
                                     <th scope="col">Actions</th>
-                                    <th scope="col">Payment</th>
                                     <th scope="col">Image</th>
                                     <th scope="col">Signature</th>
                                     <th scope="col">Fullname</th>
@@ -305,12 +290,7 @@
 
         // show bulk action
         document.getElementById('bulkAction').addEventListener('click', () => {
-            document.getElementById('paidBtn').style.display = 'flex';
-            document.getElementById('removePaidBtn').style.display = 'flex';
             document.getElementById('allCheckAll').hidden = false;
-            document.querySelectorAll('.studentCheckbox').forEach(checkbox => {
-                checkbox.hidden = false;
-            })
         })
 
         // pupulate table and search
@@ -443,7 +423,6 @@
                         </ul>
                     </div>
                 </td>
-                <td style="font-weight: bold; color: ${student.is_paid == 1 ? '#259C07' : '#F54927'}">${student.is_paid == 1 ? 'Paid' : 'Not Paid'}</td>
                 <td style="color: ${student.image ?? '#F54927'}">${student.image ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${student.image}" />` : 'No Image'}</td>
                 <td style="color: ${student.signature ?? '#F54927'}">${student.signature ? `<img style="height: 30px; width: 30px; border-radius: 30px" src="${student.signature}" />` : 'No Signature' }</td>
                 <td>${student.lastname + ', ' + student.firstname + ' ' + (student.suffix != null ? student.suffix : '') + ' ' + (student.middlename != null ? student.middlename.charAt(0) : '') + '.'}</td>
@@ -463,34 +442,6 @@
                 `;
                 tableBody.appendChild(row);
             })
-
-            bindCheckboxListener();
-        }
-
-        function bindCheckboxListener() {
-            document.querySelectorAll('.studentCheckbox').forEach(checkBox => {
-                const id = checkBox.value;
-
-                if(checkBox.checked) {
-                    selectedIds.add(String(id));
-                }
-                
-                checkBox.addEventListener('change', function() {
-                    if(this.checked) {
-                        selectedIds.add(String(id));
-                    } else {
-                        selectedIds.delete(id);
-                        document.getElementById('offSelectAll').checked = false;
-                    }
-
-                    const all =  document.querySelectorAll('.studentCheckbox');
-                    const allChecked =  document.querySelectorAll('.studentCheckbox:checked');
-
-                    if(all.length == allChecked.length) {
-                        document.getElementById('offSelectAll').checked = true;
-                    }
-                });
-            });
         }
 
         function renderPagination(meta, isSearch = false) {
@@ -617,120 +568,6 @@
             document.getElementById('studentName').textContent = $(this).data('name') + ' ' + $(this).data('lname');
         })
 
-        // submit paid students
-        $(document).on('click', '#paidBtn', function() {
-            document.getElementById('paidSpinner').style.display = 'block';
-            const selectedBox = [];
-
-            Array.from(selectedIds).forEach(value => {
-                selectedBox.push(parseInt(value));
-            });
-            
-            console.log(selectedIds);
-
-            fetch(`${APP_URL}/api/paid/students`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'Application.json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
-                    'Content-Type': 'Application/json'
-                },
-                body: JSON.stringify({
-                    ids: selectedBox
-                })
-            })
-            .then(res => res.json())
-            .then(response => {
-                if (response.message) {
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        color: "#fff",
-                        background:  "#28b463",
-                        width: 350,
-                        toast: true,
-                        title: response.message,
-                        showConfirmButton: false,
-                        timer: 2000,
-                    })
-                    .then (() => {
-                        location.reload();
-                    });
-                }else {
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "error",
-                        color: "#fff",
-                        width: 350,
-                        background:  "#cc0202",
-                        toast: true,
-                        title: response.error,
-                        showConfirmButton: false,
-                        timer: 4000,
-                    })
-                }
-            })
-            .finally(() => {
-                document.getElementById('paidSpinner').style.display = 'none';
-            })
-        })
-
-        $(document).on('click', '#removePaidBtn', function() {
-            document.getElementById('removePaidSpinner').style.display = 'block';
-            const selectedBox = [];
-
-            Array.from(selectedIds).forEach(value => {
-                selectedBox.push(parseInt(value));
-            });
-            
-            console.log(selectedIds);
-
-            fetch(`${APP_URL}/api/remove-paid/students`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'Application.json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
-                    'Content-Type': 'Application/json'
-                },
-                body: JSON.stringify({
-                    ids: selectedBox
-                })
-            })
-            .then(res => res.json())
-            .then(response => {
-                if (response.message) {
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        color: "#fff",
-                        background:  "#28b463",
-                        width: 350,
-                        toast: true,
-                        title: response.message,
-                        showConfirmButton: false,
-                        timer: 2000,
-                    })
-                    .then (() => {
-                        location.reload();
-                    });
-                }else {
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "error",
-                        color: "#fff",
-                        width: 350,
-                        background:  "#cc0202",
-                        toast: true,
-                        title: response.error,
-                        showConfirmButton: false,
-                        timer: 4000,
-                    })
-                }
-            })
-            .finally(() => {
-                document.getElementById('removePaidSpinner').style.display = 'none';
-            })
-        })
 
         // delete
         $(document).on('click', '#deleteStudentBtn', function(e) {

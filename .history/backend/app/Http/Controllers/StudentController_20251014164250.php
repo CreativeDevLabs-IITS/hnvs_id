@@ -44,69 +44,21 @@ class StudentController extends Controller
 
     public function paidStudents(Request $request) {
         try {
-            if($request->ids == null || !is_array($request->ids)) {
-                return response()->json([
-                    'error' => 'Invalid input.'
-                ], 404);
-            }
-
-            $ids = $request->ids;
+            $ids = $request->id;
 
             foreach($ids as $id) {
                 $student = Student::find($id);
 
-                if($student->is_paid == 1) {
-                    return response()->json([
-                        'error' => 'Student named ' . $student->firstname . ' ' . $student->lastname . ' is already marked as paid.'
-                    ], 400);
-                }
-
                 if($student) {
-                    $student->is_paid = 1;
-                    $student->update();
+                    $student->is_paid = true;
+                    $student->save();
                 }
             }
 
             return response()->json([
                 'message' => 'Students marked as paid successfully.'
             ], 200);
-
-        }catch(Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    public function removePaidStudents(Request $request) {
-        try {
-            if($request->ids == null || !is_array($request->ids)) {
-                return response()->json([
-                    'error' => 'Invalid input.'
-                ], 404);
-            }
-
-            $ids = $request->ids;
-
-            foreach($ids as $id) {
-                $student = Student::find($id);
-
-                if($student->is_paid == 0) {
-                    return response()->json([
-                        'error' => 'Student named ' . $student->firstname . ' ' . $student->lastname . ' is not marked as paid.'
-                    ], 400);
-                }
-
-                if($student) {
-                    $student->is_paid = 0;
-                    $student->update();
-                }
-            }
-
-            return response()->json([
-                'message' => 'Students paid status removed.'
-            ], 200);
-
+            
         }catch(Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()
